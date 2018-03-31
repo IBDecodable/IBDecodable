@@ -19,9 +19,21 @@ public class StoryboardFile: InterfaceBuilderFile {
         self.document = try type(of: self).parseContent(pathString: path)
     }
 
+    public init(url: URL) throws {
+        self.pathString = url.absoluteString
+        self.document = try type(of: self).parseContent(url: url)
+    }
+
     private static func parseContent(pathString: String) throws -> StoryboardDocument {
         let parser = InterfaceBuilderParser()
         let content = try String.init(contentsOfFile: pathString)
         return try parser.parseStoryboard(xml: content)
     }
+
+    private static func parseContent(url: URL) throws -> StoryboardDocument {
+        let parser = InterfaceBuilderParser()
+        let content = try String.init(contentsOf: url)
+        return try parser.parseStoryboard(xml: content)
+    }
+
 }
