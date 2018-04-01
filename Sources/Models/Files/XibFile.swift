@@ -19,9 +19,20 @@ public class XibFile: InterfaceBuilderFile {
         self.document = try type(of: self).parseContent(pathString: path)
     }
 
+    public init(url: URL) throws {
+        self.pathString = url.absoluteString
+        self.document = try type(of: self).parseContent(url: url)
+    }
+
     private static func parseContent(pathString: String) throws -> XibDocument {
         let parser = InterfaceBuilderParser()
         let content = try String.init(contentsOfFile: pathString)
+        return try parser.parseXib(xml: content)
+    }
+
+    private static func parseContent(url: URL) throws -> XibDocument {
+        let parser = InterfaceBuilderParser()
+        let content = try String.init(contentsOf: url)
         return try parser.parseXib(xml: content)
     }
 }

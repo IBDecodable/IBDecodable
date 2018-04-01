@@ -170,10 +170,11 @@ public struct Constraint: XMLDecodable {
 // MARK: - Color
 
 public enum Color: XMLDecodable {
-    public typealias CalibratedWhite = (key: String, white: Float, alpha: Float)
-    public typealias SRGB = (key: String, red: Float, blue: Float, green: Float, alpha: Float)
+    public typealias CalibratedWhite = (key: String?, white: Float, alpha: Float)
+    public typealias SRGB = (key: String?, red: Float, blue: Float, green: Float, alpha: Float)
     case calibratedWhite(CalibratedWhite)
     case sRGB(SRGB)
+    case name(String)
 
     public var sRGB: SRGB? {
         switch self {
@@ -190,30 +191,33 @@ public enum Color: XMLDecodable {
         default: return nil
         }
     }
-
+    
     static func decode(_ xml: XMLIndexer) throws -> Color {
-        let key: String = try xml.attributeValue(of: "key")
-        let colorSpace: String = try xml.attributeValue(of: "colorSpace")
-        switch colorSpace {
-        case "calibratedWhite":
-            return try .calibratedWhite((key:   key,
-                                         white: xml.attributeValue(of: "white"),
-                                         alpha: xml.attributeValue(of: "alpha")))
-        case "custom":
-            let customColorSpace: String = try xml.attributeValue(of: "customColorSpace")
-            switch customColorSpace {
-            case "sRGB":
-                return try .sRGB((key:   key,
-                                  red:   xml.attributeValue(of: "red"),
-                                  blue:  xml.attributeValue(of: "blue"),
-                                  green: xml.attributeValue(of: "green"),
-                                  alpha: xml.attributeValue(of: "alpha")
-                ))
+        if let colorSpace: String = xml.attributeValue(of: "colorSpace") {
+            let key: String? = xml.attributeValue(of: "key")
+            switch colorSpace {
+            case "calibratedWhite":
+                return try .calibratedWhite((key:   key,
+                                             white: xml.attributeValue(of: "white"),
+                                             alpha: xml.attributeValue(of: "alpha")))
+            case "custom":
+                let customColorSpace: String = try xml.attributeValue(of: "customColorSpace")
+                switch customColorSpace {
+                case "sRGB":
+                    return try .sRGB((key:   key,
+                                      red:   xml.attributeValue(of: "red"),
+                                      blue:  xml.attributeValue(of: "blue"),
+                                      green: xml.attributeValue(of: "green"),
+                                      alpha: xml.attributeValue(of: "alpha")
+                    ))
+                default:
+                    throw IBError.unsupportedColorSpace(customColorSpace)
+                }
             default:
-                throw IBError.unsupportedColorSpace(customColorSpace)
+                throw IBError.unsupportedColorSpace(colorSpace)
             }
-        default:
-            throw IBError.unsupportedColorSpace(colorSpace)
+        } else {
+            return .name(try xml.attributeValue(of: "name"))
         }
     }
 }

@@ -23,6 +23,7 @@ public struct StoryboardDocument: XMLDecodable {
     public let device: Device?
     public let scenes: [Scene]?
     public let placeholders: [Placeholder]?
+    public let resources: [AnyResource]?
 
     static func decode(_ xml: XMLIndexer) throws -> StoryboardDocument {
         return StoryboardDocument.init(
@@ -38,7 +39,8 @@ public struct StoryboardDocument: XMLDecodable {
             initialViewController: xml.attributeValue(of: "initialViewController"),
             device:                xml.byKey("device").flatMap(decodeValue),
             scenes:                xml.byKey("scenes")?.byKey("scene")?.all.flatMap(decodeValue),
-            placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue)
+            placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue),
+            resources:             xml.byKey("resources")?.children.flatMap(decodeValue)
         )
     }
 }
