@@ -43,15 +43,29 @@ public struct AnyView: XMLDecodable {
             throw IBError.elementNotFound
         }
         switch elementName {
+        case "activityIndicatorView":    return try AnyView(ActivityindicatorView.decode(xml))
+        case "arscnView":                return try AnyView(ARSCNView.decode(xml))
+        case "arskView":                 return try AnyView(ARSKView.decode(xml))
         case "button":                   return try AnyView(Button.decode(xml))
         case "collectionView":           return try AnyView(CollectionView.decode(xml))
         case "collectionViewCell":       return try AnyView(CollectionViewCell.decode(xml))
+        case "datePicker":               return try AnyView(DatePicker.decode(xml))
+        case "glkView":                  return try AnyView(GLKView.decode(xml))
         case "imageView":                return try AnyView(ImageView.decode(xml))
         case "label":                    return try AnyView(Label.decode(xml))
+        case "mapView":                  return try AnyView(MapView.decode(xml))
+        case "mtkView":                  return try AnyView(MTKView.decode(xml))
+        case "pageControl":              return try AnyView(PageControl.decode(xml))
         case "pickerView":               return try AnyView(PickerView.decode(xml))
+        case "progressView":             return try AnyView(ProgressView.decode(xml))
+        case "sceneKitView":             return try AnyView(SceneKitView.decode(xml))
         case "scrollView":               return try AnyView(ScrollView.decode(xml))
+        case "searchBar":                return try AnyView(SearchBar.decode(xml))
         case "segmentedControl":         return try AnyView(SegmentedControl.decode(xml))
+        case "skView":                   return try AnyView(SKView.decode(xml))
+        case "slider":                   return try AnyView(Slider.decode(xml))
         case "stackView":                return try AnyView(StackView.decode(xml))
+        case "stepper":                  return try AnyView(Stepper.decode(xml))
         case "switch":                   return try AnyView(Switch.decode(xml))
         case "tableView":                return try AnyView(TableView.decode(xml))
         case "tableViewCell":            return try AnyView(TableViewCell.decode(xml))
@@ -60,6 +74,8 @@ public struct AnyView: XMLDecodable {
         case "textView":                 return try AnyView(TextView.decode(xml))
         case "toolbar":                  return try AnyView(Toolbar.decode(xml))
         case "view":                     return try AnyView(View.decode(xml))
+        case "visualEffectView":         return try AnyView(VisualEffectView.decode(xml))
+        case "wkWebView":                return try AnyView(WKWebView.decode(xml))
         default:
             throw IBError.unsupportedViewClass(elementName)
         }

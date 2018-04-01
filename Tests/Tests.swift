@@ -75,4 +75,22 @@ class Tests: XCTestCase {
         }
     }
 
+    func testStoryboardAllViews() {
+        guard let url = Bundle(for: type(of: self)).url(forResource: "StoryboardAllViews", withExtension: "xml") else {
+            XCTFail("File not found")
+            return
+        }
+        do {
+            let file = try StoryboardFile(url: url)
+            guard let views = file.document.scenes?.first?.viewController?.viewController.rootView?.subviews, !views.isEmpty else {
+                XCTFail("No subviews")
+                return
+            }
+            let clazz = views.map { $0.view.elementClass }
+            print("\(clazz.count)")
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+
 }
