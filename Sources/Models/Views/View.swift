@@ -25,6 +25,7 @@ public struct View: XMLDecodable, ViewProtocol {
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let viewLayoutGuide: LayoutGuide?
+    public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> View {
         return View.init(
@@ -41,7 +42,8 @@ public struct View: XMLDecodable, ViewProtocol {
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            viewLayoutGuide:                           xml.byKey("viewLayoutGuide").flatMap(decodeValue)
+            viewLayoutGuide:                           xml.byKey("viewLayoutGuide").flatMap(decodeValue),
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
         )
     }
 }

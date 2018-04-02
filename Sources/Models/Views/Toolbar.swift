@@ -24,6 +24,7 @@ public struct Toolbar: XMLDecodable, ViewProtocol {
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
+    public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
 
     public struct BarButtonItem: XMLDecodable {
@@ -57,7 +58,8 @@ public struct Toolbar: XMLDecodable, ViewProtocol {
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled")
+            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
         )
     }
 }

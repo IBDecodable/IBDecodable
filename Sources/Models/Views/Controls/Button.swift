@@ -30,6 +30,7 @@ public struct Button: XMLDecodable, ViewProtocol {
     public let title: Title
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
+    public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     public struct Title: XMLDecodable {
         public let disabled: String?
@@ -97,7 +98,8 @@ public struct Button: XMLDecodable, ViewProtocol {
             textColor:                                 try decodeValue(xml),
             title:                                     try decodeValue(xml),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled")
+            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
         )
     }
 }

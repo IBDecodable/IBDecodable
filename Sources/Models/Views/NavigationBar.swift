@@ -1,33 +1,50 @@
 //
-//  Stepper.swift
+//  NavigationBar.swift
 //  IBDecodable
 //
-//  Created by phimage on 01/04/2018.
+//  Created by phimage on 02/04/2018.
 //
 
 import SWXMLHash
 
-public struct Stepper: XMLDecodable, ViewProtocol {
+public struct NavigationBar: XMLDecodable, ViewProtocol {
     public let id: String
-    public let elementClass: String = "UIStepper"
-
+    public let elementClass: String = "UIToolbar"
+    
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let items: [BarButtonItem]?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
-    public let viewLayoutGuide: LayoutGuide?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
-
-    static func decode(_ xml: XMLIndexer) throws -> Stepper {
-        return Stepper.init(
+    
+    
+    public struct BarButtonItem: XMLDecodable {
+        public let id: String
+        public let style: String?
+        public let systemItem: String?
+        public let title: String?
+        
+        static func decode(_ xml: XMLIndexer) throws -> NavigationBar.BarButtonItem {
+            return BarButtonItem.init(
+                id:         try xml.attributeValue(of: "id"),
+                style:      xml.attributeValue(of: "style"),
+                systemItem: xml.attributeValue(of: "systemItem"),
+                title:      xml.attributeValue(of: "title")
+            )
+        }
+    }
+    
+    static func decode(_ xml: XMLIndexer) throws -> NavigationBar {
+        return NavigationBar.init(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
@@ -35,13 +52,13 @@ public struct Stepper: XMLDecodable, ViewProtocol {
             contentMode:                               xml.attributeValue(of: "contentMode"),
             customClass:                               xml.attributeValue(of: "customClass"),
             customModule:                              xml.attributeValue(of: "customModule"),
+            items:                                     xml.byKey("items")?.byKey("barButtonItem")?.all.flatMap(decodeValue),
             isMisplaced:                               xml.attributeValue(of: "misplaced"),
             opaque:                                    xml.attributeValue(of: "opaque"),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            viewLayoutGuide:                           xml.byKey("viewLayoutGuide").flatMap(decodeValue),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
         )
     }

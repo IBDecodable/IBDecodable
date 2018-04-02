@@ -14,6 +14,7 @@ public struct TableViewController: XMLDecodable, ViewControllerProtocol {
     public let customModuleProvider: String?
     public var storyboardIdentifier: String?
     public let layoutGuides: [ViewControllerLayoutGuide]?
+    public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let tableView: TableView?
     public var rootView: ViewProtocol? { return tableView }
 
@@ -25,6 +26,7 @@ public struct TableViewController: XMLDecodable, ViewControllerProtocol {
             customModuleProvider: xml.attributeValue(of: "customModuleProvider"),
             storyboardIdentifier: xml.attributeValue(of: "storyboardIdentifier"),
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
+            userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue),
             tableView:            xml.byKey("tableView").flatMap(decodeValue)
         )
     }

@@ -32,6 +32,7 @@ public struct TextView: XMLDecodable, ViewProtocol {
     public let textColor: Color?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
+    public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> TextView {
         return TextView.init(
@@ -56,7 +57,8 @@ public struct TextView: XMLDecodable, ViewProtocol {
             textAlignment:                             xml.attributeValue(of: "textAlignment"),
             textColor:                                 xml.byKey("color").flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled")
+            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
         )
     }
 }

@@ -16,6 +16,7 @@ public protocol ViewControllerProtocol {
     var customModuleProvider: String? { get }
     var storyboardIdentifier: String? { get }
     var layoutGuides: [ViewControllerLayoutGuide]? { get }
+    var userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]? { get }
     var rootView: ViewProtocol? { get }
 }
 
@@ -36,6 +37,7 @@ public struct AnyViewController: XMLDecodable {
         switch elementName {
         case "viewController": return try AnyViewController(ViewController.decode(xml))
         case "tableViewController": return try AnyViewController(TableViewController.decode(xml))
+        case "navigationController": return try AnyViewController(NavigationController.decode(xml))
         default: throw IBError.unsupportedViewControllerClass(elementName)
         }
     }
