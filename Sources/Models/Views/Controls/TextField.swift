@@ -30,6 +30,7 @@ public struct TextField: XMLDecodable, ViewProtocol {
     public let textAlignment: String?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
+    public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> TextField {
         return TextField.init(
@@ -52,7 +53,8 @@ public struct TextField: XMLDecodable, ViewProtocol {
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
             textAlignment:                             xml.attributeValue(of: "textAlignment"),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled")
+            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
         )
     }
 

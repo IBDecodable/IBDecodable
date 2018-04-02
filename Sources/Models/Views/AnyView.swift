@@ -25,6 +25,7 @@ public protocol ViewProtocol {
     var subviews: [AnyView]? { get }
     var translatesAutoresizingMaskIntoConstraints: Bool? { get }
     var userInteractionEnabled: Bool? { get }
+    var userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]? { get }
 
 }
 
@@ -97,6 +98,20 @@ public struct Rect: XMLDecodable {
             y:      try xml.attributeValue(of: "y"),
             width:  try xml.attributeValue(of: "width"),
             height: try xml.attributeValue(of: "height")
+        )
+    }
+}
+
+// MARK: - Point
+
+public struct Point: XMLDecodable {
+    public let x: Float
+    public let y: Float
+    
+    static func decode(_ xml: XMLIndexer) throws -> Point {
+        return Point.init(
+            x:      try xml.attributeValue(of: "x"),
+            y:      try xml.attributeValue(of: "y")
         )
     }
 }

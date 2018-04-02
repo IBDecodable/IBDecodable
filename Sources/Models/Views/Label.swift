@@ -32,6 +32,7 @@ public struct Label: XMLDecodable, ViewProtocol {
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let verticalHuggingPriority: Int?
+    public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
 
     static func decode(_ xml: XMLIndexer) throws -> Label {
@@ -57,7 +58,8 @@ public struct Label: XMLDecodable, ViewProtocol {
             textColor:                                 xml.byKey("color").flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            verticalHuggingPriority:                   xml.attributeValue(of: "verticalHuggingPriority")
+            verticalHuggingPriority:                   xml.attributeValue(of: "verticalHuggingPriority"),
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
         )
     }
 
