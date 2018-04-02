@@ -11,12 +11,10 @@ import XCTest
 class Tests: XCTestCase {
 
     func testEmptyView() {
-        guard let url = Bundle(for: type(of: self)).url(forResource: "View", withExtension: "xml") else {
-            XCTFail("File not found")
-            return
-        }
+        let url = "Tests/Resources/View.xib"
+
         do {
-            let file = try XibFile(url: url)
+            let file = try XibFile(path: url)
             print(file.document.targetRuntime)
         } catch {
             XCTFail("\(error)")
@@ -24,12 +22,10 @@ class Tests: XCTestCase {
     }
 
     func testEmptyLaunchScreen() {
-        guard let url = Bundle(for: type(of: self)).url(forResource: "Launch Screen", withExtension: "xml") else {
-            XCTFail("File not found")
-            return
-        }
+        let url = "Tests/Resources/Launch Screen.storyboard"
+
         do {
-            let file = try StoryboardFile(url: url)
+            let file = try StoryboardFile(path: url)
             print(file.document.targetRuntime)
         } catch {
             XCTFail("\(error)")
@@ -37,12 +33,9 @@ class Tests: XCTestCase {
     }
 
     func testEmptyStoryboard() {
-        guard let url = Bundle(for: type(of: self)).url(forResource: "Storyboard", withExtension: "xml") else {
-            XCTFail("File not found")
-            return
-        }
+        let url = "Tests/Resources/StoryboardEmpty.storyboard"
         do {
-            let file = try StoryboardFile(url: url)
+            let file = try StoryboardFile(path: url)
             print(file.document.targetRuntime)
         } catch {
             XCTFail("\(error)")
@@ -50,12 +43,9 @@ class Tests: XCTestCase {
     }
 
     func testStoryboardWithAsset() {
-        guard let url = Bundle(for: type(of: self)).url(forResource: "StoryboardAsset", withExtension: "xml") else {
-            XCTFail("File not found")
-            return
-        }
+        let url = "Tests/Resources/StoryboardAsset.storyboard"
         do {
-            let file = try StoryboardFile(url: url)
+            let file = try StoryboardFile(path: url)
             guard let resources = file.document.resources, !resources.isEmpty else {
                 XCTFail("No asset resources found")
                 return
@@ -69,19 +59,17 @@ class Tests: XCTestCase {
             namedColor.forEach {
                 XCTAssertNotNil($0.color)
             }
-            
+
         } catch {
             XCTFail("\(error)")
         }
     }
 
     func testStoryboardAllViews() {
-        guard let url = Bundle(for: type(of: self)).url(forResource: "StoryboardAllViews", withExtension: "xml") else {
-            XCTFail("File not found")
-            return
-        }
+        let url = "Tests/Resources/StoryboardAllViews.storyboard"
+
         do {
-            let file = try StoryboardFile(url: url)
+            let file = try StoryboardFile(path: url)
             guard let views = file.document.scenes?.first?.viewController?.viewController.rootView?.subviews, !views.isEmpty else {
                 XCTFail("No subviews")
                 return
