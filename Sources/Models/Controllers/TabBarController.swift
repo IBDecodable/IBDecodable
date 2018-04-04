@@ -1,15 +1,15 @@
 //
-//  TableViewController.swift
-//  IBLinterCore
+//  TabBarController.swift
+//  IBDecodable
 //
-//  Created by SaitoYuta on 3/11/18.
+//  Created by phimage on 04/04/2018.
 //
 
 import SWXMLHash
 
-public struct TableViewController: XMLDecodable, ViewControllerProtocol {
+public struct TabBarController: XMLDecodable, ViewControllerProtocol {
 
-    public let elementClass: String = "UITableViewController"
+    public let elementClass: String = "UITabBarController"
     public let id: String
     public let customClass: String?
     public let customModule: String?
@@ -17,11 +17,11 @@ public struct TableViewController: XMLDecodable, ViewControllerProtocol {
     public var storyboardIdentifier: String?
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
-    public let tableView: TableView?
-    public var rootView: ViewProtocol? { return tableView }
+    public let view: View?
+    public var rootView: ViewProtocol? { return view }
 
-    static func decode(_ xml: XMLIndexer) throws -> TableViewController {
-        return TableViewController.init(
+    static func decode(_ xml: XMLIndexer) throws -> TabBarController {
+        return TabBarController.init(
             id:                   try xml.attributeValue(of: "id"),
             customClass:          xml.attributeValue(of: "customClass"),
             customModule:         xml.attributeValue(of: "customModule"),
@@ -29,7 +29,7 @@ public struct TableViewController: XMLDecodable, ViewControllerProtocol {
             storyboardIdentifier: xml.attributeValue(of: "storyboardIdentifier"),
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue),
-            tableView:            xml.byKey("tableView").flatMap(decodeValue)
+            view:                 xml.byKey("view").flatMap(decodeValue)
         )
     }
 }

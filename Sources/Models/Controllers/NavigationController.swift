@@ -8,7 +8,8 @@
 import SWXMLHash
 
 public struct NavigationController: XMLDecodable, ViewControllerProtocol {
-    
+
+    public let elementClass: String = "UINavgigationController"
     public let id: String
     public let customClass: String?
     public let customModule: String?
