@@ -119,5 +119,17 @@ class Tests: XCTestCase {
             XCTFail("\(error)")
         }
     }
+    
+    func testStoryboardAllControllers() {
+        let url = self.url(forResource:"StoryboardControllers", withExtension: "storyboard")
+        do {
+            let file = try StoryboardFile(url: url)
+         
+            let anyViewControllers = file.document.scenes?.map { $0.viewController } ?? []
+            XCTAssertEqual(anyViewControllers.count, anyViewControllers.flatMap({ $0 }).count, "Some VC are not decodable")
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
 
 }

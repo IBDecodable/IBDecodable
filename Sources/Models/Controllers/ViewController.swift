@@ -9,6 +9,7 @@ import SWXMLHash
 
 public struct ViewController: XMLDecodable, ViewControllerProtocol {
 
+    public let elementClass: String = "UIViewController"
     public let id: String
     public let customClass: String?
     public let customModule: String?
