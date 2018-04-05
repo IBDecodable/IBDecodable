@@ -68,6 +68,7 @@ public struct AnyView: XMLDecodable {
         case "stackView":                return try AnyView(StackView.decode(xml))
         case "stepper":                  return try AnyView(Stepper.decode(xml))
         case "switch":                   return try AnyView(Switch.decode(xml))
+        case "tabBar":                   return try AnyView(TabBar.decode(xml))
         case "tableView":                return try AnyView(TableView.decode(xml))
         case "tableViewCell":            return try AnyView(TableViewCell.decode(xml))
         case "tableViewCellContentView": return try AnyView(TableViewCell.TableViewContentView.decode(xml))
@@ -91,13 +92,15 @@ public struct Rect: XMLDecodable {
     public let y: Float
     public let width: Float
     public let height: Float
+    public let key: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Rect {
         return Rect.init(
             x:      try xml.attributeValue(of: "x"),
             y:      try xml.attributeValue(of: "y"),
             width:  try xml.attributeValue(of: "width"),
-            height: try xml.attributeValue(of: "height")
+            height: try xml.attributeValue(of: "height"),
+            key:    xml.attributeValue(of: "key")
         )
     }
 }
@@ -107,11 +110,13 @@ public struct Rect: XMLDecodable {
 public struct Point: XMLDecodable {
     public let x: Float
     public let y: Float
+    public let key: String?
     
     static func decode(_ xml: XMLIndexer) throws -> Point {
         return Point.init(
             x:      try xml.attributeValue(of: "x"),
-            y:      try xml.attributeValue(of: "y")
+            y:      try xml.attributeValue(of: "y"),
+            key:    xml.attributeValue(of: "key")
         )
     }
 }

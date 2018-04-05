@@ -20,6 +20,7 @@ public struct StoryboardDocument: XMLDecodable {
     public let useSafeAreas: Bool?
     public let colorMatched: Bool?
     public let initialViewController: String?
+    public let launchScreen: Bool
     public let device: Device?
     public let scenes: [Scene]?
     public let placeholders: [Placeholder]?
@@ -37,6 +38,7 @@ public struct StoryboardDocument: XMLDecodable {
             useSafeAreas:          xml.attributeValue(of: "useSafeAreas"),
             colorMatched:          xml.attributeValue(of: "colorMatched"),
             initialViewController: xml.attributeValue(of: "initialViewController"),
+            launchScreen:          xml.attributeValue(of: "launchScreen") ?? false,
             device:                xml.byKey("device").flatMap(decodeValue),
             scenes:                xml.byKey("scenes")?.byKey("scene")?.all.flatMap(decodeValue),
             placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue),
@@ -66,11 +68,13 @@ public struct Device: XMLDecodable {
 public struct Scene: XMLDecodable {
     public let id: String
     public let viewController: AnyViewController?
+    public let canvasLocation: Point?
 
     static func decode(_ xml: XMLIndexer) throws -> Scene {
         return Scene.init(
             id:             try xml.attributeValue(of: "sceneID"),
-            viewController: xml.byKey("objects")?.children.first.flatMap(decodeValue)
+            viewController: xml.byKey("objects")?.children.first.flatMap(decodeValue),
+            canvasLocation: xml.byKey("point").flatMap(decodeValue)
         )
     }
 }

@@ -39,7 +39,9 @@ class Tests: XCTestCase {
         let url = self.url(forResource:"Launch Screen", withExtension: "storyboard")
         do {
             let file = try StoryboardFile(url: url)
-            print(file.document.targetRuntime)
+            let document = file.document
+            print(document.targetRuntime)
+            XCTAssertTrue(document.launchScreen)
         } catch {
             XCTFail("\(error)")
         }
@@ -49,7 +51,8 @@ class Tests: XCTestCase {
         let url = self.url(forResource:"StoryboardEmpty", withExtension: "storyboard")
         do {
             let file = try StoryboardFile(url: url)
-            print(file.document.targetRuntime)
+            let document = file.document
+            XCTAssertFalse(document.launchScreen)
         } catch {
             XCTFail("\(error)")
         }
@@ -129,6 +132,18 @@ class Tests: XCTestCase {
             XCTAssertEqual(anyViewControllers.count, anyViewControllers.flatMap({ $0 }).count, "Some VC are not decodable")
         } catch {
             XCTFail("\(error)")
+        }
+    }
+    
+    func testStoryboardAlls() {
+        if let urls = bundle.urls(forResourcesWithExtension: "storyboard", subdirectory: nil) {
+            for url in urls {
+                do {
+                    _ = try StoryboardFile(url: url)
+                } catch {
+                    XCTFail("\(error)")
+                }
+            }
         }
     }
 

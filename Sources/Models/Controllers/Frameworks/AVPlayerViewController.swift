@@ -17,8 +17,8 @@ public struct AVPlayerViewController: XMLDecodable, ViewControllerProtocol {
     public var storyboardIdentifier: String?
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
-    public let view: View?
-    public var rootView: ViewProtocol? { return view }
+    public let view: AnyView?
+    public var rootView: ViewProtocol? { return view?.view }
 
     static func decode(_ xml: XMLIndexer) throws -> AVPlayerViewController {
         return AVPlayerViewController.init(
@@ -29,7 +29,7 @@ public struct AVPlayerViewController: XMLDecodable, ViewControllerProtocol {
             storyboardIdentifier: xml.attributeValue(of: "storyboardIdentifier"),
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue),
-            view:                 xml.byKey("view").flatMap(decodeValue)
+            view:                 xml.children.first.flatMap(decodeValue)
         )
     }
 }
