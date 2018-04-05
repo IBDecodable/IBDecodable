@@ -17,8 +17,8 @@ public struct GLKViewController: XMLDecodable, ViewControllerProtocol {
     public var storyboardIdentifier: String?
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
-    public let view: View?
-    public var rootView: ViewProtocol? { return view }
+    public let glkView: GLKView?
+    public var rootView: ViewProtocol? { return glkView }
 
     static func decode(_ xml: XMLIndexer) throws -> GLKViewController {
         return GLKViewController.init(
@@ -29,7 +29,7 @@ public struct GLKViewController: XMLDecodable, ViewControllerProtocol {
             storyboardIdentifier: xml.attributeValue(of: "storyboardIdentifier"),
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue),
-            view:                 xml.byKey("view").flatMap(decodeValue)
+            glkView:                 xml.byKey("glkView").flatMap(decodeValue)
         )
     }
 }

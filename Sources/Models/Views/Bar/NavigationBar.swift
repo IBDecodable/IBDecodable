@@ -9,7 +9,7 @@ import SWXMLHash
 
 public struct NavigationBar: XMLDecodable, ViewProtocol {
     public let id: String
-    public let elementClass: String = "UIToolbar"
+    public let elementClass: String = "UINavigationBar"
     
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
@@ -17,7 +17,7 @@ public struct NavigationBar: XMLDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
-    public let items: [BarButtonItem]?
+    public let items: [NavigationItem]?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -27,14 +27,14 @@ public struct NavigationBar: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     
     
-    public struct BarButtonItem: XMLDecodable {
+    public struct NavigationItem: XMLDecodable {
         public let id: String
         public let style: String?
         public let systemItem: String?
         public let title: String?
         
-        static func decode(_ xml: XMLIndexer) throws -> NavigationBar.BarButtonItem {
-            return BarButtonItem.init(
+        static func decode(_ xml: XMLIndexer) throws -> NavigationBar.NavigationItem {
+            return NavigationItem.init(
                 id:         try xml.attributeValue(of: "id"),
                 style:      xml.attributeValue(of: "style"),
                 systemItem: xml.attributeValue(of: "systemItem"),
@@ -52,7 +52,7 @@ public struct NavigationBar: XMLDecodable, ViewProtocol {
             contentMode:                               xml.attributeValue(of: "contentMode"),
             customClass:                               xml.attributeValue(of: "customClass"),
             customModule:                              xml.attributeValue(of: "customModule"),
-            items:                                     xml.byKey("items")?.byKey("barButtonItem")?.all.flatMap(decodeValue),
+            items:                                     xml.byKey("items")?.byKey("navigationItem")?.all.flatMap(decodeValue),
             isMisplaced:                               xml.attributeValue(of: "misplaced"),
             opaque:                                    xml.attributeValue(of: "opaque"),
             rect:                                      try decodeValue(xml.byKey("rect")),
