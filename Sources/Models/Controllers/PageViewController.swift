@@ -21,7 +21,7 @@ public struct PageViewController: XMLDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return view }
 
     static func decode(_ xml: XMLIndexer) throws -> PageViewController {
-        return PageViewController.init(
+        return PageViewController(
             id:                   try xml.attributeValue(of: "id"),
             customClass:          xml.attributeValue(of: "customClass"),
             customModule:         xml.attributeValue(of: "customModule"),

@@ -21,7 +21,7 @@ public struct SplitViewController: XMLDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return view }
 
     static func decode(_ xml: XMLIndexer) throws -> SplitViewController {
-        return SplitViewController.init(
+        return SplitViewController(
             id:                   try xml.attributeValue(of: "id"),
             customClass:          xml.attributeValue(of: "customClass"),
             customModule:         xml.attributeValue(of: "customModule"),

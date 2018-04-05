@@ -22,7 +22,7 @@ public struct XibDocument: XMLDecodable {
     public let placeholders: [Placeholder]?
 
     static func decode(_ xml: XMLIndexer) throws -> XibDocument {
-        return XibDocument.init(
+        return XibDocument(
             type:                  try xml.attributeValue(of: "type"),
             version:               try xml.attributeValue(of: "version"),
             toolsVersion:          try xml.attributeValue(of: "toolsVersion"),

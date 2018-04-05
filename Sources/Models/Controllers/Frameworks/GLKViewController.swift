@@ -21,7 +21,7 @@ public struct GLKViewController: XMLDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return glkView }
 
     static func decode(_ xml: XMLIndexer) throws -> GLKViewController {
-        return GLKViewController.init(
+        return GLKViewController(
             id:                   try xml.attributeValue(of: "id"),
             customClass:          xml.attributeValue(of: "customClass"),
             customModule:         xml.attributeValue(of: "customModule"),

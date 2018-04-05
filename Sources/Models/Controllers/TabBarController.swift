@@ -21,7 +21,7 @@ public struct TabBarController: XMLDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return view }
 
     static func decode(_ xml: XMLIndexer) throws -> TabBarController {
-        return TabBarController.init(
+        return TabBarController(
             id:                   try xml.attributeValue(of: "id"),
             customClass:          xml.attributeValue(of: "customClass"),
             customModule:         xml.attributeValue(of: "customModule"),

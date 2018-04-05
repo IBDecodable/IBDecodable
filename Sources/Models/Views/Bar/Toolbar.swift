@@ -26,7 +26,6 @@ public struct Toolbar: XMLDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
-
     public struct BarButtonItem: XMLDecodable {
         public let id: String
         public let style: String?
@@ -34,7 +33,7 @@ public struct Toolbar: XMLDecodable, ViewProtocol {
         public let title: String?
 
         static func decode(_ xml: XMLIndexer) throws -> Toolbar.BarButtonItem {
-            return BarButtonItem.init(
+            return BarButtonItem(
                 id:         try xml.attributeValue(of: "id"),
                 style:      xml.attributeValue(of: "style"),
                 systemItem: xml.attributeValue(of: "systemItem"),
@@ -44,7 +43,7 @@ public struct Toolbar: XMLDecodable, ViewProtocol {
     }
 
     static func decode(_ xml: XMLIndexer) throws -> Toolbar {
-        return Toolbar.init(
+        return Toolbar(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),

@@ -12,9 +12,9 @@ public struct Image: XMLDecodable, ResourceProtocol {
     public let width: String
     public let height: String
     public let mutableData: MutableData?
-    
+
     static func decode(_ xml: XMLIndexer) throws -> Image {
-        return Image.init(
+        return Image(
             name:          try xml.attributeValue(of: "name"),
             width:         try xml.attributeValue(of: "width"),
             height:        try xml.attributeValue(of: "height"),
@@ -27,7 +27,7 @@ public struct MutableData: XMLDecodable {
     public let content: String?
 
     static func decode(_ xml: XMLIndexer) throws -> MutableData {
-        return MutableData.init(
+        return MutableData(
             key:      try xml.attributeValue(of: "key"),
             content:  xml.element?.text)
     }

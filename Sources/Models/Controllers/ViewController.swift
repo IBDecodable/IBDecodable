@@ -21,7 +21,7 @@ public struct ViewController: XMLDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return view }
 
     static func decode(_ xml: XMLIndexer) throws -> ViewController {
-        return ViewController.init(
+        return ViewController(
             id:                   try xml.attributeValue(of: "id"),
             customClass:          xml.attributeValue(of: "customClass"),
             customModule:         xml.attributeValue(of: "customModule"),

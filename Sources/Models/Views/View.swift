@@ -28,7 +28,7 @@ public struct View: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> View {
-        return View.init(
+        return View(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
@@ -55,7 +55,7 @@ public struct LayoutGuide: XMLDecodable {
     public let id: String
 
     static func decode(_ xml: XMLIndexer) throws -> LayoutGuide {
-        return try LayoutGuide.init(
+        return try LayoutGuide(
             key: xml.attributeValue(of: "key"),
             id: xml.attributeValue(of: "id")
         )

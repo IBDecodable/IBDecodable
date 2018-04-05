@@ -58,7 +58,7 @@ public struct ViewControllerLayoutGuide: XMLDecodable {
     public let type: String
 
     static func decode(_ xml: XMLIndexer) throws -> ViewControllerLayoutGuide {
-        return try ViewControllerLayoutGuide.init(
+        return try ViewControllerLayoutGuide(
             id: xml.attributeValue(of: "id"),
             type: xml.attributeValue(of: "type")
         )

@@ -42,11 +42,13 @@ public struct Button: XMLDecodable, ViewProtocol {
             let allState = try xml.byKey("state").all
 
             func title(for key: String) -> String? {
-                guard let stateElement = try? allState.first(where: { try $0.attributeValue(of: "key") == key }) else { return nil }
+                guard let stateElement = try? allState.first(where: { try $0.attributeValue(of: "key") == key }) else {
+                    return nil
+                }
                 return stateElement.flatMap { try? $0.attributeValue(of: "title") }
             }
 
-            return Title.init(
+            return Title(
                 disabled: title(for: "disabled"),
                 highlighted: title(for: "highlighted"),
                 normal: title(for: "normal"),
@@ -65,10 +67,12 @@ public struct Button: XMLDecodable, ViewProtocol {
             let allState = try xml.byKey("state").all
 
             func color(for key: String) -> Color? {
-                guard let colorElement = try? allState.first(where: { try $0.attributeValue(of: "key") == key })?.byKey("color") else { return nil }
+                guard let colorElement = try? allState.first(where: { try $0.attributeValue(of: "key") == key })?.byKey("color") else {
+                    return nil
+                }
                 return colorElement.flatMap { try? Color.decode($0) }
             }
-            return TextColor.init(
+            return TextColor(
                 normal: color(for: "normal"),
                 disabled: color(for: "disabled"),
                 selected: color(for: "selected"),
@@ -78,7 +82,7 @@ public struct Button: XMLDecodable, ViewProtocol {
     }
 
     static func decode(_ xml: XMLIndexer) throws -> Button {
-        return Button.init(
+        return Button(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             buttonType:                                xml.attributeValue(of: "buttonType"),
@@ -95,8 +99,8 @@ public struct Button: XMLDecodable, ViewProtocol {
             opaque:                                    xml.attributeValue(of: "opaque"),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            textColor:                                 try decodeValue(xml),
-            title:                                     try decodeValue(xml),
+            textColor:                                 try TextColor.decode(xml),
+            title:                                     try Title.decode(xml),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)

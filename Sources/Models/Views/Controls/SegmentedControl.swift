@@ -34,12 +34,12 @@ public struct SegmentedControl: XMLDecodable, ViewProtocol {
         public let title: String
 
         static func decode(_ xml: XMLIndexer) throws -> SegmentedControl.Segment {
-            return try Segment.init(title: xml.attributeValue(of: "title"))
+            return try Segment(title: xml.attributeValue(of: "title"))
         }
     }
 
     static func decode(_ xml: XMLIndexer) throws -> SegmentedControl {
-        return SegmentedControl.init(
+        return SegmentedControl(
             id:                                         try xml.attributeValue(of: "id"),
             autoresizingMask:                           xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                              xml.attributeValue(of: "clipsSubviews"),

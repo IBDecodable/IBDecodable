@@ -33,7 +33,7 @@ public struct TextField: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> TextField {
-        return TextField.init(
+        return TextField(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             borderStyle:                               xml.attributeValue(of: "borderStyle"),

@@ -12,7 +12,7 @@ public struct NamedColor: XMLDecodable, ResourceProtocol {
     public let color: Color?
 
     static func decode(_ xml: XMLIndexer) throws -> NamedColor {
-        return NamedColor.init(
+        return NamedColor(
             name:    try xml.attributeValue(of: "name"),
             color:   xml.byKey("color").flatMap(decodeValue))
     }

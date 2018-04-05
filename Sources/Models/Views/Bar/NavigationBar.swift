@@ -10,7 +10,7 @@ import SWXMLHash
 public struct NavigationBar: XMLDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UINavigationBar"
-    
+
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -25,16 +25,15 @@ public struct NavigationBar: XMLDecodable, ViewProtocol {
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
-    
-    
+
     public struct NavigationItem: XMLDecodable {
         public let id: String
         public let style: String?
         public let systemItem: String?
         public let title: String?
-        
+
         static func decode(_ xml: XMLIndexer) throws -> NavigationBar.NavigationItem {
-            return NavigationItem.init(
+            return NavigationItem(
                 id:         try xml.attributeValue(of: "id"),
                 style:      xml.attributeValue(of: "style"),
                 systemItem: xml.attributeValue(of: "systemItem"),
@@ -42,9 +41,9 @@ public struct NavigationBar: XMLDecodable, ViewProtocol {
             )
         }
     }
-    
+
     static func decode(_ xml: XMLIndexer) throws -> NavigationBar {
-        return NavigationBar.init(
+        return NavigationBar(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
