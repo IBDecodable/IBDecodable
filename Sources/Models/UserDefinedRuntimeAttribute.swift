@@ -7,11 +7,11 @@
 
 import SWXMLHash
 
-public struct UserDefinedRuntimeAttribute: XMLDecodable{
+public struct UserDefinedRuntimeAttribute: XMLDecodable {
     public let keyPath: String
     public let type: String
     public let value: Any?
-    
+
     static func decode(_ xml: XMLIndexer) throws -> UserDefinedRuntimeAttribute {
         let type: String = try xml.attributeValue(of: "type")
         let valueString: String? = xml.attributeValue(of: "value")
@@ -42,7 +42,7 @@ public struct UserDefinedRuntimeAttribute: XMLDecodable{
         default:
             value = valueString
         }
-        return UserDefinedRuntimeAttribute.init(
+        return UserDefinedRuntimeAttribute(
             keyPath:     try xml.attributeValue(of: "keyPath"),
             type:        type,
             value:       value
@@ -56,9 +56,9 @@ public struct UserDefinedRuntimeAttribute: XMLDecodable{
 public struct Range: XMLDecodable {
     public let location: Float
     public let length: Float
-    
+
     static func decode(_ xml: XMLIndexer) throws -> Range {
-        return Range.init(
+        return Range(
             location:      try xml.attributeValue(of: "location"),
             length:        try xml.attributeValue(of: "length")
         )

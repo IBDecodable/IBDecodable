@@ -27,7 +27,7 @@ public struct GLKView: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> GLKView {
-        return GLKView.init(
+        return GLKView(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),

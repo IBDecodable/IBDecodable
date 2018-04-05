@@ -50,7 +50,7 @@ public struct TableView: XMLDecodable, ViewProtocol {
     }
 
     static func decode(_ xml: XMLIndexer) throws -> TableView {
-        return TableView.init(
+        return TableView(
             id:                                        try xml.attributeValue(of: "id"),
             alwaysBounceVertical:                      xml.attributeValue(of: "alwaysBounceVertical"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
@@ -121,7 +121,7 @@ public struct TableViewCell: XMLDecodable, ViewProtocol {
         public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
         static func decode(_ xml: XMLIndexer) throws -> TableViewCell.TableViewContentView {
-            return TableViewContentView.init(
+            return TableViewContentView(
                 id:                                        try xml.attributeValue(of: "id"),
                 autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
                 clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
@@ -141,7 +141,7 @@ public struct TableViewCell: XMLDecodable, ViewProtocol {
     }
 
     static func decode(_ xml: XMLIndexer) throws -> TableViewCell {
-        return TableViewCell.init(
+        return TableViewCell(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),

@@ -27,7 +27,7 @@ public struct MapView: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> MapView {
-        return MapView.init(
+        return MapView(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),

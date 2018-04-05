@@ -29,7 +29,7 @@ public struct ImageView: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> ImageView {
-        return ImageView.init(
+        return ImageView(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),

@@ -35,7 +35,7 @@ public struct TextView: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> TextView {
-        return TextView.init(
+        return TextView(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             bounces:                                   xml.attributeValue(of: "bounces"),

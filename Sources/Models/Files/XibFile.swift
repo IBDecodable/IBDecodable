@@ -26,13 +26,13 @@ public class XibFile: InterfaceBuilderFile {
 
     private static func parseContent(pathString: String) throws -> XibDocument {
         let parser = InterfaceBuilderParser()
-        let content = try String.init(contentsOfFile: pathString)
+        let content = try String(contentsOfFile: pathString)
         return try parser.parseXib(xml: content)
     }
 
     private static func parseContent(url: URL) throws -> XibDocument {
         let parser = InterfaceBuilderParser()
-        let content = try String.init(contentsOf: url)
+        let content = try String(contentsOf: url)
         return try parser.parseXib(xml: content)
     }
 }

@@ -27,7 +27,7 @@ public struct SearchBar: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> SearchBar {
-        return SearchBar.init(
+        return SearchBar(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),

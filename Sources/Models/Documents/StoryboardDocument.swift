@@ -27,7 +27,7 @@ public struct StoryboardDocument: XMLDecodable {
     public let resources: [AnyResource]?
 
     static func decode(_ xml: XMLIndexer) throws -> StoryboardDocument {
-        return StoryboardDocument.init(
+        return StoryboardDocument(
             type:                  try xml.attributeValue(of: "type"),
             version:               try xml.attributeValue(of: "version"),
             toolsVersion:          try xml.attributeValue(of: "toolsVersion"),
@@ -55,7 +55,7 @@ public struct Device: XMLDecodable {
     public let adaptation: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Device {
-        return Device.init(
+        return Device(
             id:          try xml.attributeValue(of: "id"),
             orientation: xml.attributeValue(of: "orientation"),
             adaptation:  xml.byKey("adaptation")?.attributeValue(of: "id")
@@ -71,7 +71,7 @@ public struct Scene: XMLDecodable {
     public let canvasLocation: Point?
 
     static func decode(_ xml: XMLIndexer) throws -> Scene {
-        return Scene.init(
+        return Scene(
             id:             try xml.attributeValue(of: "sceneID"),
             viewController: xml.byKey("objects")?.children.first.flatMap(decodeValue),
             canvasLocation: xml.byKey("point").flatMap(decodeValue)
@@ -89,7 +89,7 @@ public struct Placeholder: XMLDecodable {
     public let customClass: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Placeholder {
-        return Placeholder.init(
+        return Placeholder(
             id:                    try xml.attributeValue(of: "id"),
             placeholderIdentifier: try xml.attributeValue(of: "placeholderIdentifier"),
             userLabel:             xml.attributeValue(of: "userLabel"),

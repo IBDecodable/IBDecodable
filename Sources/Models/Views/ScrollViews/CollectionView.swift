@@ -29,7 +29,7 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionView {
-        return CollectionView.init(
+        return CollectionView(
             id:                                        try xml.attributeValue(of: "id"),
             alwaysBounceHorizontal:                    xml.attributeValue(of: "alwaysBounceHorizontal"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
@@ -74,7 +74,7 @@ public struct CollectionViewCell: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewCell {
-        return CollectionViewCell.init(
+        return CollectionViewCell(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),

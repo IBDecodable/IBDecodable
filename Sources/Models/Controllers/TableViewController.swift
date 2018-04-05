@@ -21,7 +21,7 @@ public struct TableViewController: XMLDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return tableView }
 
     static func decode(_ xml: XMLIndexer) throws -> TableViewController {
-        return TableViewController.init(
+        return TableViewController(
             id:                   try xml.attributeValue(of: "id"),
             customClass:          xml.attributeValue(of: "customClass"),
             customModule:         xml.attributeValue(of: "customModule"),

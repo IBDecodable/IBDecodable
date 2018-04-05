@@ -10,7 +10,7 @@ import SWXMLHash
 public struct TabBar: XMLDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITabBar"
-    
+
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -26,15 +26,14 @@ public struct TabBar: XMLDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
-
     public struct TabBarItem: XMLDecodable {
         public let id: String
         public let style: String?
         public let systemItem: String?
         public let title: String?
-        
+
         static func decode(_ xml: XMLIndexer) throws -> TabBar.TabBarItem {
-            return TabBarItem.init(
+            return TabBarItem(
                 id:         try xml.attributeValue(of: "id"),
                 style:      xml.attributeValue(of: "style"),
                 systemItem: xml.attributeValue(of: "systemItem"),
@@ -42,9 +41,9 @@ public struct TabBar: XMLDecodable, ViewProtocol {
             )
         }
     }
-    
+
     static func decode(_ xml: XMLIndexer) throws -> TabBar {
-        return TabBar.init(
+        return TabBar(
             id:                                        try xml.attributeValue(of: "id"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
@@ -63,4 +62,3 @@ public struct TabBar: XMLDecodable, ViewProtocol {
         )
     }
 }
-

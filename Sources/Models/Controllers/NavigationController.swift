@@ -19,9 +19,9 @@ public struct NavigationController: XMLDecodable, ViewControllerProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let navigationBar: NavigationBar?
     public var rootView: ViewProtocol? { return navigationBar }
-    
+
     static func decode(_ xml: XMLIndexer) throws -> NavigationController {
-        return NavigationController.init(
+        return NavigationController(
             id:                   try xml.attributeValue(of: "id"),
             customClass:          xml.attributeValue(of: "customClass"),
             customModule:         xml.attributeValue(of: "customModule"),
@@ -33,4 +33,3 @@ public struct NavigationController: XMLDecodable, ViewControllerProtocol {
         )
     }
 }
-

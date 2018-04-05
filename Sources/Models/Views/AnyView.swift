@@ -95,7 +95,7 @@ public struct Rect: XMLDecodable {
     public let key: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Rect {
-        return Rect.init(
+        return Rect(
             x:      try xml.attributeValue(of: "x"),
             y:      try xml.attributeValue(of: "y"),
             width:  try xml.attributeValue(of: "width"),
@@ -111,9 +111,9 @@ public struct Point: XMLDecodable {
     public let x: Float
     public let y: Float
     public let key: String?
-    
+
     static func decode(_ xml: XMLIndexer) throws -> Point {
-        return Point.init(
+        return Point(
             x:      try xml.attributeValue(of: "x"),
             y:      try xml.attributeValue(of: "y"),
             key:    xml.attributeValue(of: "key")
@@ -128,7 +128,7 @@ public struct AutoresizingMask: XMLDecodable {
     public let heightSizable: Bool
 
     static func decode(_ xml: XMLIndexer) throws -> AutoresizingMask {
-        return try AutoresizingMask.init(
+        return try AutoresizingMask(
             widthSizable:  xml.attributeValue(of: "widthSizable"),
             heightSizable: xml.attributeValue(of: "heightSizable"))
     }
@@ -176,7 +176,7 @@ public struct Constraint: XMLDecodable {
             }
         }
 
-        public static func ==(lhs: LayoutAttribute, rhs: LayoutAttribute) -> Bool {
+        public static func == (lhs: LayoutAttribute, rhs: LayoutAttribute) -> Bool {
             switch (lhs, rhs) {
             case (.left, .left), (.right, .right), (.top, .top), (.bottom, .bottom),
                  (.leading, .leading), (.trailing, .trailing), (.width, .width),
@@ -191,7 +191,7 @@ public struct Constraint: XMLDecodable {
     }
 
     static func decode(_ xml: XMLIndexer) throws -> Constraint {
-        return Constraint.init(
+        return Constraint(
             id:              try xml.attributeValue(of: "id"),
             constant:        xml.attributeValue(of: "constant"),
             multiplier:      xml.attributeValue(of: "multiplier"),
@@ -227,7 +227,7 @@ public enum Color: XMLDecodable {
         default: return nil
         }
     }
-    
+
     static func decode(_ xml: XMLIndexer) throws -> Color {
         if let colorSpace: String = xml.attributeValue(of: "colorSpace") {
             let key: String? = xml.attributeValue(of: "key")

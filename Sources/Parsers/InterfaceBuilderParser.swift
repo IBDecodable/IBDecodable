@@ -15,7 +15,7 @@ public struct InterfaceBuilderParser {
     private let xmlParser: SWXMLHash
 
     public init() {
-        xmlParser = SWXMLHash.config({_ in})
+        xmlParser = SWXMLHash.config({ _ in })
     }
 
     public func parseStoryboard(xml: String) throws -> StoryboardDocument {

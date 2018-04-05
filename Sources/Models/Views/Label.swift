@@ -34,9 +34,8 @@ public struct Label: XMLDecodable, ViewProtocol {
     public let verticalHuggingPriority: Int?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
-
     static func decode(_ xml: XMLIndexer) throws -> Label {
-        return Label.init(
+        return Label(
             id:                                        try xml.attributeValue(of: "id"),
             adjustsFontSizeToFit:                      xml.attributeValue(of: "adjustsFontSizeToFit"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
@@ -73,7 +72,7 @@ public struct FontDescription: XMLDecodable {
     public let weight: String?
 
     static func decode(_ xml: XMLIndexer) throws -> FontDescription {
-        return FontDescription.init(
+        return FontDescription(
             type:      try xml.attributeValue(of: "type"),
             pointSize: try xml.attributeValue(of: "pointSize"),
             weight:    xml.attributeValue(of: "weight")

@@ -28,7 +28,7 @@ public struct StackView: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
 
     static func decode(_ xml: XMLIndexer) throws -> StackView {
-        return StackView.init(
+        return StackView(
             id:                                        try xml.attributeValue(of: "id"),
             alignment:                                 xml.attributeValue(of: "alignment"),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
