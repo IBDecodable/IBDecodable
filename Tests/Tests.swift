@@ -134,6 +134,19 @@ class Tests: XCTestCase {
             XCTFail("\(error)")
         }
     }
+
+    func testStoryboardConnections() {
+        let url = self.url(forResource:"StoryboardConnections", withExtension: "storyboard")
+        do {
+            let file = try StoryboardFile(url: url)
+            
+            let viewControllers = file.document.scenes?.map { $0.viewController?.viewController } ?? []
+            let rootConnections = viewControllers.flatMap { $0?.connections }.flatMap { $0 }.flatMap { $0.connection }
+            XCTAssertFalse(rootConnections.isEmpty)
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
     
     func testStoryboardAlls() {
         if let urls = bundle.urls(forResourcesWithExtension: "storyboard", subdirectory: nil) {

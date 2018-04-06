@@ -30,6 +30,7 @@ public struct Switch: XMLDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let verticalHuggingPriority: Int?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> Switch {
         return Switch(
@@ -52,7 +53,8 @@ public struct Switch: XMLDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             verticalHuggingPriority:                   xml.attributeValue(of: "verticalHuggingPriority"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
     }
 }

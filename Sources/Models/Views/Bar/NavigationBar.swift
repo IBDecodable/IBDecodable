@@ -25,6 +25,7 @@ public struct NavigationBar: XMLDecodable, ViewProtocol {
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
 
     public struct NavigationItem: XMLDecodable {
         public let id: String
@@ -58,7 +59,8 @@ public struct NavigationBar: XMLDecodable, ViewProtocol {
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
     }
 }

@@ -1,6 +1,6 @@
 //
 //  AnyResources.swift
-//  Tests
+//  IBDecodable
 //
 //  Created by phimage on 01/04/2018.
 //

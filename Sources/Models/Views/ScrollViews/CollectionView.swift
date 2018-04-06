@@ -27,6 +27,7 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionView {
         return CollectionView(
@@ -44,7 +45,8 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
     }
 }
@@ -72,6 +74,7 @@ public struct CollectionViewCell: XMLDecodable, ViewProtocol {
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewCell {
         return CollectionViewCell(
@@ -89,7 +92,8 @@ public struct CollectionViewCell: XMLDecodable, ViewProtocol {
             _subviews:                                 xml.byKey("subviews")?.children.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
     }
 }

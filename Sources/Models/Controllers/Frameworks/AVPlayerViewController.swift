@@ -17,6 +17,7 @@ public struct AVPlayerViewController: XMLDecodable, ViewControllerProtocol {
     public var storyboardIdentifier: String?
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
     public let view: AnyView?
     public var rootView: ViewProtocol? { return view?.view }
 
@@ -28,7 +29,8 @@ public struct AVPlayerViewController: XMLDecodable, ViewControllerProtocol {
             customModuleProvider: xml.attributeValue(of: "customModuleProvider"),
             storyboardIdentifier: xml.attributeValue(of: "storyboardIdentifier"),
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
-            userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue),
+            userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
             view:                 xml.children.first.flatMap(decodeValue)
         )
     }

@@ -35,6 +35,7 @@ public struct TableView: XMLDecodable, ViewProtocol {
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
 
     public enum DataMode: XMLAttributeDecodable {
         case `static`, prototypes
@@ -72,7 +73,8 @@ public struct TableView: XMLDecodable, ViewProtocol {
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
     }
 }
@@ -101,6 +103,7 @@ public struct TableViewCell: XMLDecodable, ViewProtocol {
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
 
     public struct TableViewContentView: XMLDecodable, ViewProtocol {
         public let id: String
@@ -119,6 +122,7 @@ public struct TableViewCell: XMLDecodable, ViewProtocol {
         public let translatesAutoresizingMaskIntoConstraints: Bool?
         public let userInteractionEnabled: Bool?
         public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+        public let connections: [AnyConnection]?
 
         static func decode(_ xml: XMLIndexer) throws -> TableViewCell.TableViewContentView {
             return TableViewContentView(
@@ -135,7 +139,8 @@ public struct TableViewCell: XMLDecodable, ViewProtocol {
                 subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
                 translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
                 userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-                userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
+                userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+                connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
             )
         }
     }
@@ -156,7 +161,8 @@ public struct TableViewCell: XMLDecodable, ViewProtocol {
             _subviews:                                 xml.byKey("subviews")?.children.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
     }
 }

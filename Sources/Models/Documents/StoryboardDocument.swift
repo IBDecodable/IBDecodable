@@ -23,7 +23,6 @@ public struct StoryboardDocument: XMLDecodable {
     public let launchScreen: Bool
     public let device: Device?
     public let scenes: [Scene]?
-    public let placeholders: [Placeholder]?
     public let resources: [AnyResource]?
 
     static func decode(_ xml: XMLIndexer) throws -> StoryboardDocument {
@@ -41,7 +40,6 @@ public struct StoryboardDocument: XMLDecodable {
             launchScreen:          xml.attributeValue(of: "launchScreen") ?? false,
             device:                xml.byKey("device").flatMap(decodeValue),
             scenes:                xml.byKey("scenes")?.byKey("scene")?.all.flatMap(decodeValue),
-            placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue),
             resources:             xml.byKey("resources")?.children.flatMap(decodeValue)
         )
     }
@@ -68,13 +66,17 @@ public struct Device: XMLDecodable {
 public struct Scene: XMLDecodable {
     public let id: String
     public let viewController: AnyViewController?
+    // public let viewControllerPlaceholder: ViewControllerPlaceholder?
     public let canvasLocation: Point?
+    public let placeholders: [Placeholder]?
 
     static func decode(_ xml: XMLIndexer) throws -> Scene {
+        let objects: XMLIndexer? = xml.byKey("objects")
         return Scene(
-            id:             try xml.attributeValue(of: "sceneID"),
-            viewController: xml.byKey("objects")?.children.first.flatMap(decodeValue),
-            canvasLocation: xml.byKey("point").flatMap(decodeValue)
+            id:                        try xml.attributeValue(of: "sceneID"),
+            viewController:            objects?.children.first.flatMap(decodeValue),
+            canvasLocation:            xml.byKey("point").flatMap(decodeValue),
+            placeholders:              objects?.byKey("placeholder")?.all.flatMap(decodeValue)
         )
     }
 }
@@ -85,6 +87,7 @@ public struct Placeholder: XMLDecodable {
     public let id: String
     public let placeholderIdentifier: String
     public let userLabel: String?
+    public let colorLabel: String?
     public let sceneMemberID: String?
     public let customClass: String?
 
@@ -93,7 +96,8 @@ public struct Placeholder: XMLDecodable {
             id:                    try xml.attributeValue(of: "id"),
             placeholderIdentifier: try xml.attributeValue(of: "placeholderIdentifier"),
             userLabel:             xml.attributeValue(of: "userLabel"),
-            sceneMemberID:         xml.attributeValue(of: "userLabel"),
+            colorLabel:             xml.attributeValue(of: "colorLabel"),
+            sceneMemberID:         xml.attributeValue(of: "sceneMemberID"),
             customClass:           xml.attributeValue(of: "customClass")
         )
     }

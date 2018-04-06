@@ -17,6 +17,7 @@ public struct GLKViewController: XMLDecodable, ViewControllerProtocol {
     public var storyboardIdentifier: String?
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
     public let glkView: GLKView?
     public var rootView: ViewProtocol? { return glkView }
 
@@ -28,8 +29,9 @@ public struct GLKViewController: XMLDecodable, ViewControllerProtocol {
             customModuleProvider: xml.attributeValue(of: "customModuleProvider"),
             storyboardIdentifier: xml.attributeValue(of: "storyboardIdentifier"),
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
-            userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue),
-            glkView:                 xml.byKey("glkView").flatMap(decodeValue)
+            userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
+            glkView:              xml.byKey("glkView").flatMap(decodeValue)
         )
     }
 }

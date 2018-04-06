@@ -26,6 +26,7 @@ public protocol ViewProtocol {
     var translatesAutoresizingMaskIntoConstraints: Bool? { get }
     var userInteractionEnabled: Bool? { get }
     var userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]? { get }
+    var connections: [AnyConnection]? { get }
 
 }
 

@@ -25,6 +25,7 @@ public struct ARSCNView: XMLDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let viewLayoutGuide: LayoutGuide?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> ARSCNView {
         return ARSCNView(
@@ -42,7 +43,8 @@ public struct ARSCNView: XMLDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             viewLayoutGuide:                           xml.byKey("viewLayoutGuide").flatMap(decodeValue),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.byKey("userDefinedRuntimeAttribute")?.all.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
     }
 }

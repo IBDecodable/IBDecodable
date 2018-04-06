@@ -18,6 +18,7 @@ public protocol ViewControllerProtocol {
     var storyboardIdentifier: String? { get }
     var layoutGuides: [ViewControllerLayoutGuide]? { get }
     var userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]? { get }
+    var connections: [AnyConnection]? { get }
     var rootView: ViewProtocol? { get }
 }
 
@@ -61,6 +62,25 @@ public struct ViewControllerLayoutGuide: XMLDecodable {
         return try ViewControllerLayoutGuide(
             id: xml.attributeValue(of: "id"),
             type: xml.attributeValue(of: "type")
+        )
+    }
+}
+
+// MARK: - ViewControllerPlaceholder
+
+public struct ViewControllerPlaceholder: XMLDecodable {
+    public let id: String
+    public let storyboardName: String
+    public let referencedIdentifier: String?
+    public let sceneMemberID: String?
+
+    static func decode(_ xml: XMLIndexer) throws -> ViewControllerPlaceholder {
+        assert(xml.element?.name == "viewControllerPlaceholder")
+        return ViewControllerPlaceholder(
+            id: try xml.attributeValue(of: "id"),
+            storyboardName: try xml.attributeValue(of: "storyboardName"),
+            referencedIdentifier: xml.attributeValue(of: "referencedIdentifier"),
+            sceneMemberID: xml.attributeValue(of: "sceneMemberID")
         )
     }
 }
