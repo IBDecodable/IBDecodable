@@ -45,25 +45,10 @@ public struct StoryboardDocument: XMLDecodable {
     }
 }
 
-// MARK: - Device
-
-public struct Device: XMLDecodable {
-    public let id: String
-    public let orientation: String?
-    public let adaptation: String?
-
-    static func decode(_ xml: XMLIndexer) throws -> Device {
-        return Device(
-            id:          try xml.attributeValue(of: "id"),
-            orientation: xml.attributeValue(of: "orientation"),
-            adaptation:  xml.byKey("adaptation")?.attributeValue(of: "id")
-        )
-    }
-}
-
 // MARK: - Scene
 
 public struct Scene: XMLDecodable {
+
     public let id: String
     public let viewController: AnyViewController?
     // public let viewControllerPlaceholder: ViewControllerPlaceholder?
@@ -79,26 +64,5 @@ public struct Scene: XMLDecodable {
             placeholders:              objects?.byKey("placeholder")?.all.flatMap(decodeValue)
         )
     }
-}
 
-// MARK: - Placeholder
-
-public struct Placeholder: XMLDecodable {
-    public let id: String
-    public let placeholderIdentifier: String
-    public let userLabel: String?
-    public let colorLabel: String?
-    public let sceneMemberID: String?
-    public let customClass: String?
-
-    static func decode(_ xml: XMLIndexer) throws -> Placeholder {
-        return Placeholder(
-            id:                    try xml.attributeValue(of: "id"),
-            placeholderIdentifier: try xml.attributeValue(of: "placeholderIdentifier"),
-            userLabel:             xml.attributeValue(of: "userLabel"),
-            colorLabel:             xml.attributeValue(of: "colorLabel"),
-            sceneMemberID:         xml.attributeValue(of: "sceneMemberID"),
-            customClass:           xml.attributeValue(of: "customClass")
-        )
-    }
 }

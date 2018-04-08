@@ -207,11 +207,14 @@ public struct Constraint: XMLDecodable {
 // MARK: - Color
 
 public enum Color: XMLDecodable {
+
     public typealias CalibratedWhite = (key: String?, white: Float, alpha: Float)
     public typealias SRGB = (key: String?, red: Float, blue: Float, green: Float, alpha: Float)
+    public typealias Named = (key: String?, name: String)
     case calibratedWhite(CalibratedWhite)
     case sRGB(SRGB)
-    case name(String)
+    case name(Named)
+    case systemColor(Named)
 
     public var sRGB: SRGB? {
         switch self {
@@ -230,8 +233,8 @@ public enum Color: XMLDecodable {
     }
 
     static func decode(_ xml: XMLIndexer) throws -> Color {
+        let key: String? = xml.attributeValue(of: "key")
         if let colorSpace: String = xml.attributeValue(of: "colorSpace") {
-            let key: String? = xml.attributeValue(of: "key")
             switch colorSpace {
             case "calibratedWhite":
                 return try .calibratedWhite((key:   key,
@@ -254,7 +257,29 @@ public enum Color: XMLDecodable {
                 throw IBError.unsupportedColorSpace(colorSpace)
             }
         } else {
-            return .name(try xml.attributeValue(of: "name"))
+            if let systemColor: String = xml.attributeValue(of: "cocoaTouchSystemColor") {
+                return .systemColor((key, systemColor))
+            }
+            return .name((key, try xml.attributeValue(of: "name")))
         }
     }
+}
+
+// MARK: AttributeProtocol
+
+extension Color: AttributeProtocol {
+
+    public var key: String? {
+        switch self {
+        case .calibratedWhite(let calibratedWhite):
+            return calibratedWhite.key
+        case .sRGB(let srgb):
+            return srgb.key
+        case .name(let named):
+            return named.key
+        case .systemColor(let named):
+            return named.key
+        }
+    }
+
 }

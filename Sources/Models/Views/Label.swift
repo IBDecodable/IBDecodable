@@ -8,6 +8,7 @@
 import SWXMLHash
 
 public struct Label: XMLDecodable, ViewProtocol {
+
     public let id: String
     public let elementClass: String = "UILabel"
 
@@ -26,9 +27,10 @@ public struct Label: XMLDecodable, ViewProtocol {
     public let opaque: Bool?
     public let rect: Rect
     public let subviews: [AnyView]?
-    public let text: String
+    public let text: String?
     public let textAlignment: String?
     public let textColor: Color?
+    public let attributedString: AttributedString?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let verticalHuggingPriority: Int?
@@ -53,9 +55,10 @@ public struct Label: XMLDecodable, ViewProtocol {
             opaque:                                    xml.attributeValue(of: "opaque"),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            text:                                      try xml.attributeValue(of: "text"),
+            text:                                      xml.attributeValue(of: "text"),
             textAlignment:                             xml.attributeValue(of: "textAlignment"),
             textColor:                                 xml.byKey("color").flatMap(decodeValue),
+            attributedString:                          xml.byKey("attributedString").flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             verticalHuggingPriority:                   xml.attributeValue(of: "verticalHuggingPriority"),

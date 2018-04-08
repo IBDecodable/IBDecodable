@@ -7,23 +7,11 @@
 
 import XCTest
 @testable import IBDecodable
+import Foundation
 
 class Tests: XCTestCase {
 
-    lazy var bundle: Bundle = {
-        return Bundle(for: type(of: self))
-    }()
-
-    func url(forResource resource: String, withExtension ext: String) -> URL {
-        if let url = bundle.url(forResource: resource, withExtension: ext) {
-            return url
-        }
-        return URL(fileURLWithPath: "Tests/Resources/\(resource).\(ext)")
-    }
-
-    override func setUp() {
-
-    }
+    override func setUp() {}
 
     func testEmptyView() {
         let url = self.url(forResource:"View", withExtension: "xib")
@@ -122,7 +110,7 @@ class Tests: XCTestCase {
             XCTFail("\(error)")
         }
     }
-    
+
     func testStoryboardAllControllers() {
         let url = self.url(forResource:"StoryboardControllers", withExtension: "storyboard")
         do {
@@ -147,17 +135,63 @@ class Tests: XCTestCase {
             XCTFail("\(error)")
         }
     }
-    
+
+    func testStoryboardAttributes() {
+        let url = self.url(forResource:"StoryboardAttributes", withExtension: "storyboard")
+        do {
+            let file = try StoryboardFile(url: url)
+            
+            let viewControllers = file.document.scenes?.map { $0.viewController?.viewController } ?? []
+            print("\(viewControllers)")
+            
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+
     func testStoryboardAlls() {
-        if let urls = bundle.urls(forResourcesWithExtension: "storyboard", subdirectory: nil) {
+        if let urls = urls(withExtension: "storyboard") {
             for url in urls {
                 do {
-                    _ = try StoryboardFile(url: url)
+                    let file = try StoryboardFile(url: url)
+                    
+                    for scene in file.document.scenes ?? [] {
+                        if let viewController = scene.viewController?.viewController {
+                            #if os(iOS)
+                                // Check that element class could be loaded (need to import framework first)
+                            let cls: AnyClass? = NSClassFromString(viewController.elementClass)
+                            XCTAssertNotNil(cls, viewController.elementClass)
+                            #endif
+                        }
+                    }
                 } catch {
                     XCTFail("\(error)")
                 }
             }
         }
+    }
+
+    // MARK: Utils
+
+    lazy var bundle: Bundle = {
+        return Bundle(for: type(of: self))
+    }()
+
+    func url(forResource resource: String, withExtension ext: String) -> URL {
+        if let url = bundle.url(forResource: resource, withExtension: ext) {
+            return url
+        }
+        return URL(fileURLWithPath: "Tests/Resources/\(resource).\(ext)")
+    }
+
+    func urls(withExtension ext: String) -> [URL]? {
+        if let urls = bundle.urls(forResourcesWithExtension: ext, subdirectory: nil) {
+            return urls
+        }
+        if let paths = try? FileManager.default.contentsOfDirectory(atPath: "Tests/Resources") {
+            return paths.filter { $0.hasSuffix(".\(ext)") }.map { URL(fileURLWithPath: $0) }
+        }
+        return nil
     }
 
 }
