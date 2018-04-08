@@ -18,8 +18,9 @@ public struct TabBarController: XMLDecodable, ViewControllerProtocol {
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
-    public let view: View?
-    public var rootView: ViewProtocol? { return view }
+    public let tabBarItem: TabBar.TabBarItem?
+    public let tabBar: TabBar?
+    public var rootView: ViewProtocol? { return tabBar }
 
     static func decode(_ xml: XMLIndexer) throws -> TabBarController {
         return TabBarController(
@@ -31,7 +32,8 @@ public struct TabBarController: XMLDecodable, ViewControllerProtocol {
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
-            view:                 xml.byKey("view").flatMap(decodeValue)
+            tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
+            tabBar:               xml.byKey("tabBar").flatMap(decodeValue)
         )
     }
 }

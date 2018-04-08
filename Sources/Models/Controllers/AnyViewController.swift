@@ -19,6 +19,8 @@ public protocol ViewControllerProtocol {
     var layoutGuides: [ViewControllerLayoutGuide]? { get }
     var userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]? { get }
     var connections: [AnyConnection]? { get }
+    /// The tab bar item that represents the view controller when added to a tab bar controller.
+    var tabBarItem: TabBar.TabBarItem? { get }
     var rootView: ViewProtocol? { get }
 }
 

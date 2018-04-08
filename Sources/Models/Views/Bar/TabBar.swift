@@ -29,6 +29,7 @@ public struct TabBar: XMLDecodable, ViewProtocol {
 
     public struct TabBarItem: XMLDecodable {
         public let id: String
+        public let key: String?
         public let style: String?
         public let systemItem: String?
         public let title: String?
@@ -36,6 +37,7 @@ public struct TabBar: XMLDecodable, ViewProtocol {
         static func decode(_ xml: XMLIndexer) throws -> TabBar.TabBarItem {
             return TabBarItem(
                 id:         try xml.attributeValue(of: "id"),
+                key:      xml.attributeValue(of: "key"),
                 style:      xml.attributeValue(of: "style"),
                 systemItem: xml.attributeValue(of: "systemItem"),
                 title:      xml.attributeValue(of: "title")

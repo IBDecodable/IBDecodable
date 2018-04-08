@@ -88,22 +88,23 @@ class Tests: XCTestCase {
         let url = self.url(forResource:"StoryboardUserDefinedAttributes", withExtension: "storyboard")
         do {
             let file = try StoryboardFile(url: url)
-            
-            for scene in file.document.scenes ?? [] {
-                if let controller = scene.viewController?.viewController, let attributes = controller.userDefinedRuntimeAttributes {
-                    
-                    XCTAssertFalse(attributes.isEmpty, "No user defined attributes on root controller")
-                    if let rootView = controller.rootView {
-                        if let viewAttributes = rootView.userDefinedRuntimeAttributes {
-                            XCTAssertFalse(viewAttributes.isEmpty, "No user defined attributes on root view")
+            if let scenes = file.document.scenes {
+                for scene in scenes {
+                    if let controller = scene.viewController?.viewController, let attributes = controller.userDefinedRuntimeAttributes {
+                        
+                        XCTAssertFalse(attributes.isEmpty, "No user defined attributes on root controller")
+                        if let rootView = controller.rootView {
+                            if let viewAttributes = rootView.userDefinedRuntimeAttributes {
+                                XCTAssertFalse(viewAttributes.isEmpty, "No user defined attributes on root view")
+                            } else {
+                                XCTFail("No user defined attributes on root view")
+                            }
                         } else {
-                            XCTFail("No user defined attributes on root view")
+                            XCTFail("No root view for controller \(controller)")
                         }
                     } else {
-                        XCTFail("No root view for controller \(controller)")
+                        XCTFail("No user defined attributes on root controller")
                     }
-                } else {
-                    XCTFail("No user defined attributes on root controller")
                 }
             }
         } catch {
@@ -141,8 +142,9 @@ class Tests: XCTestCase {
         do {
             let file = try StoryboardFile(url: url)
             
-            let viewControllers = file.document.scenes?.map { $0.viewController?.viewController } ?? []
-            print("\(viewControllers)")
+            let _ = file.document.scenes?.map { $0.viewController?.viewController } ?? []
+            // print("\(viewControllers)")
+            // TODO browser to get attributes
             
         } catch {
             XCTFail("\(error)")

@@ -18,6 +18,7 @@ public struct GLKViewController: XMLDecodable, ViewControllerProtocol {
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let tabBarItem: TabBar.TabBarItem?
     public let glkView: GLKView?
     public var rootView: ViewProtocol? { return glkView }
 
@@ -31,6 +32,7 @@ public struct GLKViewController: XMLDecodable, ViewControllerProtocol {
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
+            tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
             glkView:              xml.byKey("glkView").flatMap(decodeValue)
         )
     }
