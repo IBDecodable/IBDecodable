@@ -21,6 +21,7 @@ public struct AVPlayerViewController: XMLDecodable, ViewControllerProtocol {
     public let tabBarItem: TabBar.TabBarItem?
     public let view: AnyView?
     public var rootView: ViewProtocol? { return view?.view }
+    public var videoGravity: String?
 
     static func decode(_ xml: XMLIndexer) throws -> AVPlayerViewController {
         return AVPlayerViewController(
@@ -33,7 +34,8 @@ public struct AVPlayerViewController: XMLDecodable, ViewControllerProtocol {
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
             tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
-            view:                 xml.children.first.flatMap(decodeValue)
+            view:                 xml.children.first.flatMap(decodeValue),
+            videoGravity:         xml.attributeValue(of: "videoGravity")
         )
     }
 }

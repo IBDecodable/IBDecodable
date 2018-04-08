@@ -127,11 +127,18 @@ public struct Point: XMLDecodable {
 public struct AutoresizingMask: XMLDecodable {
     public let widthSizable: Bool
     public let heightSizable: Bool
+    public let key: String?
+    public let flexibleMaxX: Bool
+    public let flexibleMaxY: Bool
 
     static func decode(_ xml: XMLIndexer) throws -> AutoresizingMask {
         return try AutoresizingMask(
             widthSizable:  xml.attributeValue(of: "widthSizable"),
-            heightSizable: xml.attributeValue(of: "heightSizable"))
+            heightSizable: xml.attributeValue(of: "heightSizable"),
+            key:           xml.attributeValue(of: "key"),
+            flexibleMaxX:  xml.attributeValue(of: "flexibleMaxX"),
+            flexibleMaxY:  xml.attributeValue(of: "flexibleMaxY")
+        )
     }
 }
 

@@ -21,19 +21,21 @@ public struct TableViewController: XMLDecodable, ViewControllerProtocol {
     public let tabBarItem: TabBar.TabBarItem?
     public let tableView: TableView?
     public var rootView: ViewProtocol? { return tableView }
+    public var clearsSelectionOnViewWillAppear: Bool?
 
     static func decode(_ xml: XMLIndexer) throws -> TableViewController {
         return TableViewController(
-            id:                   try xml.attributeValue(of: "id"),
-            customClass:          xml.attributeValue(of: "customClass"),
-            customModule:         xml.attributeValue(of: "customModule"),
-            customModuleProvider: xml.attributeValue(of: "customModuleProvider"),
-            storyboardIdentifier: xml.attributeValue(of: "storyboardIdentifier"),
-            layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
-            userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
-            tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
-            tableView:            xml.byKey("tableView").flatMap(decodeValue)
+            id:                              try xml.attributeValue(of: "id"),
+            customClass:                     xml.attributeValue(of: "customClass"),
+            customModule:                    xml.attributeValue(of: "customModule"),
+            customModuleProvider:            xml.attributeValue(of: "customModuleProvider"),
+            storyboardIdentifier:            xml.attributeValue(of: "storyboardIdentifier"),
+            layoutGuides:                    xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
+            userDefinedRuntimeAttributes:    xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
+            connections:                     xml.byKey("connections")?.children.flatMap(decodeValue),
+            tabBarItem:                      xml.byKey("tabBarItem").flatMap(decodeValue),
+            tableView:                       xml.byKey("tableView").flatMap(decodeValue),
+            clearsSelectionOnViewWillAppear: (try? xml.attributeValue(of: "clearsSelectionOnViewWillAppear")) ?? true
         )
     }
 }
