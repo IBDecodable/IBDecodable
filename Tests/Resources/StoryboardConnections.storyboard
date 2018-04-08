@@ -37,7 +37,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qo6-GC-tuQ">
-                                                    <rect key="frame" x="209" y="6" width="46" height="30"/>
+                                                    <rect key="frame" x="289" y="3" width="46" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Button"/>
                                                     <connections>
@@ -80,6 +80,16 @@
                     <view key="view" contentMode="scaleToFill" id="qja-oF-epM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyf-Ww-OT1">
+                                <rect key="frame" x="164" y="257" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="F5Y-Gm-KdX" kind="show" id="o8d-bM-qoT"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="pk5-ET-pRV"/>
                     </view>
@@ -87,6 +97,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V8P-30-g5s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1532" y="42"/>
+        </scene>
+        <!--StoryboardAsset-->
+        <scene sceneID="z3e-qk-kCu">
+            <objects>
+                <viewControllerPlaceholder storyboardName="StoryboardAsset" id="F5Y-Gm-KdX" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q3A-48-glf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2265" y="19"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bsR-oM-HsP">

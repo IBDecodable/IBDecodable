@@ -51,7 +51,7 @@ public struct Scene: XMLDecodable {
 
     public let id: String
     public let viewController: AnyViewController?
-    // public let viewControllerPlaceholder: ViewControllerPlaceholder?
+    public let viewControllerPlaceholder: ViewControllerPlaceholder?
     public let canvasLocation: Point?
     public let placeholders: [Placeholder]?
 
@@ -60,6 +60,7 @@ public struct Scene: XMLDecodable {
         return Scene(
             id:                        try xml.attributeValue(of: "sceneID"),
             viewController:            objects?.children.first.flatMap(decodeValue),
+            viewControllerPlaceholder: objects?.byKey("viewControllerPlaceholder").flatMap(decodeValue),
             canvasLocation:            xml.byKey("point").flatMap(decodeValue),
             placeholders:              objects?.byKey("placeholder")?.all.flatMap(decodeValue)
         )
