@@ -122,6 +122,42 @@ public struct Point: XMLDecodable {
     }
 }
 
+// MARK: - Size
+
+public struct Size: XMLDecodable {
+    public let width: Float
+    public let height: Float
+    public let key: String?
+
+    static func decode(_ xml: XMLIndexer) throws -> Size {
+        return Size(
+            width:  try xml.attributeValue(of: "width"),
+            height: try xml.attributeValue(of: "height"),
+            key:    xml.attributeValue(of: "key")
+        )
+    }
+}
+
+// MARK: - Inset
+
+public struct Inset: XMLDecodable {
+    public let minX: Float
+    public let minY: Float
+    public let maxX: Float
+    public let maxY: Float
+    public let key: String?
+
+    static func decode(_ xml: XMLIndexer) throws -> Inset {
+        return Inset(
+            minX: try xml.attributeValue(of: "minX"),
+            minY: try xml.attributeValue(of: "minY"),
+            maxX: try xml.attributeValue(of: "maxX"),
+            maxY: try xml.attributeValue(of: "maxY"),
+            key:  xml.attributeValue(of: "key")
+        )
+    }
+}
+
 // MARK: - AutoresizingMask
 
 public struct AutoresizingMask: XMLDecodable {

@@ -29,6 +29,8 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
     public let cells: [CollectionViewCell]?
+    public let layout: CollectionViewLayout?
+    public let flowLayout: CollectionViewFlowLayout?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionView {
         return CollectionView(
@@ -48,7 +50,9 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue),
-            cells:                                     xml.byKey("cells")?.children.flatMap(decodeValue)
+            cells:                                     xml.byKey("cells")?.children.flatMap(decodeValue),
+            layout:                                    xml.byKey("collectionViewLayout").flatMap(decodeValue),
+            flowLayout:                                xml.byKey("collectionViewFlowLayout").flatMap(decodeValue)
         )
     }
 }
@@ -96,6 +100,48 @@ public struct CollectionViewCell: XMLDecodable, ViewProtocol {
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+        )
+    }
+}
+
+// MARK: - CollectionViewLayout
+
+public struct CollectionViewLayout: XMLDecodable {
+
+    public let id: String
+    public let key: String?
+    public let customClass: String?
+    public let customModule: String?
+
+    static func decode(_ xml: XMLIndexer) throws -> CollectionViewLayout {
+        return CollectionViewLayout(
+            id:                       try xml.attributeValue(of: "id"),
+            key:                      xml.attributeValue(of: "contentMode"),
+            customClass:              xml.attributeValue(of: "customClass"),
+            customModule:             xml.attributeValue(of: "customModule")
+        )
+    }
+}
+
+// MARK: - CollectionViewFlowLayout
+
+public struct CollectionViewFlowLayout: XMLDecodable {
+
+    public let id: String
+    public let key: String?
+    public let minimumLineSpacing: String?
+    public let minimumInteritemSpacing: String?
+    public let sizes: [Size]?
+    public let insets: [Inset]?
+
+    static func decode(_ xml: XMLIndexer) throws -> CollectionViewFlowLayout {
+        return CollectionViewFlowLayout(
+            id:                       try xml.attributeValue(of: "id"),
+            key:                      xml.attributeValue(of: "contentMode"),
+            minimumLineSpacing:       xml.attributeValue(of: "minimumLineSpacing"),
+            minimumInteritemSpacing:  xml.attributeValue(of: "minimumInteritemSpacing"),
+            sizes:                     xml.byKey("size")?.all.flatMap(decodeValue),
+            insets:                     xml.byKey("inset")?.all.flatMap(decodeValue)
         )
     }
 }
