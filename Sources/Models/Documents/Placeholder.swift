@@ -15,7 +15,7 @@ public struct Placeholder: XMLDecodable {
     public let colorLabel: String?
     public let sceneMemberID: String?
     public let customClass: String?
-    public let attributedString: AttributedString?
+    public let userComments: AttributedString?
 
     static func decode(_ xml: XMLIndexer) throws -> Placeholder {
         return Placeholder(
@@ -25,7 +25,7 @@ public struct Placeholder: XMLDecodable {
             colorLabel:            xml.attributeValue(of: "colorLabel"),
             sceneMemberID:         xml.attributeValue(of: "sceneMemberID"),
             customClass:           xml.attributeValue(of: "customClass"),
-            attributedString:      xml.byKey("attributedString").flatMap(decodeValue)
+            userComments:          xml.byKey("attributedString")?.withAttribute("key", "userComments").flatMap(decodeValue)
         )
     }
 

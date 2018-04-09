@@ -36,6 +36,8 @@ public struct TableView: XMLDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let sections: [TableViewSection]?
+    public let prototypeCells: [TableViewCell]?
 
     public enum DataMode: XMLAttributeDecodable {
         case `static`, prototypes
@@ -74,11 +76,36 @@ public struct TableView: XMLDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue),
+            sections:                                  xml.byKey("sections")?.children.flatMap(decodeValue),
+            prototypeCells:                            xml.byKey("prototypes")?.children.flatMap(decodeValue)
         )
     }
 }
 
+// MARK: - TableViewSection
+
+public struct TableViewSection: XMLDecodable {
+
+    public let id: String
+    public let headerTitle: String?
+    public let footerTitle: String?
+    public let colorLabel: String?
+    public let cells: [TableViewCell]?
+    public let userComments: AttributedString?
+
+    static func decode(_ xml: XMLIndexer) throws -> TableViewSection {
+        assert(xml.element?.name == "tableViewSection")
+        return TableViewSection(
+            id:           try xml.attributeValue(of: "id"),
+            headerTitle:  xml.attributeValue(of: "headerTitle"),
+            footerTitle:  xml.attributeValue(of: "footerTitle"),
+            colorLabel:   xml.attributeValue(of: "colorLabel"),
+            cells:        xml.byKey("cells")?.children.flatMap(decodeValue),
+            userComments: xml.byKey("attributedString")?.withAttribute("key", "userComments").flatMap(decodeValue)
+        )
+    }
+}
 // MARK: - TableViewCell
 
 public struct TableViewCell: XMLDecodable, ViewProtocol {

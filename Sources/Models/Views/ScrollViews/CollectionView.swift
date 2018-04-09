@@ -28,6 +28,7 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let cells: [CollectionViewCell]?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionView {
         return CollectionView(
@@ -46,7 +47,8 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue),
+            cells:                                     xml.byKey("cells")?.children.flatMap(decodeValue)
         )
     }
 }

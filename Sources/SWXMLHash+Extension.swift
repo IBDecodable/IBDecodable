@@ -43,6 +43,11 @@ extension XMLIndexer {
     public func byKey(_ key: String) -> XMLIndexer? {
         return try? byKey(key)
     }
+
+    public func withAttribute(_ attr: String, _ value: String) -> XMLIndexer? {
+        return try? withAttribute(attr, value)
+    }
+
 }
 
 extension XMLAttributeDeserializable where Self: XMLAttributeDecodable {
