@@ -29,8 +29,10 @@ public struct AnyConnection: XMLDecodable {
             throw IBError.elementNotFound
         }
         switch elementName {
-        case "outlet":      return try AnyConnection(Outlet.decode(xml))
-        case "segue":           return try AnyConnection(Segue.decode(xml))
+        case "outlet":           return try AnyConnection(Outlet.decode(xml))
+        case "segue":            return try AnyConnection(Segue.decode(xml))
+        case "action":           return try AnyConnection(Action.decode(xml))
+        case "outletCollection": return try AnyConnection(OutletCollection.decode(xml))
         default:
             throw IBError.unsupportedViewClass(elementName)
         }

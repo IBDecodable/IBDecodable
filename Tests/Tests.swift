@@ -132,6 +132,8 @@ class Tests: XCTestCase {
             let viewControllers = file.document.scenes?.map { $0.viewController?.viewController } ?? []
             let rootConnections = viewControllers.flatMap { $0?.connections }.flatMap { $0 }.flatMap { $0.connection }
             XCTAssertFalse(rootConnections.isEmpty)
+            let allConnections = file.document.connections ?? []
+            XCTAssertEqual(allConnections.count, 9)
         } catch {
             XCTFail("\(error)")
         }
