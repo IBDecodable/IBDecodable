@@ -20,6 +20,7 @@ public struct XibDocument: XMLDecodable {
     public let device: Device?
     public let views: [AnyView]?
     public let placeholders: [Placeholder]?
+    public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> XibDocument {
         return XibDocument(
@@ -34,7 +35,8 @@ public struct XibDocument: XMLDecodable {
             colorMatched:          xml.attributeValue(of: "colorMatched"),
             device:                xml.byKey("device").flatMap(decodeValue),
             views:                 xml.byKey("objects")?.children.flatMap(decodeValue),
-            placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue)
+            placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue),
+            connections:           findConnections(in: xml)
         )
     }
 }
