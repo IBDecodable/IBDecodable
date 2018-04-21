@@ -19,7 +19,7 @@ public struct TextView: XMLDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
-    public let font: FontDescription?
+    public let fontDescription: FontDescription?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -46,7 +46,7 @@ public struct TextView: XMLDecodable, ViewProtocol {
             contentMode:                               xml.attributeValue(of: "contentMode"),
             customClass:                               xml.attributeValue(of: "customClass"),
             customModule:                              xml.attributeValue(of: "customModule"),
-            font:                                      xml.byKey("fontDescription").flatMap(decodeValue),
+            fontDescription:                           xml.byKey("fontDescription").flatMap(decodeValue),
             isMisplaced:                               xml.attributeValue(of: "misplaced"),
             opaque:                                    xml.attributeValue(of: "opaque"),
             rect:                                      try decodeValue(xml.byKey("rect")),

@@ -20,64 +20,28 @@ public struct Button: XMLDecodable, ViewProtocol {
     public let contentVerticalAlignment: String?
     public let customClass: String?
     public let customModule: String?
-    public let font: FontDescription?
+    public let fontDescription: FontDescription?
     public let lineBreakMode: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
     public let subviews: [AnyView]?
-    public let textColor: TextColor
-    public let title: Title
+    public let state: [State]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct Title: XMLDecodable {
-        public let disabled: String?
-        public let highlighted: String?
-        public let normal: String?
-        public let selected: String?
+    public struct State: XMLDecodable {
+        public let key: String
+        public let title: String
+        public let color: Color?
 
-        static func decode(_ xml: XMLIndexer) throws -> Button.Title {
-            let allState = try xml.byKey("state").all
-
-            func title(for key: String) -> String? {
-                guard let stateElement = try? allState.first(where: { try $0.attributeValue(of: "key") == key }) else {
-                    return nil
-                }
-                return stateElement.flatMap { try? $0.attributeValue(of: "title") }
-            }
-
-            return Title(
-                disabled: title(for: "disabled"),
-                highlighted: title(for: "highlighted"),
-                normal: title(for: "normal"),
-                selected: title(for: "selected")
-            )
-        }
-    }
-
-    public struct TextColor: XMLDecodable {
-        public let normal: Color?
-        public let disabled: Color?
-        public let selected: Color?
-        public let highlighted: Color?
-
-        static func decode(_ xml: XMLIndexer) throws -> Button.TextColor {
-            let allState = try xml.byKey("state").all
-
-            func color(for key: String) -> Color? {
-                guard let colorElement = try? allState.first(where: { try $0.attributeValue(of: "key") == key })?.byKey("color") else {
-                    return nil
-                }
-                return colorElement.flatMap { try? Color.decode($0) }
-            }
-            return TextColor(
-                normal: color(for: "normal"),
-                disabled: color(for: "disabled"),
-                selected: color(for: "selected"),
-                highlighted: color(for: "highlighted")
+        static func decode(_ xml: XMLIndexer) throws -> Button.State {
+            return State.init(
+                key:   try xml.attributeValue(of: "key"),
+                title: try xml.attributeValue(of: "title"),
+                color: xml.byKey("color").flatMap(decodeValue)
             )
         }
     }
@@ -94,14 +58,13 @@ public struct Button: XMLDecodable, ViewProtocol {
             contentVerticalAlignment:                  xml.attributeValue(of: "contentVerticalAlignment"),
             customClass:                               xml.attributeValue(of: "customClass"),
             customModule:                              xml.attributeValue(of: "customModule"),
-            font:                                      xml.byKey("fontDescription").flatMap(decodeValue),
+            fontDescription:                                      xml.byKey("fontDescription").flatMap(decodeValue),
             lineBreakMode:                             xml.attributeValue(of: "lineBreakMode"),
             isMisplaced:                               xml.attributeValue(of: "misplaced"),
             opaque:                                    xml.attributeValue(of: "opaque"),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            textColor:                                 try TextColor.decode(xml),
-            title:                                     try Title.decode(xml),
+            state:                                     xml.byKey("state")?.all.flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
             userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),

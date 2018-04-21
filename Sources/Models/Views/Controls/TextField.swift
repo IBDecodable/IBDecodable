@@ -21,7 +21,7 @@ public struct TextField: XMLDecodable, ViewProtocol {
     public let customClass: String?
     public let customModule: String?
     public let fixedFrame: Bool?
-    public let font: FontDescription?
+    public let fontDescription: FontDescription?
     public let minimumFontSize: Float?
     public let isMisplaced: Bool?
     public let opaque: Bool?
@@ -46,7 +46,7 @@ public struct TextField: XMLDecodable, ViewProtocol {
             customClass:                               xml.attributeValue(of: "customClass"),
             customModule:                              xml.attributeValue(of: "customModule"),
             fixedFrame:                                xml.attributeValue(of: "fixedFrame"),
-            font:                                      xml.byKey("fontDescription").flatMap(decodeValue),
+            fontDescription:                           xml.byKey("fontDescription").flatMap(decodeValue),
             minimumFontSize:                           xml.attributeValue(of: "minimumFontSize"),
             isMisplaced:                               xml.attributeValue(of: "misplaced"),
             opaque:                                    xml.attributeValue(of: "opaque"),
