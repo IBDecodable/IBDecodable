@@ -32,6 +32,8 @@ public struct CollectionView: XMLDecodable, KeyDecodable, ViewProtocol {
     public let layout: CollectionViewLayout?
     public let flowLayout: CollectionViewFlowLayout?
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> CollectionView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -42,25 +44,26 @@ public struct CollectionView: XMLDecodable, KeyDecodable, ViewProtocol {
             }()
             return MappedCodingKey(stringValue: stringValue)
         }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
 
         return CollectionView(
             id:                                        try container.attribute(of: .id),
             alwaysBounceHorizontal:                    container.attributeIfPresent(of: .alwaysBounceHorizontal),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            subviews:                                  xml.byKey("subviews")?.children.compactMap(decodeValue),
+            rect:                                      try container.element(of: .rect),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.compactMap(decodeValue),
-            cells:                                     xml.byKey("cells")?.children.compactMap(decodeValue),
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections),
+            cells:                                     container.childrenIfPresent(of: .cells),
             layout:                                    xml.byKey("collectionViewLayout").flatMap(decodeValue),
             flowLayout:                                xml.byKey("collectionViewFlowLayout").flatMap(decodeValue)
         )
@@ -92,34 +95,38 @@ public struct CollectionViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewCell {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case ._subviews: return "subview"
                 default: return key.stringValue
                 }
             }()
             return MappedCodingKey(stringValue: stringValue)
         }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
 
         return CollectionViewCell(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentView:                               try decodeValue(xml.byKey("view")),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            _subviews:                                 xml.byKey("subviews")?.children.compactMap(decodeValue),
+            rect:                                      try container.element(of: .rect),
+            _subviews:                                 container.childrenIfPresent(of: ._subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.compactMap(decodeValue)
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 }

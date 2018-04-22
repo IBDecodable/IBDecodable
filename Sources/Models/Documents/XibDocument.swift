@@ -22,8 +22,13 @@ public struct XibDocument: XMLDecodable, KeyDecodable {
     public let placeholders: [Placeholder]?
     public let connections: [AnyConnection]?
 
+    enum ExternalCodingKeys: CodingKey { case objects }
+    enum ObjectsCodingKeys: CodingKey { case placeholder }
+
     static func decode(_ xml: XMLIndexer) throws -> XibDocument {
         let container = xml.container(keys: CodingKeys.self)
+        let externalContainer = xml.container(keys: ExternalCodingKeys.self)
+        let objectsContainer = externalContainer.nestedContainerIfPresent(of: .objects, keys: ObjectsCodingKeys.self)
         return XibDocument(
             type:                  try container.attribute(of: .type),
             version:               try container.attribute(of: .version),
@@ -35,8 +40,8 @@ public struct XibDocument: XMLDecodable, KeyDecodable {
             useSafeAreas:          container.attributeIfPresent(of: .useSafeAreas),
             colorMatched:          container.attributeIfPresent(of: .colorMatched),
             device:                container.elementIfPresent(of: .device),
-            views:                 xml.byKey("objects")?.children.flatMap(decodeValue),
-            placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue),
+            views:                 externalContainer.childrenIfPresent(of: .objects),
+            placeholders:          objectsContainer?.elementsIfPresent(of: .placeholder),
             connections:           findConnections(in: xml)
         )
     }

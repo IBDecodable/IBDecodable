@@ -51,13 +51,13 @@ public struct ActivityindicatorView: XMLDecodable, KeyDecodable, ViewProtocol {
             customModule:                              container.attributeIfPresent(of: .customModule),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            subviews:                                  xml.byKey("subviews")?.children.compactMap(decodeValue),
+            rect:                                      try container.element(of: .rect),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             viewLayoutGuide:                           container.elementIfPresent(of: .viewLayoutGuide),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.compactMap(decodeValue)
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 }

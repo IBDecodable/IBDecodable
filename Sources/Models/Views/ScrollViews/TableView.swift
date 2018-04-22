@@ -54,6 +54,8 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
         }
     }
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> TableView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -64,13 +66,14 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
             }()
             return MappedCodingKey(stringValue: stringValue)
         }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
 
         return TableView(
             id:                                        try container.attribute(of: .id),
             alwaysBounceVertical:                      container.attributeIfPresent(of: .alwaysBounceVertical),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
@@ -78,18 +81,18 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
             estimatedRowHeight:                        container.attributeIfPresent(of: .estimatedRowHeight),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try decodeValue(xml.byKey("rect")),
+            rect:                                      try container.element(of: .rect),
             rowHeight:                                 container.attributeIfPresent(of: .rowHeight),
             sectionFooterHeight:                       container.attributeIfPresent(of: .sectionFooterHeight),
             sectionHeaderHeight:                       container.attributeIfPresent(of: .sectionHeaderHeight),
             separatorStyle:                            container.attributeIfPresent(of: .separatorStyle),
             style:                                     container.attributeIfPresent(of: .style),
-            subviews:                                  xml.byKey("subviews")?.children.compactMap(decodeValue),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.compactMap(decodeValue),
-            sections:                                  xml.byKey("sections")?.children.compactMap(decodeValue),
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections),
+            sections:                                  container.childrenIfPresent(of: .sections),
             prototypeCells:                            xml.byKey("prototypes")?.children.compactMap(decodeValue)
         )
     }
@@ -114,7 +117,7 @@ public struct TableViewSection: XMLDecodable, KeyDecodable {
             headerTitle:  container.attributeIfPresent(of: .headerTitle),
             footerTitle:  container.attributeIfPresent(of: .footerTitle),
             colorLabel:   container.attributeIfPresent(of: .colorLabel),
-            cells:        xml.byKey("cells")?.children.compactMap(decodeValue),
+            cells:        container.childrenIfPresent(of: .cells),
             userComments: xml.byKey("attributedString")?.withAttribute("key", "userComments").flatMap(decodeValue)
         )
     }
@@ -174,55 +177,60 @@ public struct TableViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
                 }()
                 return MappedCodingKey(stringValue: stringValue)
             }
+            let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
 
             return TableViewContentView(
                 id:                                        try container.attribute(of: .id),
                 autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
                 clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
-                constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
+                constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
                 contentMode:                               container.attributeIfPresent(of: .contentMode),
                 customClass:                               container.attributeIfPresent(of: .customClass),
                 customModule:                              container.attributeIfPresent(of: .customModule),
                 isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
                 opaque:                                    container.attributeIfPresent(of: .opaque),
-                rect:                                      try decodeValue(xml.byKey("rect")),
-                subviews:                                  xml.byKey("subviews")?.children.compactMap(decodeValue),
+                rect:                                      try container.element(of: .rect),
+                subviews:                                  container.childrenIfPresent(of: .subviews),
                 translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
                 userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
-                userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
-                connections:                               xml.byKey("connections")?.children.compactMap(decodeValue)
+                userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+                connections:                               container.childrenIfPresent(of: .connections)
             )
         }
     }
+
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
 
     static func decode(_ xml: XMLIndexer) throws -> TableViewCell {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case ._subviews: return "subview"
                 default: return key.stringValue
                 }
             }()
             return MappedCodingKey(stringValue: stringValue)
         }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
 
         return TableViewCell(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentView:                               try decodeValue(xml.byKey("tableViewCellContentView")),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            _subviews:                                 xml.byKey("subviews")?.children.compactMap(decodeValue),
+            rect:                                      try container.element(of: .rect),
+            _subviews:                                 container.childrenIfPresent(of: ._subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.compactMap(decodeValue)
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 }

@@ -19,6 +19,8 @@ protocol XMLIndexerContainerType {
     func elementsIfPresent<T>(of key: Key) -> [T]? where T: XMLDecodable
     func children<T>(of key: Key) throws -> [T] where T: XMLDecodable
     func childrenIfPresent<T>(of key: Key) -> [T]? where T: XMLDecodable
+    func withAttributeElements<T>(_ attr: Key, _ value: String) -> [T]? where T: XMLDecodable
+    func withAttributeElement<T>(_ attr: Key, _ value: String) -> T? where T: XMLDecodable
     func nestedContainer<A>(of key: Key, keys: A.Type) throws -> XMLIndexerContainer<A>
     func nestedContainerIfPresent<A>(of key: Key, keys: A.Type) -> XMLIndexerContainer<A>?
     func nestedContainers<A>(of key: Key, keys: A.Type) throws -> [XMLIndexerContainer<A>]
@@ -68,6 +70,16 @@ class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
         return nestedIndexer?.children.compactMap(decodeValue)
     }
 
+    func withAttributeElements<T>(_ attr: K, _ value: String) -> [T]? where T : XMLDecodable {
+        let elements: [XMLIndexer]? = indexer.withAttribute(attr.stringValue, value)?.all
+        return elements?.compactMap(decodeValue)
+    }
+
+    func withAttributeElement<T>(_ attr: K, _ value: String) -> T? where T : XMLDecodable {
+        let element: XMLIndexer? = indexer.withAttribute(attr.stringValue, value)
+        return element.flatMap(decodeValue)
+    }
+
     func nestedContainer<A>(of key: K, keys: A.Type) throws -> XMLIndexerContainer<A> {
         let nestedIndexer: XMLIndexer = try indexer.byKey(key.stringValue)
         return XMLIndexerContainer<A>.init(indexer: nestedIndexer)
@@ -80,6 +92,10 @@ class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
     func nestedContainers<A>(of key: K, keys: A.Type) throws -> [XMLIndexerContainer<A>] {
         let nestedIndexers: [XMLIndexer] = try indexer.byKey(key.stringValue).all
         return nestedIndexers.map(XMLIndexerContainer<A>.init)
+    }
+
+    func externalContainer<A>(keys: A.Type) -> XMLIndexerContainer<A> {
+        return XMLIndexerContainer<A>(indexer: indexer)
     }
 }
 

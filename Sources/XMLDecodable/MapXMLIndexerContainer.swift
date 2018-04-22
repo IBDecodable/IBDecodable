@@ -45,6 +45,12 @@ class MapXMLIndexerContainer<From, Parent>: XMLIndexerContainerType where Parent
     func childrenIfPresent<T>(of key: From) -> [T]? where T: XMLDecodable {
         return parent.childrenIfPresent(of: transformer(key))
     }
+    func withAttributeElements<T>(_ attr: From, _ value: String) -> [T]? where T : XMLDecodable {
+        return parent.withAttributeElements(transformer(attr), value)
+    }
+    func withAttributeElement<T>(_ attr: From, _ value: String) -> T? where T : XMLDecodable {
+        return parent.withAttributeElement(transformer(attr), value)
+    }
     func nestedContainer<A>(of key: From, keys: A.Type) throws -> XMLIndexerContainer<A> {
         return try parent.nestedContainer(of: transformer(key), keys: A.self)
     }

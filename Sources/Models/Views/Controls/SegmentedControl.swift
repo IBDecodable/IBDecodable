@@ -40,6 +40,8 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
         }
     }
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> SegmentedControl {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -50,12 +52,13 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
             }()
             return MappedCodingKey(stringValue: stringValue)
         }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         
         return SegmentedControl(
             id:                                         try container.attribute(of: .id),
             autoresizingMask:                           container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                              container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                                xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
+            constraints:                                constraintsContainer?.elementsIfPresent(of: .constraint),
             contentHorizontalAlignment:                 container.attributeIfPresent(of: .contentHorizontalAlignment),
             contentMode:                                container.attributeIfPresent(of: .contentMode),
             contentVerticalAlignment:                   container.attributeIfPresent(of: .contentVerticalAlignment),
@@ -63,15 +66,15 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
             customModule:                               container.attributeIfPresent(of: .customModule),
             isMisplaced:                                container.attributeIfPresent(of: .isMisplaced),
             opaque:                                     container.attributeIfPresent(of: .opaque),
-            rect:                                       try decodeValue(xml.byKey("rect")),
+            rect:                                       try container.element(of: .rect),
             segmentControlStyle:                        container.attributeIfPresent(of: .segmentControlStyle),
             segments:                                   try xml.byKey("segments").byKey("segment").all.map(decodeValue),
             selectedSegmentIndex:                       container.attributeIfPresent(of: .selectedSegmentIndex),
-            subviews:                                   xml.byKey("subviews")?.children.flatMap(decodeValue),
+            subviews:                                   container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints:  container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                     container.attributeIfPresent(of: .userInteractionEnabled),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 

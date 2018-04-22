@@ -23,20 +23,23 @@ public struct TableViewController: XMLDecodable, KeyDecodable, ViewControllerPro
     public var rootView: ViewProtocol? { return tableView }
     public var clearsSelectionOnViewWillAppear: Bool?
 
+    enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
+
     static func decode(_ xml: XMLIndexer) throws -> TableViewController {
         let container = xml.container(keys: CodingKeys.self)
+        let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return TableViewController(
             id:                              try container.attribute(of: .id),
             customClass:                     container.attributeIfPresent(of: .customClass),
             customModule:                    container.attributeIfPresent(of: .customModule),
             customModuleProvider:            container.attributeIfPresent(of: .customModuleProvider),
             storyboardIdentifier:            container.attributeIfPresent(of: .storyboardIdentifier),
-            layoutGuides:                    xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.compactMap(decodeValue),
-            userDefinedRuntimeAttributes:    xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
-            connections:                     xml.byKey("connections")?.children.compactMap(decodeValue),
+            layoutGuides:                    layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
+            userDefinedRuntimeAttributes:    container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                     container.childrenIfPresent(of: .connections),
             tabBarItem:                      container.elementIfPresent(of: .tabBarItem),
             tableView:                       container.elementIfPresent(of: .tableView),
-            clearsSelectionOnViewWillAppear: (try? container.attributeIfPresent(of: .clearsSelectionOnViewWillAppear)) ?? true
+            clearsSelectionOnViewWillAppear: container.attributeIfPresent(of: .clearsSelectionOnViewWillAppear) ?? true
         )
     }
 }

@@ -17,8 +17,21 @@ public struct Placeholder: XMLDecodable, KeyDecodable {
     public let customClass: String?
     public let userComments: AttributedString?
 
+    enum AttributedStringCodingKeys: CodingKey {
+        case key
+    }
+
     static func decode(_ xml: XMLIndexer) throws -> Placeholder {
-        let container = xml.container(keys: CodingKeys.self)
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .userComments: return "attributedString"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+        let attributedStringContainer = container.nestedContainerIfPresent(of: .userComments, keys: AttributedStringCodingKeys.self)
         return Placeholder(
             id:                    try container.attribute(of: .id),
             placeholderIdentifier: try container.attribute(of: .placeholderIdentifier),
@@ -26,7 +39,7 @@ public struct Placeholder: XMLDecodable, KeyDecodable {
             colorLabel:            container.attributeIfPresent(of: .colorLabel),
             sceneMemberID:         container.attributeIfPresent(of: .sceneMemberID),
             customClass:           container.attributeIfPresent(of: .customClass),
-            userComments:          xml.byKey("attributedString")?.withAttribute("key", "userComments").flatMap(decodeValue)
+            userComments:          attributedStringContainer?.withAttributeElement(.key, "userComments")
         )
     }
 

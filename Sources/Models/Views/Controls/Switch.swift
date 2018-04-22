@@ -32,6 +32,8 @@ public struct Switch: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> Switch {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -42,12 +44,13 @@ public struct Switch: XMLDecodable, KeyDecodable, ViewProtocol {
             }()
             return MappedCodingKey(stringValue: stringValue)
         }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
 
         return Switch(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
@@ -58,13 +61,13 @@ public struct Switch: XMLDecodable, KeyDecodable, ViewProtocol {
             on:                                        try container.attribute(of: .on),
             onTintColor:                               xml.byKey("color").flatMap(decodeValue),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
+            rect:                                      try container.element(of: .rect),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             verticalHuggingPriority:                   container.attributeIfPresent(of: .verticalHuggingPriority),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 }

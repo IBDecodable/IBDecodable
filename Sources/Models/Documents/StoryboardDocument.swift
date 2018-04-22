@@ -41,8 +41,8 @@ public struct StoryboardDocument: XMLDecodable, KeyDecodable {
             initialViewController: container.attributeIfPresent(of: .initialViewController),
             launchScreen:          container.attributeIfPresent(of: .launchScreen) ?? false,
             device:                container.elementIfPresent(of: .device),
-            scenes:                xml.byKey("scenes")?.byKey("scene")?.all.flatMap(decodeValue),
-            resources:             xml.byKey("resources")?.children.flatMap(decodeValue),
+            scenes:                xml.byKey("scenes")?.byKey("scene")?.all.compactMap(decodeValue),
+            resources:             container.childrenIfPresent(of: .resources),
             connections:           findConnections(in: xml)
         )
     }
@@ -74,7 +74,7 @@ public struct Scene: XMLDecodable, KeyDecodable {
             viewController:            objects?.children.first.flatMap(decodeValue),
             viewControllerPlaceholder: objects?.byKey("viewControllerPlaceholder").flatMap(decodeValue),
             canvasLocation:            xml.byKey("point").flatMap(decodeValue),
-            placeholders:              objects?.byKey("placeholder")?.all.flatMap(decodeValue)
+            placeholders:              objects?.byKey("placeholder")?.all.compactMap(decodeValue)
         )
     }
 

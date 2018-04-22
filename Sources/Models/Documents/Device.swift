@@ -13,12 +13,17 @@ public struct Device: XMLDecodable, KeyDecodable {
     public let orientation: String?
     public let adaptation: String?
 
+    enum AdaptationCodingKeys: CodingKey {
+        case id
+    }
+
     static func decode(_ xml: XMLIndexer) throws -> Device {
         let container = xml.container(keys: CodingKeys.self)
+        let adaptationContainer = container.nestedContainerIfPresent(of: .adaptation, keys: AdaptationCodingKeys.self)
         return Device(
             id:          try container.attribute(of: .id),
             orientation: container.attributeIfPresent(of: .orientation),
-            adaptation:  xml.byKey("adaptation")?.attributeValue(of: "id")
+            adaptation:  adaptationContainer?.attributeIfPresent(of: .id)
         )
     }
 }

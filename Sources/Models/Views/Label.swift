@@ -37,6 +37,8 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> Label {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -47,13 +49,15 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
             }()
             return MappedCodingKey(stringValue: stringValue)
         }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        
         return Label(
             id:                                        try container.attribute(of: .id),
             adjustsFontSizeToFit:                      container.attributeIfPresent(of: .adjustsFontSizeToFit),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
             baselineAdjustment:                        container.attributeIfPresent(of: .baselineAdjustment),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
@@ -62,8 +66,8 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
             lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
+            rect:                                      try container.element(of: .rect),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
             textColor:                                 xml.byKey("color").flatMap(decodeValue),
@@ -71,8 +75,8 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             verticalHuggingPriority:                   container.attributeIfPresent(of: .verticalHuggingPriority),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 

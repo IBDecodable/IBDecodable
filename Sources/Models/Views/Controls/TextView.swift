@@ -35,6 +35,8 @@ public struct TextView: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> TextView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -45,6 +47,7 @@ public struct TextView: XMLDecodable, KeyDecodable, ViewProtocol {
             }()
             return MappedCodingKey(stringValue: stringValue)
         }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
 
         return TextView(
             id:                                        try container.attribute(of: .id),
@@ -52,25 +55,25 @@ public struct TextView: XMLDecodable, KeyDecodable, ViewProtocol {
             bounces:                                   container.attributeIfPresent(of: .bounces),
             bouncesZoom:                               container.attributeIfPresent(of: .bouncesZoom),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             fontDescription:                           container.elementIfPresent(of: .fontDescription),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try decodeValue(xml.byKey("rect")),
+            rect:                                      try container.element(of: .rect),
             scrollEnabled:                             container.attributeIfPresent(of: .scrollEnabled),
             showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
             showsVerticalScrollIndicator:              container.attributeIfPresent(of: .showsVerticalScrollIndicator),
-            subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      try container.attribute(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
             textColor:                                 xml.byKey("color").flatMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 }
