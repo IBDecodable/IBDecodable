@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TableViewController: XMLDecodable, ViewControllerProtocol {
+public struct TableViewController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "UITableViewController"
     public let id: String
@@ -24,18 +24,19 @@ public struct TableViewController: XMLDecodable, ViewControllerProtocol {
     public var clearsSelectionOnViewWillAppear: Bool?
 
     static func decode(_ xml: XMLIndexer) throws -> TableViewController {
+        let container = xml.container(keys: CodingKeys.self)
         return TableViewController(
-            id:                              try xml.attributeValue(of: "id"),
-            customClass:                     xml.attributeValue(of: "customClass"),
-            customModule:                    xml.attributeValue(of: "customModule"),
-            customModuleProvider:            xml.attributeValue(of: "customModuleProvider"),
-            storyboardIdentifier:            xml.attributeValue(of: "storyboardIdentifier"),
-            layoutGuides:                    xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
-            userDefinedRuntimeAttributes:    xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                     xml.byKey("connections")?.children.flatMap(decodeValue),
+            id:                              try container.attribute(of: .id),
+            customClass:                     container.attributeIfPresent(of: .customClass),
+            customModule:                    container.attributeIfPresent(of: .customModule),
+            customModuleProvider:            container.attributeIfPresent(of: .customModuleProvider),
+            storyboardIdentifier:            container.attributeIfPresent(of: .storyboardIdentifier),
+            layoutGuides:                    xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.compactMap(decodeValue),
+            userDefinedRuntimeAttributes:    xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
+            connections:                     xml.byKey("connections")?.children.compactMap(decodeValue),
             tabBarItem:                      xml.byKey("tabBarItem").flatMap(decodeValue),
             tableView:                       xml.byKey("tableView").flatMap(decodeValue),
-            clearsSelectionOnViewWillAppear: (try? xml.attributeValue(of: "clearsSelectionOnViewWillAppear")) ?? true
+            clearsSelectionOnViewWillAppear: (try? container.attributeIfPresent(of: .clearsSelectionOnViewWillAppear)) ?? true
         )
     }
 }

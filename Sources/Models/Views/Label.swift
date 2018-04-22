@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Label: XMLDecodable, ViewProtocol {
+public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
 
     public let id: String
     public let elementClass: String = "UILabel"
@@ -38,30 +38,39 @@ public struct Label: XMLDecodable, ViewProtocol {
     public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> Label {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
         return Label(
-            id:                                        try xml.attributeValue(of: "id"),
-            adjustsFontSizeToFit:                      xml.attributeValue(of: "adjustsFontSizeToFit"),
+            id:                                        try container.attribute(of: .id),
+            adjustsFontSizeToFit:                      container.attributeIfPresent(of: .adjustsFontSizeToFit),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            baselineAdjustment:                        xml.attributeValue(of: "baselineAdjustment"),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
+            baselineAdjustment:                        container.attributeIfPresent(of: .baselineAdjustment),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
             font:                                      xml.byKey("fontDescription").flatMap(decodeValue),
-            horizontalHuggingPriority:                 xml.attributeValue(of: "horizontalHuggingPriority"),
-            lineBreakMode:                             xml.attributeValue(of: "lineBreakMode"),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
+            horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
+            lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            text:                                      xml.attributeValue(of: "text"),
-            textAlignment:                             xml.attributeValue(of: "textAlignment"),
+            text:                                      container.attributeIfPresent(of: .text),
+            textAlignment:                             container.attributeIfPresent(of: .textAlignment),
             textColor:                                 xml.byKey("color").flatMap(decodeValue),
             attributedText:                            xml.byKey("attributedString").flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            verticalHuggingPriority:                   xml.attributeValue(of: "verticalHuggingPriority"),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
+            verticalHuggingPriority:                   container.attributeIfPresent(of: .verticalHuggingPriority),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
@@ -71,16 +80,17 @@ public struct Label: XMLDecodable, ViewProtocol {
 
 // MARK: - FontDescription
 
-public struct FontDescription: XMLDecodable {
+public struct FontDescription: XMLDecodable, KeyDecodable {
     public let type: String
     public let pointSize: Float
     public let weight: String?
 
     static func decode(_ xml: XMLIndexer) throws -> FontDescription {
+        let container = xml.container(keys: CodingKeys.self)
         return FontDescription(
-            type:      try xml.attributeValue(of: "type"),
-            pointSize: try xml.attributeValue(of: "pointSize"),
-            weight:    xml.attributeValue(of: "weight")
+            type:      try container.attribute(of: .type),
+            pointSize: try container.attribute(of: .pointSize),
+            weight:    container.attributeIfPresent(of: .weight)
         )
     }
 }

@@ -15,7 +15,7 @@ public protocol ResourceProtocol {
 
 // MARK: - AnyResource
 
-public struct AnyResource: XMLDecodable {
+public struct AnyResource: XMLDecodable, KeyDecodable {
 
     public let resource: ResourceProtocol
 
@@ -23,6 +23,8 @@ public struct AnyResource: XMLDecodable {
         self.resource = resource
     }
 
+    public func encode(to encoder: Encoder) throws { fatalError() }
+    
     static func decode(_ xml: XMLIndexer) throws -> AnyResource {
         guard let elementName = xml.element?.name else {
             throw IBError.elementNotFound

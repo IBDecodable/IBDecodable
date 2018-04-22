@@ -26,13 +26,15 @@ public protocol ViewControllerProtocol {
 
 // MARK: - AnyViewController
 
-public struct AnyViewController: XMLDecodable {
+public struct AnyViewController: XMLDecodable, KeyDecodable {
 
     public let viewController: ViewControllerProtocol
 
     init(_ viewController: ViewControllerProtocol) {
         self.viewController = viewController
     }
+
+    public func encode(to encoder: Encoder) throws { fatalError() }
 
     static func decode(_ xml: XMLIndexer) throws -> AnyViewController {
         guard let elementName = xml.element?.name else {
@@ -56,21 +58,22 @@ public struct AnyViewController: XMLDecodable {
 
 // MARK: - ViewControllerLayoutGuide
 
-public struct ViewControllerLayoutGuide: XMLDecodable {
+public struct ViewControllerLayoutGuide: XMLDecodable, KeyDecodable {
     public let id: String
     public let type: String
 
     static func decode(_ xml: XMLIndexer) throws -> ViewControllerLayoutGuide {
+        let container = xml.container(keys: CodingKeys.self)
         return try ViewControllerLayoutGuide(
-            id: xml.attributeValue(of: "id"),
-            type: xml.attributeValue(of: "type")
+            id: container.attribute(of: .id),
+            type: container.attribute(of: .type)
         )
     }
 }
 
 // MARK: - ViewControllerPlaceholder
 
-public struct ViewControllerPlaceholder: XMLDecodable {
+public struct ViewControllerPlaceholder: XMLDecodable, KeyDecodable {
     public let id: String
     public let storyboardName: String
     public let referencedIdentifier: String?
@@ -78,11 +81,12 @@ public struct ViewControllerPlaceholder: XMLDecodable {
 
     static func decode(_ xml: XMLIndexer) throws -> ViewControllerPlaceholder {
         assert(xml.element?.name == "viewControllerPlaceholder")
+        let container = xml.container(keys: CodingKeys.self)
         return ViewControllerPlaceholder(
-            id: try xml.attributeValue(of: "id"),
-            storyboardName: try xml.attributeValue(of: "storyboardName"),
-            referencedIdentifier: xml.attributeValue(of: "referencedIdentifier"),
-            sceneMemberID: xml.attributeValue(of: "sceneMemberID")
+            id: try container.attribute(of: .id),
+            storyboardName: try container.attribute(of: .storyboardName),
+            referencedIdentifier: container.attributeIfPresent(of: .referencedIdentifier),
+            sceneMemberID: container.attributeIfPresent(of: .sceneMemberID)
         )
     }
 }

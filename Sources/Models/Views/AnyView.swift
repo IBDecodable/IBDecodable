@@ -32,7 +32,7 @@ public protocol ViewProtocol {
 
 // MARK: - AnyView
 
-public struct AnyView: XMLDecodable {
+public struct AnyView: XMLDecodable, KeyDecodable {
 
     public let view: ViewProtocol
 
@@ -40,6 +40,8 @@ public struct AnyView: XMLDecodable {
         self.view = view
     }
 
+    public func encode(to encoder: Encoder) throws { fatalError() }
+    
     static func decode(_ xml: XMLIndexer) throws -> AnyView {
         guard let elementName = xml.element?.name else {
             throw IBError.elementNotFound
@@ -88,7 +90,7 @@ public struct AnyView: XMLDecodable {
 
 // MARK: - Rect
 
-public struct Rect: XMLDecodable {
+public struct Rect: XMLDecodable, KeyDecodable {
     public let x: Float
     public let y: Float
     public let width: Float
@@ -96,51 +98,54 @@ public struct Rect: XMLDecodable {
     public let key: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Rect {
+        let container = xml.container(keys: CodingKeys.self)
         return Rect(
-            x:      try xml.attributeValue(of: "x"),
-            y:      try xml.attributeValue(of: "y"),
-            width:  try xml.attributeValue(of: "width"),
-            height: try xml.attributeValue(of: "height"),
-            key:    xml.attributeValue(of: "key")
+            x:      try container.attribute(of: .x),
+            y:      try container.attribute(of: .y),
+            width:  try container.attribute(of: .width),
+            height: try container.attribute(of: .height),
+            key:    container.attributeIfPresent(of: .key)
         )
     }
 }
 
 // MARK: - Point
 
-public struct Point: XMLDecodable {
+public struct Point: XMLDecodable, KeyDecodable {
     public let x: Float
     public let y: Float
     public let key: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Point {
+        let container = xml.container(keys: CodingKeys.self)
         return Point(
-            x:      try xml.attributeValue(of: "x"),
-            y:      try xml.attributeValue(of: "y"),
-            key:    xml.attributeValue(of: "key")
+            x:      try container.attribute(of: .x),
+            y:      try container.attribute(of: .y),
+            key:    container.attributeIfPresent(of: .key)
         )
     }
 }
 
 // MARK: - Size
 
-public struct Size: XMLDecodable {
+public struct Size: XMLDecodable, KeyDecodable {
     public let width: Float
     public let height: Float
     public let key: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Size {
+        let container = xml.container(keys: CodingKeys.self)
         return Size(
-            width:  try xml.attributeValue(of: "width"),
-            height: try xml.attributeValue(of: "height"),
-            key:    xml.attributeValue(of: "key")
+            width:  try container.attribute(of: .width),
+            height: try container.attribute(of: .height),
+            key:    container.attributeIfPresent(of: .key)
         )
     }
 }
 
 // MARK: - Inset
 
-public struct Inset: XMLDecodable {
+public struct Inset: XMLDecodable, KeyDecodable {
     public let minX: Float
     public let minY: Float
     public let maxX: Float
@@ -148,19 +153,20 @@ public struct Inset: XMLDecodable {
     public let key: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Inset {
+        let container = xml.container(keys: CodingKeys.self)
         return Inset(
-            minX: try xml.attributeValue(of: "minX"),
-            minY: try xml.attributeValue(of: "minY"),
-            maxX: try xml.attributeValue(of: "maxX"),
-            maxY: try xml.attributeValue(of: "maxY"),
-            key:  xml.attributeValue(of: "key")
+            minX: try container.attribute(of: .minX),
+            minY: try container.attribute(of: .minY),
+            maxX: try container.attribute(of: .maxX),
+            maxY: try container.attribute(of: .maxY),
+            key:  container.attributeIfPresent(of: .key)
         )
     }
 }
 
 // MARK: - AutoresizingMask
 
-public struct AutoresizingMask: XMLDecodable {
+public struct AutoresizingMask: XMLDecodable, KeyDecodable {
     public let widthSizable: Bool
     public let heightSizable: Bool
     public let key: String?
@@ -168,19 +174,20 @@ public struct AutoresizingMask: XMLDecodable {
     public let flexibleMaxY: Bool
 
     static func decode(_ xml: XMLIndexer) throws -> AutoresizingMask {
+        let container = xml.container(keys: CodingKeys.self)
         return try AutoresizingMask(
-            widthSizable:  xml.attributeValue(of: "widthSizable"),
-            heightSizable: xml.attributeValue(of: "heightSizable"),
-            key:           xml.attributeValue(of: "key"),
-            flexibleMaxX:  xml.attributeValue(of: "flexibleMaxX"),
-            flexibleMaxY:  xml.attributeValue(of: "flexibleMaxY")
+            widthSizable:  container.attribute(of: .widthSizable),
+            heightSizable: container.attribute(of: .heightSizable),
+            key:           container.attribute(of: .key),
+            flexibleMaxX:  container.attribute(of: .flexibleMaxX),
+            flexibleMaxY:  container.attribute(of: .flexibleMaxY)
         )
     }
 }
 
 // MARK: - Constraint
 
-public struct Constraint: XMLDecodable {
+public struct Constraint: XMLDecodable, KeyDecodable {
     public let id: String
     public let constant: Int?
     public let multiplier: String?
@@ -189,7 +196,7 @@ public struct Constraint: XMLDecodable {
     public let secondItem: String?
     public let secondAttribute: LayoutAttribute?
 
-    public enum LayoutAttribute: XMLAttributeDecodable, Equatable {
+    public enum LayoutAttribute: XMLAttributeDecodable, KeyDecodable, Equatable {
         case left, right, top, bottom, leading, trailing,
         width, height, centerX, centerY
 
@@ -197,6 +204,8 @@ public struct Constraint: XMLDecodable {
         bottomMargin, leadingMargin, trailingMargin
 
         case other(String)
+
+        public func encode(to encoder: Encoder) throws { fatalError() }
 
         static func decode(_ attribute: XMLAttribute) throws -> Constraint.LayoutAttribute {
             switch attribute.text {
@@ -235,21 +244,22 @@ public struct Constraint: XMLDecodable {
     }
 
     static func decode(_ xml: XMLIndexer) throws -> Constraint {
+        let container = xml.container(keys: CodingKeys.self)
         return Constraint(
-            id:              try xml.attributeValue(of: "id"),
-            constant:        xml.attributeValue(of: "constant"),
-            multiplier:      xml.attributeValue(of: "multiplier"),
-            firstItem:       xml.attributeValue(of: "firstItem"),
-            firstAttribute:  xml.attributeValue(of: "firstAttribute"),
-            secondItem:      xml.attributeValue(of: "secondItem"),
-            secondAttribute: xml.attributeValue(of: "secondAttribute")
+            id:              try container.attribute(of: .id),
+            constant:        container.attributeIfPresent(of: .constant),
+            multiplier:      container.attributeIfPresent(of: .multiplier),
+            firstItem:       container.attributeIfPresent(of: .firstItem),
+            firstAttribute:  container.attributeIfPresent(of: .firstAttribute),
+            secondItem:      container.attributeIfPresent(of: .secondItem),
+            secondAttribute: container.attributeIfPresent(of: .secondAttribute)
         )
     }
 }
 
 // MARK: - Color
 
-public enum Color: XMLDecodable {
+public enum Color: XMLDecodable, KeyDecodable {
 
     public typealias CalibratedWhite = (key: String?, white: Float, alpha: Float)
     public typealias SRGB = (key: String?, red: Float, blue: Float, green: Float, alpha: Float)
@@ -275,23 +285,51 @@ public enum Color: XMLDecodable {
         }
     }
 
+    public func encode(to encoder: Encoder) throws { fatalError() }
+
+    enum CodingKeys: CodingKey {
+        case key
+        case colorSpace
+        case cocoaTouchSystemColor
+    }
+
+    enum CalibratedWhiteCodingKeys: CodingKey {
+        case white, alpha
+    }
+
+    enum sRGBCodingKeys: CodingKey {
+        case red, blue, green, alpha
+    }
+
+    enum CustomCodingKeys: CodingKey {
+        case customColorSpace
+    }
+
+    enum NamedCodingKeys: CodingKey {
+        case name
+    }
+
     static func decode(_ xml: XMLIndexer) throws -> Color {
-        let key: String? = xml.attributeValue(of: "key")
-        if let colorSpace: String = xml.attributeValue(of: "colorSpace") {
+        let container = xml.container(keys: CodingKeys.self)
+        let key: String? = container.attributeIfPresent(of: .key)
+        if let colorSpace: String = container.attributeIfPresent(of: .colorSpace) {
             switch colorSpace {
             case "calibratedWhite":
+                let calibratedWhiteContainer = xml.container(keys: CalibratedWhiteCodingKeys.self)
                 return try .calibratedWhite((key:   key,
-                                             white: xml.attributeValue(of: "white"),
-                                             alpha: xml.attributeValue(of: "alpha")))
+                                             white: calibratedWhiteContainer.attribute(of: .white),
+                                             alpha: calibratedWhiteContainer.attribute(of: .alpha)))
             case "custom":
-                let customColorSpace: String = try xml.attributeValue(of: "customColorSpace")
+                let container = xml.container(keys: CustomCodingKeys.self)
+                let customColorSpace: String = try container.attribute(of: .customColorSpace)
                 switch customColorSpace {
                 case "sRGB":
+                    let sRGBContainer = xml.container(keys: sRGBCodingKeys.self)
                     return try .sRGB((key:   key,
-                                      red:   xml.attributeValue(of: "red"),
-                                      blue:  xml.attributeValue(of: "blue"),
-                                      green: xml.attributeValue(of: "green"),
-                                      alpha: xml.attributeValue(of: "alpha")
+                                      red:   sRGBContainer.attribute(of: .red),
+                                      blue:  sRGBContainer.attribute(of: .blue),
+                                      green: sRGBContainer.attribute(of: .green),
+                                      alpha: sRGBContainer.attribute(of: .alpha)
                     ))
                 default:
                     throw IBError.unsupportedColorSpace(customColorSpace)
@@ -300,10 +338,11 @@ public enum Color: XMLDecodable {
                 throw IBError.unsupportedColorSpace(colorSpace)
             }
         } else {
-            if let systemColor: String = xml.attributeValue(of: "cocoaTouchSystemColor") {
+            if let systemColor: String = container.attributeIfPresent(of: .cocoaTouchSystemColor) {
                 return .systemColor((key, systemColor))
             }
-            return .name((key, try xml.attributeValue(of: "name")))
+            let container = xml.container(keys: NamedCodingKeys.self)
+            return .name((key, try container.attribute(of: .name)))
         }
     }
 }

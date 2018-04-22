@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct ImageView: XMLDecodable, ViewProtocol {
+public struct ImageView: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIImageView"
 
@@ -30,23 +30,33 @@ public struct ImageView: XMLDecodable, ViewProtocol {
     public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> ImageView {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+
         return ImageView(
-            id:                                        try xml.attributeValue(of: "id"),
+            id:                                        try container.attribute(of: .id),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
-            image:                                     try xml.attributeValue(of: "image"),
-            insetsLayoutMarginsFromSafeArea:           xml.attributeValue(of: "insetsLayoutMarginsFromSafeArea"),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            multipleTouchEnabled:                      xml.attributeValue(of: "multipleTouchEnabled"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
+            image:                                     try container.attribute(of: .image),
+            insetsLayoutMarginsFromSafeArea:           container.attributeIfPresent(of: .insetsLayoutMarginsFromSafeArea),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )

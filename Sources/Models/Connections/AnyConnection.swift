@@ -16,13 +16,15 @@ public protocol ConnectionProtocol {
 
 // MARK: - AnyConnection
 
-public struct AnyConnection: XMLDecodable {
+public struct AnyConnection: XMLDecodable, KeyDecodable {
 
     public let connection: ConnectionProtocol
 
     init(_ connection: ConnectionProtocol) {
         self.connection = connection
     }
+
+    public func encode(to encoder: Encoder) throws { fatalError() }
 
     static func decode(_ xml: XMLIndexer) throws -> AnyConnection {
         guard let elementName = xml.element?.name else {

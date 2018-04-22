@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct XibDocument: XMLDecodable {
+public struct XibDocument: XMLDecodable, KeyDecodable {
     public let type: String
     public let version: String
     public let toolsVersion: String
@@ -23,16 +23,17 @@ public struct XibDocument: XMLDecodable {
     public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> XibDocument {
+        let container = xml.container(keys: CodingKeys.self)
         return XibDocument(
-            type:                  try xml.attributeValue(of: "type"),
-            version:               try xml.attributeValue(of: "version"),
-            toolsVersion:          try xml.attributeValue(of: "toolsVersion"),
-            targetRuntime:         try xml.attributeValue(of: "targetRuntime"),
-            propertyAccessControl: xml.attributeValue(of: "propertyAccessControl"),
-            useAutolayout:         xml.attributeValue(of: "useAutolayout"),
-            useTraitCollections:   xml.attributeValue(of: "useTraitCollections"),
-            useSafeAreas:          xml.attributeValue(of: "useSafeAreas"),
-            colorMatched:          xml.attributeValue(of: "colorMatched"),
+            type:                  try container.attribute(of: .type),
+            version:               try container.attribute(of: .version),
+            toolsVersion:          try container.attribute(of: .toolsVersion),
+            targetRuntime:         try container.attribute(of: .targetRuntime),
+            propertyAccessControl: container.attributeIfPresent(of: .propertyAccessControl),
+            useAutolayout:         container.attributeIfPresent(of: .useAutolayout),
+            useTraitCollections:   container.attributeIfPresent(of: .useTraitCollections),
+            useSafeAreas:          container.attributeIfPresent(of: .useSafeAreas),
+            colorMatched:          container.attributeIfPresent(of: .colorMatched),
             device:                xml.byKey("device").flatMap(decodeValue),
             views:                 xml.byKey("objects")?.children.flatMap(decodeValue),
             placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue),

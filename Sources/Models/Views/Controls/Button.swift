@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Button: XMLDecodable, ViewProtocol {
+public struct Button: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIButton"
 
@@ -32,41 +32,52 @@ public struct Button: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct State: XMLDecodable {
+    public struct State: XMLDecodable, KeyDecodable {
         public let key: String
         public let title: String
         public let color: Color?
 
         static func decode(_ xml: XMLIndexer) throws -> Button.State {
+            let container = xml.container(keys: CodingKeys.self)
             return State.init(
-                key:   try xml.attributeValue(of: "key"),
-                title: try xml.attributeValue(of: "title"),
+                key:   try container.attribute(of: .key),
+                title: try container.attribute(of: .title),
                 color: xml.byKey("color").flatMap(decodeValue)
             )
         }
     }
 
     static func decode(_ xml: XMLIndexer) throws -> Button {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+
         return Button(
-            id:                                        try xml.attributeValue(of: "id"),
+            id:                                        try container.attribute(of: .id),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            buttonType:                                xml.attributeValue(of: "buttonType"),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
+            buttonType:                                container.attributeIfPresent(of: .buttonType),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentHorizontalAlignment:                xml.attributeValue(of: "contentHorizontalAlignment"),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            contentVerticalAlignment:                  xml.attributeValue(of: "contentVerticalAlignment"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
             fontDescription:                                      xml.byKey("fontDescription").flatMap(decodeValue),
-            lineBreakMode:                             xml.attributeValue(of: "lineBreakMode"),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
+            lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
             state:                                     xml.byKey("state")?.all.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )

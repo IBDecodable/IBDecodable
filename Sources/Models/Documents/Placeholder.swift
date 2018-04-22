@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Placeholder: XMLDecodable {
+public struct Placeholder: XMLDecodable, KeyDecodable {
 
     public let id: String
     public let placeholderIdentifier: String
@@ -18,13 +18,14 @@ public struct Placeholder: XMLDecodable {
     public let userComments: AttributedString?
 
     static func decode(_ xml: XMLIndexer) throws -> Placeholder {
+        let container = xml.container(keys: CodingKeys.self)
         return Placeholder(
-            id:                    try xml.attributeValue(of: "id"),
-            placeholderIdentifier: try xml.attributeValue(of: "placeholderIdentifier"),
-            userLabel:             xml.attributeValue(of: "userLabel"),
-            colorLabel:            xml.attributeValue(of: "colorLabel"),
-            sceneMemberID:         xml.attributeValue(of: "sceneMemberID"),
-            customClass:           xml.attributeValue(of: "customClass"),
+            id:                    try container.attribute(of: .id),
+            placeholderIdentifier: try container.attribute(of: .placeholderIdentifier),
+            userLabel:             container.attributeIfPresent(of: .userLabel),
+            colorLabel:            container.attributeIfPresent(of: .colorLabel),
+            sceneMemberID:         container.attributeIfPresent(of: .sceneMemberID),
+            customClass:           container.attributeIfPresent(of: .customClass),
             userComments:          xml.byKey("attributedString")?.withAttribute("key", "userComments").flatMap(decodeValue)
         )
     }

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct SegmentedControl: XMLDecodable, ViewProtocol {
+public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UISegmentedControl"
 
@@ -31,34 +31,45 @@ public struct SegmentedControl: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct Segment: XMLDecodable {
+    public struct Segment: XMLDecodable, KeyDecodable {
         public let title: String
 
         static func decode(_ xml: XMLIndexer) throws -> SegmentedControl.Segment {
-            return try Segment(title: xml.attributeValue(of: "title"))
+            let container = xml.container(keys: CodingKeys.self)
+            return try Segment(title: container.attribute(of: .title))
         }
     }
 
     static func decode(_ xml: XMLIndexer) throws -> SegmentedControl {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+        
         return SegmentedControl(
-            id:                                         try xml.attributeValue(of: "id"),
+            id:                                         try container.attribute(of: .id),
             autoresizingMask:                           xml.byKey("autoresizingMask").flatMap(decodeValue),
-            clipsSubviews:                              xml.attributeValue(of: "clipsSubviews"),
+            clipsSubviews:                              container.attributeIfPresent(of: .clipsSubviews),
             constraints:                                xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentHorizontalAlignment:                 xml.attributeValue(of: "contentHorizontalAlignment"),
-            contentMode:                                xml.attributeValue(of: "contentMode"),
-            contentVerticalAlignment:                   xml.attributeValue(of: "contentVerticalAlignment"),
-            customClass:                                xml.attributeValue(of: "customClass"),
-            customModule:                               xml.attributeValue(of: "customModule"),
-            isMisplaced:                                xml.attributeValue(of: "misplaced"),
-            opaque:                                     xml.attributeValue(of: "opaque"),
+            contentHorizontalAlignment:                 container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentMode:                                container.attributeIfPresent(of: .contentMode),
+            contentVerticalAlignment:                   container.attributeIfPresent(of: .contentVerticalAlignment),
+            customClass:                                container.attributeIfPresent(of: .customClass),
+            customModule:                               container.attributeIfPresent(of: .customModule),
+            isMisplaced:                                container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                     container.attributeIfPresent(of: .opaque),
             rect:                                       try decodeValue(xml.byKey("rect")),
-            segmentControlStyle:                        xml.attributeValue(of: "segmentControlStyle"),
+            segmentControlStyle:                        container.attributeIfPresent(of: .segmentControlStyle),
             segments:                                   try xml.byKey("segments").byKey("segment").all.map(decodeValue),
-            selectedSegmentIndex:                       xml.attributeValue(of: "selectedSegmentIndex"),
+            selectedSegmentIndex:                       container.attributeIfPresent(of: .selectedSegmentIndex),
             subviews:                                   xml.byKey("subviews")?.children.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints:  xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                     xml.attributeValue(of: "userInteractionEnabled"),
+            translatesAutoresizingMaskIntoConstraints:  container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                     container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )

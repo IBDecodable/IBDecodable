@@ -7,13 +7,14 @@
 
 import SWXMLHash
 
-public struct NamedColor: XMLDecodable, ResourceProtocol {
+public struct NamedColor: XMLDecodable, KeyDecodable, ResourceProtocol {
     public let name: String
     public let color: Color?
 
     static func decode(_ xml: XMLIndexer) throws -> NamedColor {
+        let container = xml.container(keys: CodingKeys.self)
         return NamedColor(
-            name:    try xml.attributeValue(of: "name"),
+            name:    try container.attribute(of: .name),
             color:   xml.byKey("color").flatMap(decodeValue))
     }
 

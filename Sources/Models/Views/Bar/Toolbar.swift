@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Toolbar: XMLDecodable, ViewProtocol {
+public struct Toolbar: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIToolbar"
 
@@ -27,38 +27,48 @@ public struct Toolbar: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct BarButtonItem: XMLDecodable {
+    public struct BarButtonItem: XMLDecodable, KeyDecodable {
         public let id: String
         public let style: String?
         public let systemItem: String?
         public let title: String?
 
         static func decode(_ xml: XMLIndexer) throws -> Toolbar.BarButtonItem {
+            let container = xml.container(keys: CodingKeys.self)
             return BarButtonItem(
-                id:         try xml.attributeValue(of: "id"),
-                style:      xml.attributeValue(of: "style"),
-                systemItem: xml.attributeValue(of: "systemItem"),
-                title:      xml.attributeValue(of: "title")
+                id:         try container.attribute(of: .id),
+                style:      container.attributeIfPresent(of: .style),
+                systemItem: container.attributeIfPresent(of: .systemItem),
+                title:      container.attributeIfPresent(of: .title)
             )
         }
     }
 
     static func decode(_ xml: XMLIndexer) throws -> Toolbar {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
         return Toolbar(
-            id:                                        try xml.attributeValue(of: "id"),
+            id:                                        try container.attribute(of: .id),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
             items:                                     xml.byKey("items")?.byKey("barButtonItem")?.all.flatMap(decodeValue),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )

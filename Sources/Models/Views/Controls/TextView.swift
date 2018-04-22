@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TextView: XMLDecodable, ViewProtocol {
+public struct TextView: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITextView"
 
@@ -36,29 +36,39 @@ public struct TextView: XMLDecodable, ViewProtocol {
     public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> TextView {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+
         return TextView(
-            id:                                        try xml.attributeValue(of: "id"),
+            id:                                        try container.attribute(of: .id),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            bounces:                                   xml.attributeValue(of: "bounces"),
-            bouncesZoom:                               xml.attributeValue(of: "bouncesZoom"),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
+            bounces:                                   container.attributeIfPresent(of: .bounces),
+            bouncesZoom:                               container.attributeIfPresent(of: .bouncesZoom),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
             fontDescription:                           xml.byKey("fontDescription").flatMap(decodeValue),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),
-            scrollEnabled:                             xml.attributeValue(of: "scrollEnabled"),
-            showsHorizontalScrollIndicator:            xml.attributeValue(of: "showsHorizontalScrollIndicator"),
-            showsVerticalScrollIndicator:              xml.attributeValue(of: "showsVerticalScrollIndicator"),
+            scrollEnabled:                             container.attributeIfPresent(of: .scrollEnabled),
+            showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
+            showsVerticalScrollIndicator:              container.attributeIfPresent(of: .showsVerticalScrollIndicator),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            text:                                      try xml.attributeValue(of: "text"),
-            textAlignment:                             xml.attributeValue(of: "textAlignment"),
+            text:                                      try container.attribute(of: .text),
+            textAlignment:                             container.attributeIfPresent(of: .textAlignment),
             textColor:                                 xml.byKey("color").flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )

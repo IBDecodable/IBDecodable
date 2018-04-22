@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - CollectionView
 
-public struct CollectionView: XMLDecodable, ViewProtocol {
+public struct CollectionView: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UICollectionView"
 
@@ -33,24 +33,34 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
     public let flowLayout: CollectionViewFlowLayout?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionView {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+
         return CollectionView(
-            id:                                        try xml.attributeValue(of: "id"),
-            alwaysBounceHorizontal:                    xml.attributeValue(of: "alwaysBounceHorizontal"),
+            id:                                        try container.attribute(of: .id),
+            alwaysBounceHorizontal:                    container.attributeIfPresent(of: .alwaysBounceHorizontal),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
+            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),
-            subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue),
-            cells:                                     xml.byKey("cells")?.children.flatMap(decodeValue),
+            subviews:                                  xml.byKey("subviews")?.children.compactMap(decodeValue),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.compactMap(decodeValue),
+            cells:                                     xml.byKey("cells")?.children.compactMap(decodeValue),
             layout:                                    xml.byKey("collectionViewLayout").flatMap(decodeValue),
             flowLayout:                                xml.byKey("collectionViewFlowLayout").flatMap(decodeValue)
         )
@@ -59,7 +69,7 @@ public struct CollectionView: XMLDecodable, ViewProtocol {
 
 // MARK: - CollectionViewCell
 
-public struct CollectionViewCell: XMLDecodable, ViewProtocol {
+public struct CollectionViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UICollectionViewCell"
 
@@ -83,30 +93,40 @@ public struct CollectionViewCell: XMLDecodable, ViewProtocol {
     public let connections: [AnyConnection]?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewCell {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+
         return CollectionViewCell(
-            id:                                        try xml.attributeValue(of: "id"),
+            id:                                        try container.attribute(of: .id),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
+            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
             contentView:                               try decodeValue(xml.byKey("view")),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),
-            _subviews:                                 xml.byKey("subviews")?.children.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            _subviews:                                 xml.byKey("subviews")?.children.compactMap(decodeValue),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
+            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
+            connections:                               xml.byKey("connections")?.children.compactMap(decodeValue)
         )
     }
 }
 
 // MARK: - CollectionViewLayout
 
-public struct CollectionViewLayout: XMLDecodable {
+public struct CollectionViewLayout: XMLDecodable, KeyDecodable {
 
     public let id: String
     public let key: String?
@@ -114,18 +134,27 @@ public struct CollectionViewLayout: XMLDecodable {
     public let customModule: String?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewLayout {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .key: return "contentMode"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
         return CollectionViewLayout(
-            id:                       try xml.attributeValue(of: "id"),
-            key:                      xml.attributeValue(of: "contentMode"),
-            customClass:              xml.attributeValue(of: "customClass"),
-            customModule:             xml.attributeValue(of: "customModule")
+            id:                       try container.attribute(of: .id),
+            key:                      container.attributeIfPresent(of: .key),
+            customClass:              container.attributeIfPresent(of: .customClass),
+            customModule:             container.attributeIfPresent(of: .customModule)
         )
     }
 }
 
 // MARK: - CollectionViewFlowLayout
 
-public struct CollectionViewFlowLayout: XMLDecodable {
+public struct CollectionViewFlowLayout: XMLDecodable, KeyDecodable {
 
     public let id: String
     public let key: String?
@@ -135,13 +164,22 @@ public struct CollectionViewFlowLayout: XMLDecodable {
     public let insets: [Inset]?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewFlowLayout {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .key: return "contentMode"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
         return CollectionViewFlowLayout(
-            id:                       try xml.attributeValue(of: "id"),
-            key:                      xml.attributeValue(of: "contentMode"),
-            minimumLineSpacing:       xml.attributeValue(of: "minimumLineSpacing"),
-            minimumInteritemSpacing:  xml.attributeValue(of: "minimumInteritemSpacing"),
-            sizes:                     xml.byKey("size")?.all.flatMap(decodeValue),
-            insets:                     xml.byKey("inset")?.all.flatMap(decodeValue)
+            id:                       try container.attribute(of: .id),
+            key:                      container.attributeIfPresent(of: .key),
+            minimumLineSpacing:       container.attributeIfPresent(of: .minimumLineSpacing),
+            minimumInteritemSpacing:  container.attributeIfPresent(of: .minimumInteritemSpacing),
+            sizes:                     xml.byKey("size")?.all.compactMap(decodeValue),
+            insets:                     xml.byKey("inset")?.all.compactMap(decodeValue)
         )
     }
 }

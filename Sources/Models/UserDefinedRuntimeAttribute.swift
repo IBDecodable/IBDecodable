@@ -7,14 +7,23 @@
 
 import SWXMLHash
 
-public struct UserDefinedRuntimeAttribute: XMLDecodable {
+public struct UserDefinedRuntimeAttribute: XMLDecodable, KeyDecodable {
     public let keyPath: String
     public let type: String
     public let value: Any?
 
+    public func encode(to encoder: Encoder) throws { fatalError() }
+
+    enum CodingKeys: CodingKey {
+        case type
+        case keyPath
+        case value
+    }
+
     static func decode(_ xml: XMLIndexer) throws -> UserDefinedRuntimeAttribute {
-        let type: String = try xml.attributeValue(of: "type")
-        let valueString: String? = xml.attributeValue(of: "value")
+        let container = xml.container(keys: CodingKeys.self)
+        let type: String = try container.attribute(of: .type)
+        let valueString: String? = container.attributeIfPresent(of: .value)
         var value: Any? = nil
         switch type {
         case "boolean":
@@ -43,7 +52,7 @@ public struct UserDefinedRuntimeAttribute: XMLDecodable {
             value = valueString
         }
         return UserDefinedRuntimeAttribute(
-            keyPath:     try xml.attributeValue(of: "keyPath"),
+            keyPath:     try container.attribute(of: .keyPath),
             type:        type,
             value:       value
         )
@@ -53,14 +62,15 @@ public struct UserDefinedRuntimeAttribute: XMLDecodable {
 
 // MARK: - Range
 
-public struct Range: XMLDecodable {
+public struct Range: XMLDecodable, KeyDecodable {
     public let location: Float
     public let length: Float
 
     static func decode(_ xml: XMLIndexer) throws -> Range {
+        let container = xml.container(keys: CodingKeys.self)
         return Range(
-            location:      try xml.attributeValue(of: "location"),
-            length:        try xml.attributeValue(of: "length")
+            location:      try container.attribute(of: .location),
+            length:        try container.attribute(of: .length)
         )
     }
 }

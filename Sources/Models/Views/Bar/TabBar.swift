@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TabBar: XMLDecodable, ViewProtocol {
+public struct TabBar: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITabBar"
 
@@ -27,7 +27,7 @@ public struct TabBar: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct TabBarItem: XMLDecodable {
+    public struct TabBarItem: XMLDecodable, KeyDecodable {
         public let id: String
         public let key: String?
         public let style: String?
@@ -35,32 +35,43 @@ public struct TabBar: XMLDecodable, ViewProtocol {
         public let title: String?
 
         static func decode(_ xml: XMLIndexer) throws -> TabBar.TabBarItem {
+            let container = xml.container(keys: CodingKeys.self)
             return TabBarItem(
-                id:         try xml.attributeValue(of: "id"),
-                key:      xml.attributeValue(of: "key"),
-                style:      xml.attributeValue(of: "style"),
-                systemItem: xml.attributeValue(of: "systemItem"),
-                title:      xml.attributeValue(of: "title")
+                id:         try container.attribute(of: .id),
+                key:      container.attributeIfPresent(of: .key),
+                style:      container.attributeIfPresent(of: .style),
+                systemItem: container.attributeIfPresent(of: .systemItem),
+                title:      container.attributeIfPresent(of: .title)
             )
         }
     }
 
     static func decode(_ xml: XMLIndexer) throws -> TabBar {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+
         return TabBar(
-            id:                                        try xml.attributeValue(of: "id"),
+            id:                                        try container.attribute(of: .id),
             autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
             items:                                     xml.byKey("items")?.byKey("tabBarItem")?.all.flatMap(decodeValue),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),
             subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
         )
