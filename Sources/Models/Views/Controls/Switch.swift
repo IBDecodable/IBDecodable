@@ -39,6 +39,7 @@ public struct Switch: XMLDecodable, KeyDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .onTintColor: return "color"
                 default: return key.stringValue
                 }
             }()
@@ -59,7 +60,7 @@ public struct Switch: XMLDecodable, KeyDecodable, ViewProtocol {
             horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             on:                                        try container.attribute(of: .on),
-            onTintColor:                               xml.byKey("color").flatMap(decodeValue),
+            onTintColor:                               container.elementIfPresent(of: .onTintColor),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),

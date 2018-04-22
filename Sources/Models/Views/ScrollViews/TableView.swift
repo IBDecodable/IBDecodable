@@ -207,6 +207,7 @@ public struct TableViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case ._subviews: return "subview"
+                case .contentView: return "tableViewCellContentView"
                 default: return key.stringValue
                 }
             }()
@@ -219,7 +220,7 @@ public struct TableViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
-            contentView:                               try decodeValue(xml.byKey("tableViewCellContentView")),
+            contentView:                               try container.element(of: .contentView),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),

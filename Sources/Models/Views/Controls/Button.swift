@@ -72,7 +72,7 @@ public struct Button: XMLDecodable, KeyDecodable, ViewProtocol {
             contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
-            fontDescription:                                      container.elementIfPresent(of: .fontDescription),
+            fontDescription:                           container.elementIfPresent(of: .fontDescription),
             lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),

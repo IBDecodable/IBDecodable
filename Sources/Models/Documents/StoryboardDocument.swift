@@ -26,8 +26,11 @@ public struct StoryboardDocument: XMLDecodable, KeyDecodable {
     public let resources: [AnyResource]?
     public let connections: [AnyConnection]?
 
+    enum ScenesCodingKeys: CodingKey { case scene }
+
     static func decode(_ xml: XMLIndexer) throws -> StoryboardDocument {
         let container = xml.container(keys: CodingKeys.self)
+        let scenesContainer = container.nestedContainerIfPresent(of: .scenes, keys: ScenesCodingKeys.self)
         return StoryboardDocument(
             type:                  try container.attribute(of: .type),
             version:               try container.attribute(of: .version),
@@ -41,7 +44,7 @@ public struct StoryboardDocument: XMLDecodable, KeyDecodable {
             initialViewController: container.attributeIfPresent(of: .initialViewController),
             launchScreen:          container.attributeIfPresent(of: .launchScreen) ?? false,
             device:                container.elementIfPresent(of: .device),
-            scenes:                xml.byKey("scenes")?.byKey("scene")?.all.compactMap(decodeValue),
+            scenes:                scenesContainer?.elementsIfPresent(of: .scene),
             resources:             container.childrenIfPresent(of: .resources),
             connections:           findConnections(in: xml)
         )
@@ -58,12 +61,17 @@ public struct Scene: XMLDecodable, KeyDecodable {
     public let canvasLocation: Point?
     public let placeholders: [Placeholder]?
 
+    enum ExternalCodingKeys: CodingKey { case objects }
+    enum ObjectsCodingKeys: CodingKey { case placeholder }
+
     static func decode(_ xml: XMLIndexer) throws -> Scene {
-        let objects: XMLIndexer? = xml.byKey("objects")
+        let externalContainer = xml.container(keys: ExternalCodingKeys.self)
+        let objectsContainer = externalContainer.nestedContainerIfPresent(of: .objects, keys: ObjectsCodingKeys.self)
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
                 case .id: return "sceneID"
+                case .canvasLocation: return "point"
                 default: return key.stringValue
                 }
             }()
@@ -71,10 +79,10 @@ public struct Scene: XMLDecodable, KeyDecodable {
         }
         return Scene(
             id:                        try container.attribute(of: .id),
-            viewController:            objects?.children.first.flatMap(decodeValue),
-            viewControllerPlaceholder: objects?.byKey("viewControllerPlaceholder").flatMap(decodeValue),
-            canvasLocation:            xml.byKey("point").flatMap(decodeValue),
-            placeholders:              objects?.byKey("placeholder")?.all.compactMap(decodeValue)
+            viewController:            externalContainer.childrenIfPresent(of: .objects)?.first,
+            viewControllerPlaceholder: container.elementIfPresent(of: .viewControllerPlaceholder),
+            canvasLocation:            container.elementIfPresent(of: .canvasLocation),
+            placeholders:              objectsContainer?.elementsIfPresent(of: .placeholder)
         )
     }
 

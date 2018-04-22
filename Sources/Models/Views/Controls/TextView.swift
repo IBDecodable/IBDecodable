@@ -42,6 +42,7 @@ public struct TextView: XMLDecodable, KeyDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .textColor: return "color"
                 default: return key.stringValue
                 }
             }()
@@ -69,7 +70,7 @@ public struct TextView: XMLDecodable, KeyDecodable, ViewProtocol {
             subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      try container.attribute(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
-            textColor:                                 xml.byKey("color").flatMap(decodeValue),
+            textColor:                                 container.elementIfPresent(of: .textColor),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),

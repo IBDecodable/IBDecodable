@@ -44,6 +44,9 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .font: return "fontDescription"
+                case .textColor: return "color"
+                case .attributedText: return "attributedString"
                 default: return key.stringValue
                 }
             }()
@@ -54,14 +57,14 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
         return Label(
             id:                                        try container.attribute(of: .id),
             adjustsFontSizeToFit:                      container.attributeIfPresent(of: .adjustsFontSizeToFit),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             baselineAdjustment:                        container.attributeIfPresent(of: .baselineAdjustment),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
-            font:                                      xml.byKey("fontDescription").flatMap(decodeValue),
+            font:                                      container.elementIfPresent(of: .font),
             horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
             lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
@@ -70,8 +73,8 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
             subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
-            textColor:                                 xml.byKey("color").flatMap(decodeValue),
-            attributedText:                            xml.byKey("attributedString").flatMap(decodeValue),
+            textColor:                                 container.elementIfPresent(of: .textColor),
+            attributedText:                            container.elementIfPresent(of: .attributedText),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             verticalHuggingPriority:                   container.attributeIfPresent(of: .verticalHuggingPriority),

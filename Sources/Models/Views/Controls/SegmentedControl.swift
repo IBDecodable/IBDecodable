@@ -41,6 +41,7 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
     }
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum SegmentsCodingKeys: CodingKey { case segment }
 
     static func decode(_ xml: XMLIndexer) throws -> SegmentedControl {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -53,6 +54,7 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let segmentsContainer = container.nestedContainerIfPresent(of: .segments, keys: SegmentsCodingKeys.self)
         
         return SegmentedControl(
             id:                                         try container.attribute(of: .id),
@@ -68,7 +70,7 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
             opaque:                                     container.attributeIfPresent(of: .opaque),
             rect:                                       try container.element(of: .rect),
             segmentControlStyle:                        container.attributeIfPresent(of: .segmentControlStyle),
-            segments:                                   try xml.byKey("segments").byKey("segment").all.map(decodeValue),
+            segments:                                   try segmentsContainer?.elements(of: .segment) ?? [],
             selectedSegmentIndex:                       container.attributeIfPresent(of: .selectedSegmentIndex),
             subviews:                                   container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints:  container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),

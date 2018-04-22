@@ -39,6 +39,8 @@ public struct CollectionView: XMLDecodable, KeyDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .layout: return "collectionViewLayout"
+                case .flowLayout: return "collectionViewFlowLayout"
                 default: return key.stringValue
                 }
             }()
@@ -49,7 +51,7 @@ public struct CollectionView: XMLDecodable, KeyDecodable, ViewProtocol {
         return CollectionView(
             id:                                        try container.attribute(of: .id),
             alwaysBounceHorizontal:                    container.attributeIfPresent(of: .alwaysBounceHorizontal),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
@@ -64,8 +66,8 @@ public struct CollectionView: XMLDecodable, KeyDecodable, ViewProtocol {
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
             cells:                                     container.childrenIfPresent(of: .cells),
-            layout:                                    xml.byKey("collectionViewLayout").flatMap(decodeValue),
-            flowLayout:                                xml.byKey("collectionViewFlowLayout").flatMap(decodeValue)
+            layout:                                    container.elementIfPresent(of: .layout),
+            flowLayout:                                container.elementIfPresent(of: .flowLayout)
         )
     }
 }
@@ -103,6 +105,7 @@ public struct CollectionViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case ._subviews: return "subview"
+                case .contentView: return "view"
                 default: return key.stringValue
                 }
             }()
@@ -112,10 +115,10 @@ public struct CollectionViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
 
         return CollectionViewCell(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
-            contentView:                               try decodeValue(xml.byKey("view")),
+            contentView:                               try container.element(of: .contentView),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
@@ -175,6 +178,8 @@ public struct CollectionViewFlowLayout: XMLDecodable, KeyDecodable {
             let stringValue: String = {
                 switch key {
                 case .key: return "contentMode"
+                case .sizes: return "size"
+                case .insets: return "inset"
                 default: return key.stringValue
                 }
             }()
@@ -185,8 +190,8 @@ public struct CollectionViewFlowLayout: XMLDecodable, KeyDecodable {
             key:                      container.attributeIfPresent(of: .key),
             minimumLineSpacing:       container.attributeIfPresent(of: .minimumLineSpacing),
             minimumInteritemSpacing:  container.attributeIfPresent(of: .minimumInteritemSpacing),
-            sizes:                     xml.byKey("size")?.all.compactMap(decodeValue),
-            insets:                     xml.byKey("inset")?.all.compactMap(decodeValue)
+            sizes:                    container.elementsIfPresent(of: .sizes),
+            insets:                   container.elementsIfPresent(of: .insets)
         )
     }
 }
