@@ -23,19 +23,22 @@ public struct CollectionViewController: XMLDecodable, KeyDecodable, ViewControll
     public var rootView: ViewProtocol? { return collectionView }
     public var clearsSelectionOnViewWillAppear: Bool
 
+    enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
+
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewController {
         let container = xml.container(keys: CodingKeys.self)
+        let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return CollectionViewController(
             id:                              try container.attribute(of: .id),
             customClass:                     container.attributeIfPresent(of: .customClass),
             customModule:                    container.attributeIfPresent(of: .customModule),
             customModuleProvider:            container.attributeIfPresent(of: .customModuleProvider),
             storyboardIdentifier:            container.attributeIfPresent(of: .storyboardIdentifier),
-            layoutGuides:                    xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.compactMap(decodeValue),
-            userDefinedRuntimeAttributes:    xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
-            connections:                     xml.byKey("connections")?.children.compactMap(decodeValue),
-            tabBarItem:                      xml.byKey("tabBarItem").flatMap(decodeValue),
-            collectionView:                  xml.byKey("collectionView").flatMap(decodeValue),
+            layoutGuides:                    layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
+            userDefinedRuntimeAttributes:    container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                     container.childrenIfPresent(of: .connections),
+            tabBarItem:                      container.elementIfPresent(of: .tabBarItem),
+            collectionView:                  container.elementIfPresent(of: .collectionView),
             clearsSelectionOnViewWillAppear: container.attributeIfPresent(of: .clearsSelectionOnViewWillAppear) ?? true
         )
     }

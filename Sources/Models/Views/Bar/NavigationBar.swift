@@ -63,7 +63,7 @@ public struct NavigationBar: XMLDecodable, KeyDecodable, ViewProtocol {
 
         return NavigationBar(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),

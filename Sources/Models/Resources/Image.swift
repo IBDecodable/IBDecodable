@@ -19,7 +19,7 @@ public struct Image: XMLDecodable, KeyDecodable, ResourceProtocol {
             name:          try container.attribute(of: .name),
             width:         try container.attribute(of: .width),
             height:        try container.attribute(of: .height),
-            mutableData:   xml.byKey("mutableData").flatMap(decodeValue))
+            mutableData:   container.elementIfPresent(of: .mutableData))
     }
 }
 

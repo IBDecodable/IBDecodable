@@ -42,7 +42,7 @@ public struct StackView: XMLDecodable, KeyDecodable, ViewProtocol {
         return StackView(
             id:                                        try container.attribute(of: .id),
             alignment:                                 container.attributeIfPresent(of: .alignment),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             axis:                                      container.attributeIfPresent(of: .axis),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),

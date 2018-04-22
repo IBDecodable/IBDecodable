@@ -42,7 +42,7 @@ public struct ImageView: XMLDecodable, KeyDecodable, ViewProtocol {
 
         return ImageView(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
             contentMode:                               container.attributeIfPresent(of: .contentMode),

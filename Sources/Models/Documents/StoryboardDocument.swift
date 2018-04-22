@@ -40,7 +40,7 @@ public struct StoryboardDocument: XMLDecodable, KeyDecodable {
             colorMatched:          container.attributeIfPresent(of: .colorMatched),
             initialViewController: container.attributeIfPresent(of: .initialViewController),
             launchScreen:          container.attributeIfPresent(of: .launchScreen) ?? false,
-            device:                xml.byKey("device").flatMap(decodeValue),
+            device:                container.elementIfPresent(of: .device),
             scenes:                xml.byKey("scenes")?.byKey("scene")?.all.flatMap(decodeValue),
             resources:             xml.byKey("resources")?.children.flatMap(decodeValue),
             connections:           findConnections(in: xml)

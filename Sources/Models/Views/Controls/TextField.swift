@@ -46,7 +46,7 @@ public struct TextField: XMLDecodable, KeyDecodable, ViewProtocol {
 
         return TextField(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             borderStyle:                               container.attributeIfPresent(of: .borderStyle),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
@@ -56,7 +56,7 @@ public struct TextField: XMLDecodable, KeyDecodable, ViewProtocol {
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             fixedFrame:                                container.attributeIfPresent(of: .fixedFrame),
-            fontDescription:                           xml.byKey("fontDescription").flatMap(decodeValue),
+            fontDescription:                           container.elementIfPresent(of: .fontDescription),
             minimumFontSize:                           container.attributeIfPresent(of: .minimumFontSize),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),

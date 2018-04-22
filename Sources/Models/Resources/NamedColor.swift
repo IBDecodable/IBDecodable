@@ -15,7 +15,7 @@ public struct NamedColor: XMLDecodable, KeyDecodable, ResourceProtocol {
         let container = xml.container(keys: CodingKeys.self)
         return NamedColor(
             name:    try container.attribute(of: .name),
-            color:   xml.byKey("color").flatMap(decodeValue))
+            color:   container.elementIfPresent(of: .color))
     }
 
 }

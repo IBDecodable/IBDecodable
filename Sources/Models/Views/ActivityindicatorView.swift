@@ -43,7 +43,7 @@ public struct ActivityindicatorView: XMLDecodable, KeyDecodable, ViewProtocol {
 
         return ActivityindicatorView(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
@@ -55,7 +55,7 @@ public struct ActivityindicatorView: XMLDecodable, KeyDecodable, ViewProtocol {
             subviews:                                  xml.byKey("subviews")?.children.compactMap(decodeValue),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
-            viewLayoutGuide:                           xml.byKey("viewLayoutGuide").flatMap(decodeValue),
+            viewLayoutGuide:                           container.elementIfPresent(of: .viewLayoutGuide),
             userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
             connections:                               xml.byKey("connections")?.children.compactMap(decodeValue)
         )

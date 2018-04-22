@@ -22,19 +22,22 @@ public struct SplitViewController: XMLDecodable, KeyDecodable, ViewControllerPro
     public let view: View?
     public var rootView: ViewProtocol? { return view }
 
+    enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
+
     static func decode(_ xml: XMLIndexer) throws -> SplitViewController {
         let container = xml.container(keys: CodingKeys.self)
+        let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return SplitViewController(
-            id:                   try container.attribute(of: .id),
-            customClass:          container.attributeIfPresent(of: .customClass),
-            customModule:         container.attributeIfPresent(of: .customModule),
-            customModuleProvider: container.attributeIfPresent(of: .customModuleProvider),
-            storyboardIdentifier: container.attributeIfPresent(of: .storyboardIdentifier),
-            layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
-            userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
-            tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
-            view:                 xml.byKey("view").flatMap(decodeValue)
+            id:                           try container.attribute(of: .id),
+            customClass:                  container.attributeIfPresent(of: .customClass),
+            customModule:                 container.attributeIfPresent(of: .customModule),
+            customModuleProvider:         container.attributeIfPresent(of: .customModuleProvider),
+            storyboardIdentifier:         container.attributeIfPresent(of: .storyboardIdentifier),
+            layoutGuides:                 layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
+            userDefinedRuntimeAttributes: container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                  container.childrenIfPresent(of: .connections),
+            tabBarItem:                   container.elementIfPresent(of: .tabBarItem),
+            view:                         container.elementIfPresent(of: .view)
         )
     }
 }

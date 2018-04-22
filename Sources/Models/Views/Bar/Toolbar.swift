@@ -56,7 +56,7 @@ public struct Toolbar: XMLDecodable, KeyDecodable, ViewProtocol {
         }
         return Toolbar(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
             contentMode:                               container.attributeIfPresent(of: .contentMode),

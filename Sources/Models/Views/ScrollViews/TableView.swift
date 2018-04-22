@@ -68,7 +68,7 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
         return TableView(
             id:                                        try container.attribute(of: .id),
             alwaysBounceVertical:                      container.attributeIfPresent(of: .alwaysBounceVertical),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
@@ -177,7 +177,7 @@ public struct TableViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
 
             return TableViewContentView(
                 id:                                        try container.attribute(of: .id),
-                autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+                autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
                 clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
                 constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
                 contentMode:                               container.attributeIfPresent(of: .contentMode),
@@ -208,7 +208,7 @@ public struct TableViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
 
         return TableViewCell(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.compactMap(decodeValue),
             contentView:                               try decodeValue(xml.byKey("tableViewCellContentView")),

@@ -34,8 +34,8 @@ public struct TableViewController: XMLDecodable, KeyDecodable, ViewControllerPro
             layoutGuides:                    xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.compactMap(decodeValue),
             userDefinedRuntimeAttributes:    xml.byKey("userDefinedRuntimeAttributes")?.children.compactMap(decodeValue),
             connections:                     xml.byKey("connections")?.children.compactMap(decodeValue),
-            tabBarItem:                      xml.byKey("tabBarItem").flatMap(decodeValue),
-            tableView:                       xml.byKey("tableView").flatMap(decodeValue),
+            tabBarItem:                      container.elementIfPresent(of: .tabBarItem),
+            tableView:                       container.elementIfPresent(of: .tableView),
             clearsSelectionOnViewWillAppear: (try? container.attributeIfPresent(of: .clearsSelectionOnViewWillAppear)) ?? true
         )
     }

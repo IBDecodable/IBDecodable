@@ -34,7 +34,7 @@ public struct AVPlayerViewController: XMLDecodable, KeyDecodable, ViewController
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
-            tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
+            tabBarItem:           container.elementIfPresent(of: .tabBarItem),
             view:                 xml.children.first.flatMap(decodeValue),
             videoGravity:         container.attributeIfPresent(of: .videoGravity)
         )

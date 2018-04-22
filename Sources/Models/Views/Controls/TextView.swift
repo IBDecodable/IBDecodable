@@ -48,7 +48,7 @@ public struct TextView: XMLDecodable, KeyDecodable, ViewProtocol {
 
         return TextView(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             bounces:                                   container.attributeIfPresent(of: .bounces),
             bouncesZoom:                               container.attributeIfPresent(of: .bouncesZoom),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
@@ -56,7 +56,7 @@ public struct TextView: XMLDecodable, KeyDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
-            fontDescription:                           xml.byKey("fontDescription").flatMap(decodeValue),
+            fontDescription:                           container.elementIfPresent(of: .fontDescription),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try decodeValue(xml.byKey("rect")),

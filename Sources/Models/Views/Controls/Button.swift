@@ -42,7 +42,7 @@ public struct Button: XMLDecodable, KeyDecodable, ViewProtocol {
             return State.init(
                 key:   try container.attribute(of: .key),
                 title: try container.attribute(of: .title),
-                color: xml.byKey("color").flatMap(decodeValue)
+                color: container.elementIfPresent(of: .color)
             )
         }
     }
@@ -60,7 +60,7 @@ public struct Button: XMLDecodable, KeyDecodable, ViewProtocol {
 
         return Button(
             id:                                        try container.attribute(of: .id),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             buttonType:                                container.attributeIfPresent(of: .buttonType),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
@@ -69,7 +69,7 @@ public struct Button: XMLDecodable, KeyDecodable, ViewProtocol {
             contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
-            fontDescription:                                      xml.byKey("fontDescription").flatMap(decodeValue),
+            fontDescription:                                      container.elementIfPresent(of: .fontDescription),
             lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),

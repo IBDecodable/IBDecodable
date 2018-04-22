@@ -33,8 +33,8 @@ public struct GLKViewController: XMLDecodable, KeyDecodable, ViewControllerProto
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
-            tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
-            glkView:              xml.byKey("glkView").flatMap(decodeValue)
+            tabBarItem:           container.elementIfPresent(of: .tabBarItem),
+            glkView:              container.elementIfPresent(of: .glkView)
         )
     }
 }

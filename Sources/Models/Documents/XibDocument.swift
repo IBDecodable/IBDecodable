@@ -34,7 +34,7 @@ public struct XibDocument: XMLDecodable, KeyDecodable {
             useTraitCollections:   container.attributeIfPresent(of: .useTraitCollections),
             useSafeAreas:          container.attributeIfPresent(of: .useSafeAreas),
             colorMatched:          container.attributeIfPresent(of: .colorMatched),
-            device:                xml.byKey("device").flatMap(decodeValue),
+            device:                container.elementIfPresent(of: .device),
             views:                 xml.byKey("objects")?.children.flatMap(decodeValue),
             placeholders:          xml.byKey("objects")?.byKey("placeholder")?.all.flatMap(decodeValue),
             connections:           findConnections(in: xml)

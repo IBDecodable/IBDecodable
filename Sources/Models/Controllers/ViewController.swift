@@ -33,8 +33,8 @@ public struct ViewController: XMLDecodable, KeyDecodable, ViewControllerProtocol
             layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
             userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
             connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
-            tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
-            view:                 xml.byKey("view").flatMap(decodeValue)
+            tabBarItem:           container.elementIfPresent(of: .tabBarItem),
+            view:                 container.elementIfPresent(of: .view)
         )
     }
 }

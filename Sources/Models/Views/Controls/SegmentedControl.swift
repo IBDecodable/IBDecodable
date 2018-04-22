@@ -53,7 +53,7 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
         
         return SegmentedControl(
             id:                                         try container.attribute(of: .id),
-            autoresizingMask:                           xml.byKey("autoresizingMask").flatMap(decodeValue),
+            autoresizingMask:                           container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                              container.attributeIfPresent(of: .clipsSubviews),
             constraints:                                xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
             contentHorizontalAlignment:                 container.attributeIfPresent(of: .contentHorizontalAlignment),
