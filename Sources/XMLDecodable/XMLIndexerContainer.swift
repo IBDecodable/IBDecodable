@@ -93,10 +93,6 @@ class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
         let nestedIndexers: [XMLIndexer] = try indexer.byKey(key.stringValue).all
         return nestedIndexers.map(XMLIndexerContainer<A>.init)
     }
-
-    func externalContainer<A>(keys: A.Type) -> XMLIndexerContainer<A> {
-        return XMLIndexerContainer<A>(indexer: indexer)
-    }
 }
 
 extension XMLIndexer {

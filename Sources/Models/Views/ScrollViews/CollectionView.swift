@@ -144,15 +144,7 @@ public struct CollectionViewLayout: XMLDecodable, KeyDecodable {
     public let customModule: String?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewLayout {
-        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
-            let stringValue: String = {
-                switch key {
-                case .key: return "contentMode"
-                default: return key.stringValue
-                }
-            }()
-            return MappedCodingKey(stringValue: stringValue)
-        }
+        let container = xml.container(keys: CodingKeys.self)
         return CollectionViewLayout(
             id:                       try container.attribute(of: .id),
             key:                      container.attributeIfPresent(of: .key),
