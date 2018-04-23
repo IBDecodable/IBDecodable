@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Switch: XMLDecodable, ViewProtocol {
+public struct Switch: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UISwitch"
 
@@ -32,29 +32,43 @@ public struct Switch: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> Switch {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                case .onTintColor: return "color"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+
         return Switch(
-            id:                                        try xml.attributeValue(of: "id"),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentHorizontalAlignment:                xml.attributeValue(of: "contentHorizontalAlignment"),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            contentVerticalAlignment:                  xml.attributeValue(of: "contentVerticalAlignment"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
-            horizontalHuggingPriority:                 xml.attributeValue(of: "horizontalHuggingPriority"),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            on:                                        try xml.attributeValue(of: "on"),
-            onTintColor:                               xml.byKey("color").flatMap(decodeValue),
-            opaque:                                    xml.attributeValue(of: "opaque"),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            verticalHuggingPriority:                   xml.attributeValue(of: "verticalHuggingPriority"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            id:                                        try container.attribute(of: .id),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
+            horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            on:                                        try container.attribute(of: .on),
+            onTintColor:                               container.elementIfPresent(of: .onTintColor),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
+            rect:                                      try container.element(of: .rect),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
+            verticalHuggingPriority:                   container.attributeIfPresent(of: .verticalHuggingPriority),
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 }

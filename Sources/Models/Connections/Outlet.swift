@@ -7,15 +7,16 @@
 
 import SWXMLHash
 
-public struct Outlet: XMLDecodable, ConnectionProtocol {
+public struct Outlet: XMLDecodable, KeyDecodable, ConnectionProtocol {
     public let id: String
     public let destination: String
     public let property: String
 
     static func decode(_ xml: XMLIndexer) throws -> Outlet {
+        let container = xml.container(keys: CodingKeys.self)
         return Outlet(
-            id:            try xml.attributeValue(of: "id"),
-            destination:   try xml.attributeValue(of: "destination"),
-            property:      try xml.attributeValue(of: "property"))
+            id:            try container.attribute(of: .id),
+            destination:   try container.attribute(of: .destination),
+            property:      try container.attribute(of: .property))
     }
 }

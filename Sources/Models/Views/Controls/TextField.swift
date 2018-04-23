@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TextField: XMLDecodable, ViewProtocol {
+public struct TextField: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITextField"
 
@@ -33,30 +33,43 @@ public struct TextField: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> TextField {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+
         return TextField(
-            id:                                        try xml.attributeValue(of: "id"),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            borderStyle:                               xml.attributeValue(of: "borderStyle"),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentHorizontalAlignment:                xml.attributeValue(of: "contentHorizontalAlignment"),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            contentVerticalAlignment:                  xml.attributeValue(of: "contentVerticalAlignment"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
-            fixedFrame:                                xml.attributeValue(of: "fixedFrame"),
-            fontDescription:                           xml.byKey("fontDescription").flatMap(decodeValue),
-            minimumFontSize:                           xml.attributeValue(of: "minimumFontSize"),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            textAlignment:                             xml.attributeValue(of: "textAlignment"),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            id:                                        try container.attribute(of: .id),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
+            borderStyle:                               container.attributeIfPresent(of: .borderStyle),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
+            fixedFrame:                                container.attributeIfPresent(of: .fixedFrame),
+            fontDescription:                           container.elementIfPresent(of: .fontDescription),
+            minimumFontSize:                           container.attributeIfPresent(of: .minimumFontSize),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
+            rect:                                      try container.element(of: .rect),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
+            textAlignment:                             container.attributeIfPresent(of: .textAlignment),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 

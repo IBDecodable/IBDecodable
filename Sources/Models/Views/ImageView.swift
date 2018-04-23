@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct ImageView: XMLDecodable, ViewProtocol {
+public struct ImageView: XMLDecodable, KeyDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIImageView"
 
@@ -29,26 +29,39 @@ public struct ImageView: XMLDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+
     static func decode(_ xml: XMLIndexer) throws -> ImageView {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+
         return ImageView(
-            id:                                        try xml.attributeValue(of: "id"),
-            autoresizingMask:                          xml.byKey("autoresizingMask").flatMap(decodeValue),
-            clipsSubviews:                             xml.attributeValue(of: "clipsSubviews"),
-            constraints:                               xml.byKey("constraints")?.byKey("constraint")?.all.flatMap(decodeValue),
-            contentMode:                               xml.attributeValue(of: "contentMode"),
-            customClass:                               xml.attributeValue(of: "customClass"),
-            customModule:                              xml.attributeValue(of: "customModule"),
-            image:                                     try xml.attributeValue(of: "image"),
-            insetsLayoutMarginsFromSafeArea:           xml.attributeValue(of: "insetsLayoutMarginsFromSafeArea"),
-            isMisplaced:                               xml.attributeValue(of: "misplaced"),
-            multipleTouchEnabled:                      xml.attributeValue(of: "multipleTouchEnabled"),
-            opaque:                                    xml.attributeValue(of: "opaque"),
-            rect:                                      try decodeValue(xml.byKey("rect")),
-            subviews:                                  xml.byKey("subviews")?.children.flatMap(decodeValue),
-            translatesAutoresizingMaskIntoConstraints: xml.attributeValue(of: "translatesAutoresizingMaskIntoConstraints"),
-            userInteractionEnabled:                    xml.attributeValue(of: "userInteractionEnabled"),
-            userDefinedRuntimeAttributes:              xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                               xml.byKey("connections")?.children.flatMap(decodeValue)
+            id:                                        try container.attribute(of: .id),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
+            image:                                     try container.attribute(of: .image),
+            insetsLayoutMarginsFromSafeArea:           container.attributeIfPresent(of: .insetsLayoutMarginsFromSafeArea),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
+            rect:                                      try container.element(of: .rect),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections)
         )
     }
 }

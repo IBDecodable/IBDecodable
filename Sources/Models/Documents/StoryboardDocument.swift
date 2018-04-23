@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - StoryboardDocument
 
-public struct StoryboardDocument: XMLDecodable {
+public struct StoryboardDocument: XMLDecodable, KeyDecodable {
     public let type: String
     public let version: String
     public let toolsVersion: String
@@ -26,22 +26,26 @@ public struct StoryboardDocument: XMLDecodable {
     public let resources: [AnyResource]?
     public let connections: [AnyConnection]?
 
+    enum ScenesCodingKeys: CodingKey { case scene }
+
     static func decode(_ xml: XMLIndexer) throws -> StoryboardDocument {
+        let container = xml.container(keys: CodingKeys.self)
+        let scenesContainer = container.nestedContainerIfPresent(of: .scenes, keys: ScenesCodingKeys.self)
         return StoryboardDocument(
-            type:                  try xml.attributeValue(of: "type"),
-            version:               try xml.attributeValue(of: "version"),
-            toolsVersion:          try xml.attributeValue(of: "toolsVersion"),
-            targetRuntime:         try xml.attributeValue(of: "targetRuntime"),
-            propertyAccessControl: xml.attributeValue(of: "propertyAccessControl"),
-            useAutolayout:         xml.attributeValue(of: "useAutolayout"),
-            useTraitCollections:   xml.attributeValue(of: "useTraitCollections"),
-            useSafeAreas:          xml.attributeValue(of: "useSafeAreas"),
-            colorMatched:          xml.attributeValue(of: "colorMatched"),
-            initialViewController: xml.attributeValue(of: "initialViewController"),
-            launchScreen:          xml.attributeValue(of: "launchScreen") ?? false,
-            device:                xml.byKey("device").flatMap(decodeValue),
-            scenes:                xml.byKey("scenes")?.byKey("scene")?.all.flatMap(decodeValue),
-            resources:             xml.byKey("resources")?.children.flatMap(decodeValue),
+            type:                  try container.attribute(of: .type),
+            version:               try container.attribute(of: .version),
+            toolsVersion:          try container.attribute(of: .toolsVersion),
+            targetRuntime:         try container.attribute(of: .targetRuntime),
+            propertyAccessControl: container.attributeIfPresent(of: .propertyAccessControl),
+            useAutolayout:         container.attributeIfPresent(of: .useAutolayout),
+            useTraitCollections:   container.attributeIfPresent(of: .useTraitCollections),
+            useSafeAreas:          container.attributeIfPresent(of: .useSafeAreas),
+            colorMatched:          container.attributeIfPresent(of: .colorMatched),
+            initialViewController: container.attributeIfPresent(of: .initialViewController),
+            launchScreen:          container.attributeIfPresent(of: .launchScreen) ?? false,
+            device:                container.elementIfPresent(of: .device),
+            scenes:                scenesContainer?.elementsIfPresent(of: .scene),
+            resources:             container.childrenIfPresent(of: .resources),
             connections:           findConnections(in: xml)
         )
     }
@@ -49,7 +53,7 @@ public struct StoryboardDocument: XMLDecodable {
 
 // MARK: - Scene
 
-public struct Scene: XMLDecodable {
+public struct Scene: XMLDecodable, KeyDecodable {
 
     public let id: String
     public let viewController: AnyViewController?
@@ -57,14 +61,28 @@ public struct Scene: XMLDecodable {
     public let canvasLocation: Point?
     public let placeholders: [Placeholder]?
 
+    enum ExternalCodingKeys: CodingKey { case objects }
+    enum ObjectsCodingKeys: CodingKey { case placeholder }
+
     static func decode(_ xml: XMLIndexer) throws -> Scene {
-        let objects: XMLIndexer? = xml.byKey("objects")
+        let externalContainer = xml.container(keys: ExternalCodingKeys.self)
+        let objectsContainer = externalContainer.nestedContainerIfPresent(of: .objects, keys: ObjectsCodingKeys.self)
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .id: return "sceneID"
+                case .canvasLocation: return "point"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
         return Scene(
-            id:                        try xml.attributeValue(of: "sceneID"),
-            viewController:            objects?.children.first.flatMap(decodeValue),
-            viewControllerPlaceholder: objects?.byKey("viewControllerPlaceholder").flatMap(decodeValue),
-            canvasLocation:            xml.byKey("point").flatMap(decodeValue),
-            placeholders:              objects?.byKey("placeholder")?.all.flatMap(decodeValue)
+            id:                        try container.attribute(of: .id),
+            viewController:            externalContainer.childrenIfPresent(of: .objects)?.first,
+            viewControllerPlaceholder: container.elementIfPresent(of: .viewControllerPlaceholder),
+            canvasLocation:            container.elementIfPresent(of: .canvasLocation),
+            placeholders:              objectsContainer?.elementsIfPresent(of: .placeholder)
         )
     }
 

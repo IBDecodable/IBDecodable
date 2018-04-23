@@ -7,17 +7,23 @@
 
 import SWXMLHash
 
-public struct Device: XMLDecodable {
+public struct Device: XMLDecodable, KeyDecodable {
 
     public let id: String
     public let orientation: String?
     public let adaptation: String?
 
+    enum AdaptationCodingKeys: CodingKey {
+        case id
+    }
+
     static func decode(_ xml: XMLIndexer) throws -> Device {
+        let container = xml.container(keys: CodingKeys.self)
+        let adaptationContainer = container.nestedContainerIfPresent(of: .adaptation, keys: AdaptationCodingKeys.self)
         return Device(
-            id:          try xml.attributeValue(of: "id"),
-            orientation: xml.attributeValue(of: "orientation"),
-            adaptation:  xml.byKey("adaptation")?.attributeValue(of: "id")
+            id:          try container.attribute(of: .id),
+            orientation: container.attributeIfPresent(of: .orientation),
+            adaptation:  adaptationContainer?.attributeIfPresent(of: .id)
         )
     }
 }

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct NavigationController: XMLDecodable, ViewControllerProtocol {
+public struct NavigationController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "UINavgigationController"
     public let id: String
@@ -22,18 +22,22 @@ public struct NavigationController: XMLDecodable, ViewControllerProtocol {
     public let navigationBar: NavigationBar?
     public var rootView: ViewProtocol? { return navigationBar }
 
+    enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
+
     static func decode(_ xml: XMLIndexer) throws -> NavigationController {
+        let container = xml.container(keys: CodingKeys.self)
+        let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return NavigationController(
-            id:                   try xml.attributeValue(of: "id"),
-            customClass:          xml.attributeValue(of: "customClass"),
-            customModule:         xml.attributeValue(of: "customModule"),
-            customModuleProvider: xml.attributeValue(of: "customModuleProvider"),
-            storyboardIdentifier: xml.attributeValue(of: "storyboardIdentifier"),
-            layoutGuides:         xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
-            userDefinedRuntimeAttributes: xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:          xml.byKey("connections")?.children.flatMap(decodeValue),
-            tabBarItem:           xml.byKey("tabBarItem").flatMap(decodeValue),
-            navigationBar:                 xml.byKey("navigationBar").flatMap(decodeValue)
+            id:                           try container.attribute(of: .id),
+            customClass:                  container.attributeIfPresent(of: .customClass),
+            customModule:                 container.attributeIfPresent(of: .customModule),
+            customModuleProvider:         container.attributeIfPresent(of: .customModuleProvider),
+            storyboardIdentifier:         container.attributeIfPresent(of: .storyboardIdentifier),
+            layoutGuides:                 layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
+            userDefinedRuntimeAttributes: container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                  container.childrenIfPresent(of: .connections),
+            tabBarItem:                   container.elementIfPresent(of: .tabBarItem),
+            navigationBar:                container.elementIfPresent(of: .navigationBar)
         )
     }
 }

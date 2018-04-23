@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct CollectionViewController: XMLDecodable, ViewControllerProtocol {
+public struct CollectionViewController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "UICollectionViewController"
     public let id: String
@@ -23,19 +23,23 @@ public struct CollectionViewController: XMLDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return collectionView }
     public var clearsSelectionOnViewWillAppear: Bool
 
+    enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
+
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewController {
+        let container = xml.container(keys: CodingKeys.self)
+        let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return CollectionViewController(
-            id:                              try xml.attributeValue(of: "id"),
-            customClass:                     xml.attributeValue(of: "customClass"),
-            customModule:                    xml.attributeValue(of: "customModule"),
-            customModuleProvider:            xml.attributeValue(of: "customModuleProvider"),
-            storyboardIdentifier:            xml.attributeValue(of: "storyboardIdentifier"),
-            layoutGuides:                    xml.byKey("layoutGuides")?.byKey("viewControllerLayoutGuide")?.all.flatMap(decodeValue),
-            userDefinedRuntimeAttributes:    xml.byKey("userDefinedRuntimeAttributes")?.children.flatMap(decodeValue),
-            connections:                     xml.byKey("connections")?.children.flatMap(decodeValue),
-            tabBarItem:                      xml.byKey("tabBarItem").flatMap(decodeValue),
-            collectionView:                  xml.byKey("collectionView").flatMap(decodeValue),
-            clearsSelectionOnViewWillAppear: (try? xml.attributeValue(of: "clearsSelectionOnViewWillAppear")) ?? true
+            id:                              try container.attribute(of: .id),
+            customClass:                     container.attributeIfPresent(of: .customClass),
+            customModule:                    container.attributeIfPresent(of: .customModule),
+            customModuleProvider:            container.attributeIfPresent(of: .customModuleProvider),
+            storyboardIdentifier:            container.attributeIfPresent(of: .storyboardIdentifier),
+            layoutGuides:                    layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
+            userDefinedRuntimeAttributes:    container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                     container.childrenIfPresent(of: .connections),
+            tabBarItem:                      container.elementIfPresent(of: .tabBarItem),
+            collectionView:                  container.elementIfPresent(of: .collectionView),
+            clearsSelectionOnViewWillAppear: container.attributeIfPresent(of: .clearsSelectionOnViewWillAppear) ?? true
         )
     }
 }

@@ -55,10 +55,10 @@ class Tests: XCTestCase {
                 return
             }
             // Check images
-            let images: [Image] = resources.flatMap { $0.resource as? Image }
+            let images: [Image] = resources.compactMap { $0.resource as? Image }
             XCTAssertFalse(images.isEmpty, "There is no image")
             // Check named colors
-            let namedColor: [NamedColor] =  resources.flatMap { $0.resource as? NamedColor }
+            let namedColor: [NamedColor] =  resources.compactMap { $0.resource as? NamedColor }
             XCTAssertFalse(namedColor.isEmpty, "There is no named color")
             namedColor.forEach {
                 XCTAssertNotNil($0.color)
@@ -118,7 +118,7 @@ class Tests: XCTestCase {
             let file = try StoryboardFile(url: url)
          
             let anyViewControllers = file.document.scenes?.map { $0.viewController } ?? []
-            XCTAssertEqual(anyViewControllers.count, anyViewControllers.flatMap({ $0 }).count, "Some VC are not decodable")
+            XCTAssertEqual(anyViewControllers.count, anyViewControllers.compactMap({ $0 }).count, "Some VC are not decodable")
         } catch {
             XCTFail("\(error)")
         }
@@ -130,7 +130,7 @@ class Tests: XCTestCase {
             let file = try StoryboardFile(url: url)
             
             let viewControllers = file.document.scenes?.map { $0.viewController?.viewController } ?? []
-            let rootConnections = viewControllers.flatMap { $0?.connections }.flatMap { $0 }.flatMap { $0.connection }
+            let rootConnections = viewControllers.compactMap { $0?.connections }.flatMap { $0 }.compactMap { $0.connection }
             XCTAssertFalse(rootConnections.isEmpty)
             let allConnections = file.document.connections ?? []
             XCTAssertEqual(allConnections.count, 9)
