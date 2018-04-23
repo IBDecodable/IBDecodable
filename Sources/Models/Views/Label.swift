@@ -20,7 +20,7 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
-    public let font: FontDescription?
+    public let fontDescription: FontDescription?
     public let horizontalHuggingPriority: Int?
     public let lineBreakMode: String?
     public let isMisplaced: Bool?
@@ -44,7 +44,6 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
-                case .font: return "fontDescription"
                 case .textColor: return "color"
                 case .attributedText: return "attributedString"
                 default: return key.stringValue
@@ -64,7 +63,7 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
-            font:                                      container.elementIfPresent(of: .font),
+            fontDescription:                           container.elementIfPresent(of: .fontDescription),
             horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
             lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
