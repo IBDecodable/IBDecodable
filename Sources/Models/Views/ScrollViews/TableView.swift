@@ -61,6 +61,7 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .prototypeCells: return "prototypes"
                 default: return key.stringValue
                 }
             }()
@@ -93,7 +94,7 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
             sections:                                  container.childrenIfPresent(of: .sections),
-            prototypeCells:                            xml.byKey("prototypes")?.children.compactMap(decodeValue)
+            prototypeCells:                            container.childrenIfPresent(of: .prototypeCells)
         )
     }
 }
@@ -109,16 +110,21 @@ public struct TableViewSection: XMLDecodable, KeyDecodable {
     public let cells: [TableViewCell]?
     public let userComments: AttributedString?
 
+    enum ExternalCodingKeys: CodingKey { case attributedString }
+    enum AttributedStringCodingKeys: CodingKey { case key }
+
     static func decode(_ xml: XMLIndexer) throws -> TableViewSection {
         assert(xml.element?.name == "tableViewSection")
         let container = xml.container(keys: CodingKeys.self)
+        let attributedStringContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .attributedString, keys: AttributedStringCodingKeys.self)
         return TableViewSection(
             id:           try container.attribute(of: .id),
             headerTitle:  container.attributeIfPresent(of: .headerTitle),
             footerTitle:  container.attributeIfPresent(of: .footerTitle),
             colorLabel:   container.attributeIfPresent(of: .colorLabel),
             cells:        container.childrenIfPresent(of: .cells),
-            userComments: xml.byKey("attributedString")?.withAttribute("key", "userComments").flatMap(decodeValue)
+            userComments: attributedStringContainer?.withAttributeElement(.key, "userComments")
         )
     }
 }
