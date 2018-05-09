@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct SKView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct SKView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "SKView"
 

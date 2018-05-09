@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct SegmentedControl: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UISegmentedControl"
 
@@ -31,7 +31,7 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct Segment: XMLDecodable, KeyDecodable {
+    public struct Segment: IBDecodable {
         public let title: String
 
         static func decode(_ xml: XMLIndexer) throws -> SegmentedControl.Segment {
@@ -55,7 +55,7 @@ public struct SegmentedControl: XMLDecodable, KeyDecodable, ViewProtocol {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let segmentsContainer = container.nestedContainerIfPresent(of: .segments, keys: SegmentsCodingKeys.self)
-        
+
         return SegmentedControl(
             id:                                         try container.attribute(of: .id),
             autoresizingMask:                           container.elementIfPresent(of: .autoresizingMask),

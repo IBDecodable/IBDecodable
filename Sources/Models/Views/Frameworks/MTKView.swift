@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct MTKView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct MTKView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "MTKView"
 
@@ -40,7 +40,7 @@ public struct MTKView: XMLDecodable, KeyDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
-        
+
         return MTKView(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),

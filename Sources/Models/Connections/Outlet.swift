@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Outlet: XMLDecodable, KeyDecodable, ConnectionProtocol {
+public struct Outlet: IBDecodable, ConnectionProtocol {
     public let id: String
     public let destination: String
     public let property: String

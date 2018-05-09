@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Device: XMLDecodable, KeyDecodable {
+public struct Device: IBDecodable, IBIdentifiable {
 
     public let id: String
     public let orientation: String?

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TextField: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct TextField: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITextField"
 

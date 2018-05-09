@@ -134,6 +134,9 @@ class Tests: XCTestCase {
             XCTAssertFalse(rootConnections.isEmpty)
             let allConnections = file.document.connections ?? []
             XCTAssertEqual(allConnections.count, 9)
+            
+            //let connections: [AnyConnection] = file.document.children(of: AnyConnection.self)
+            //XCTAssertEqual(connections.count, 9)
         } catch {
             XCTFail("\(error)")
         }
@@ -169,12 +172,64 @@ class Tests: XCTestCase {
                         }
                     }
                 } catch {
-                    XCTFail("\(error)")
+                    XCTFail("\(error) \(url)")
                 }
             }
         }
     }
 
+    func testStoryboardElementChildren() {
+        if let urls = urls(withExtension: "storyboard") {
+            for url in urls {
+                do {
+                    let file = try StoryboardFile(url: url)
+                    let name = url.lastPathComponent
+                    print(name)
+
+                    let document = file.document
+                    printTree(element: document)
+        
+                    let children = document.children
+                    let flattened = document.flattened
+                    
+                    if name.contains("Empty")  {
+                        XCTAssertTrue(children.isEmpty, "must have no children element for doc \(name)")
+                        XCTAssertTrue(flattened.count == 1, "must have no flattened children element for doc \(name)")
+                    } else {
+                        XCTAssertTrue(children.count > 0, "no children element for doc \(name)")
+                        XCTAssertTrue(flattened.count > 2, "no flattened children element for doc \(name)")
+                        
+                        // Example code for indexation
+                        var duplicate: [IBIdentifiable] = []
+                        let mapById: [String: IBIdentifiable] = flattened.reduce([:]) { result, element in
+                            var result = result
+                            if let identifiable = element as? IBIdentifiable {
+                                if let oldValue = result[identifiable.id]/*, (identifiable as AnyObject !== oldValue as AnyObject)*/ {
+                                    duplicate.append(oldValue)
+                                    print("duplicate \(identifiable.id): \(identifiable) with \(oldValue)")
+                                } else {
+                                    result[identifiable.id] = identifiable
+                                }
+                            }
+                            return result
+                        }
+                        XCTAssertTrue(mapById.count > 2, "no element by id \(name)")
+                        XCTAssertTrue(duplicate.isEmpty, "there is duplicate element by id \(name)")
+                        
+                        // Example code for browsing
+                        _ = document.browse { element in
+                           
+                            return true // go on
+                        }
+                        
+                    }
+                } catch {
+                    XCTFail("\(error)  \(url)")
+                }
+            }
+        }
+        
+    }
     // MARK: Utils
 
     lazy var bundle: Bundle = {
@@ -198,4 +253,18 @@ class Tests: XCTestCase {
         return nil
     }
 
+    func printTree(element: IBElement, level: Int = 0) {
+        var elementString = "\(type(of: element))"
+        if let identifiable = element as? IBIdentifiable {
+            elementString += "[id=\(identifiable.id)]"
+        }
+        if let keyable = element as? IBKeyable, let key = keyable.key {
+            elementString += "[key=\(key)]"
+        }
+        print(String(repeating: "-", count: level) + elementString)
+        
+        element.children.forEach { child in
+            printTree(element: child, level: level + 4)
+        }
+    }
 }

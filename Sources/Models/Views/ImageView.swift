@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct ImageView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct ImageView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIImageView"
 

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct ARSKView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct ARSKView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "ARSKView"
 

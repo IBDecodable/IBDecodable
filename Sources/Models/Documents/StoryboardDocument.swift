@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - StoryboardDocument
 
-public struct StoryboardDocument: XMLDecodable, KeyDecodable {
+public struct StoryboardDocument: IBDecodable {
     public let type: String
     public let version: String
     public let toolsVersion: String
@@ -53,7 +53,7 @@ public struct StoryboardDocument: XMLDecodable, KeyDecodable {
 
 // MARK: - Scene
 
-public struct Scene: XMLDecodable, KeyDecodable {
+public struct Scene: IBDecodable {
 
     public let id: String
     public let viewController: AnyViewController?
@@ -87,7 +87,6 @@ public struct Scene: XMLDecodable, KeyDecodable {
     }
 
 }
-
 
 // MARK: - Connection
 // FIXME: This implementation is temporary

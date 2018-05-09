@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - ViewProtocol
 
-public protocol ViewProtocol {
+public protocol ViewProtocol: IBIdentifiable {
     var elementClass: String { get }
     var id: String { get }
 
@@ -32,7 +32,7 @@ public protocol ViewProtocol {
 
 // MARK: - AnyView
 
-public struct AnyView: XMLDecodable, KeyDecodable {
+public struct AnyView: IBDecodable {
 
     public let view: ViewProtocol
 
@@ -41,7 +41,7 @@ public struct AnyView: XMLDecodable, KeyDecodable {
     }
 
     public func encode(to encoder: Encoder) throws { fatalError() }
-    
+
     static func decode(_ xml: XMLIndexer) throws -> AnyView {
         guard let elementName = xml.element?.name else {
             throw IBError.elementNotFound
@@ -88,9 +88,16 @@ public struct AnyView: XMLDecodable, KeyDecodable {
 
 }
 
+extension AnyView: IBAny {
+    public typealias NestedElement = ViewProtocol
+    public var nested: ViewProtocol {
+        return view
+    }
+}
+
 // MARK: - Rect
 
-public struct Rect: XMLDecodable, KeyDecodable {
+public struct Rect: IBDecodable, IBKeyable {
     public let x: Float
     public let y: Float
     public let width: Float
@@ -111,7 +118,7 @@ public struct Rect: XMLDecodable, KeyDecodable {
 
 // MARK: - Point
 
-public struct Point: XMLDecodable, KeyDecodable {
+public struct Point: IBDecodable, IBKeyable {
     public let x: Float
     public let y: Float
     public let key: String?
@@ -128,7 +135,7 @@ public struct Point: XMLDecodable, KeyDecodable {
 
 // MARK: - Size
 
-public struct Size: XMLDecodable, KeyDecodable {
+public struct Size: IBDecodable, IBKeyable {
     public let width: Float
     public let height: Float
     public let key: String?
@@ -145,7 +152,7 @@ public struct Size: XMLDecodable, KeyDecodable {
 
 // MARK: - Inset
 
-public struct Inset: XMLDecodable, KeyDecodable {
+public struct Inset: IBDecodable, IBKeyable {
     public let minX: Float
     public let minY: Float
     public let maxX: Float
@@ -166,7 +173,7 @@ public struct Inset: XMLDecodable, KeyDecodable {
 
 // MARK: - AutoresizingMask
 
-public struct AutoresizingMask: XMLDecodable, KeyDecodable {
+public struct AutoresizingMask: IBDecodable, IBKeyable {
     public let widthSizable: Bool
     public let heightSizable: Bool
     public let key: String?
@@ -187,7 +194,7 @@ public struct AutoresizingMask: XMLDecodable, KeyDecodable {
 
 // MARK: - Constraint
 
-public struct Constraint: XMLDecodable, KeyDecodable {
+public struct Constraint: IBDecodable, IBIdentifiable {
     public let id: String
     public let constant: Int?
     public let multiplier: String?
@@ -259,7 +266,7 @@ public struct Constraint: XMLDecodable, KeyDecodable {
 
 // MARK: - Color
 
-public enum Color: XMLDecodable, KeyDecodable {
+public enum Color: IBDecodable {
 
     public typealias CalibratedWhite = (key: String?, white: Float, alpha: Float)
     public typealias SRGB = (key: String?, red: Float, blue: Float, green: Float, alpha: Float)

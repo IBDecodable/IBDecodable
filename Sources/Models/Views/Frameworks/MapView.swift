@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct MapView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct MapView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "MKMapView"
 

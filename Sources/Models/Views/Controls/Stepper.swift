@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Stepper: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct Stepper: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIStepper"
 
@@ -40,7 +40,7 @@ public struct Stepper: XMLDecodable, KeyDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
-        
+
         return Stepper(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),

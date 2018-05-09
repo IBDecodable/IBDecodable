@@ -7,9 +7,9 @@
 
 import SWXMLHash
 
-public struct AttributedString: XMLDecodable, KeyDecodable {
+public struct AttributedString: IBDecodable, IBKeyable {
 
-    public let key: String
+    public let key: String?
     public let fragments: [Fragment]?
 
     static func decode(_ xml: XMLIndexer) throws -> AttributedString {
@@ -28,7 +28,7 @@ public struct AttributedString: XMLDecodable, KeyDecodable {
         )
     }
 
-    public struct Fragment: XMLDecodable, KeyDecodable {
+    public struct Fragment: IBDecodable {
         public let content: String
         public let attributes: [AnyAttribute]?
 
@@ -45,13 +45,13 @@ public struct AttributedString: XMLDecodable, KeyDecodable {
 
 // MARK: - AttributeProtocol
 
-public protocol AttributeProtocol {
+public protocol AttributeProtocol: IBKeyable {
     var key: String? { get }
 }
 
 // MARK: - AnyAttribute
 
-public struct AnyAttribute: XMLDecodable, KeyDecodable {
+public struct AnyAttribute: IBDecodable {
 
     public let attribute: AttributeProtocol
 
@@ -75,9 +75,16 @@ public struct AnyAttribute: XMLDecodable, KeyDecodable {
     }
 }
 
+extension AnyAttribute: IBAny {
+    public typealias NestedElement = AttributeProtocol
+    public var nested: AttributeProtocol {
+        return attribute
+    }
+}
+
 // MARK: - Font
 
-public struct Font: XMLDecodable, KeyDecodable, AttributeProtocol {
+public struct Font: IBDecodable, AttributeProtocol {
 
     public let key: String?
     public let size: String?
@@ -97,7 +104,7 @@ public struct Font: XMLDecodable, KeyDecodable, AttributeProtocol {
 
 // MARK: - ParagraphStyle
 
-public struct ParagraphStyle: XMLDecodable, KeyDecodable, AttributeProtocol {
+public struct ParagraphStyle: IBDecodable, AttributeProtocol {
 
     public let key: String?
     public let alignment: String?

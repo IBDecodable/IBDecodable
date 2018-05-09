@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct UserDefinedRuntimeAttribute: XMLDecodable, KeyDecodable {
+public struct UserDefinedRuntimeAttribute: IBDecodable {
     public let keyPath: String
     public let type: String
     public let value: Any?
@@ -58,11 +58,17 @@ public struct UserDefinedRuntimeAttribute: XMLDecodable, KeyDecodable {
         )
     }
 
+    public static func == (left: UserDefinedRuntimeAttribute, right: UserDefinedRuntimeAttribute) -> Bool {
+        guard left.keyPath == right.keyPath, left.type == right.type else {
+            return false
+        }
+        return true
+    }
 }
 
 // MARK: - Range
 
-public struct Range: XMLDecodable, KeyDecodable {
+public struct Range: IBDecodable {
     public let location: Float
     public let length: Float
 

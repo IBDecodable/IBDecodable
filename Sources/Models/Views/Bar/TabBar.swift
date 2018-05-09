@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TabBar: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct TabBar: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITabBar"
 
@@ -27,7 +27,7 @@ public struct TabBar: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct TabBarItem: XMLDecodable, KeyDecodable {
+    public struct TabBarItem: IBDecodable, IBKeyable {
         public let id: String
         public let key: String?
         public let style: String?

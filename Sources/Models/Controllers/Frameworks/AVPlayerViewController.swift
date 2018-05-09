@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct AVPlayerViewController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
+public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "AVPlayerViewController"
     public let id: String

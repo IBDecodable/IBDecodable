@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct View: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct View: IBDecodable, ViewProtocol {
 
     public let id: String
     public let elementClass: String = "UIView"
@@ -65,7 +65,7 @@ public struct View: XMLDecodable, KeyDecodable, ViewProtocol {
 
 // MARK: - LayoutGuide
 
-public struct LayoutGuide: XMLDecodable, KeyDecodable {
+public struct LayoutGuide: IBDecodable {
     public let key: String
     public let id: String
 

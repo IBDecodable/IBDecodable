@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Segue: XMLDecodable, KeyDecodable, ConnectionProtocol {
+public struct Segue: IBDecodable, ConnectionProtocol {
     public let id: String
     public let destination: String
     public let kind: Segue.Kind
@@ -22,7 +22,7 @@ public struct Segue: XMLDecodable, KeyDecodable, ConnectionProtocol {
             relationship:  container.attributeIfPresent(of: .relationship))
     }
 
-    public enum Kind: XMLAttributeDecodable, KeyDecodable {
+    public enum Kind: XMLAttributeDecodable, KeyDecodable, Equatable {
         case relationship, show, showDetail, presentation, embed, unwind, push
         case modal, popover, replace, custom(String)
 
@@ -42,6 +42,33 @@ public struct Segue: XMLDecodable, KeyDecodable, ConnectionProtocol {
             case "replace": return .replace
             default:
                 return .custom(attribute.text)
+            }
+        }
+
+        public static func == (left: Kind, right: Kind) -> Bool {
+            switch (left, right) {
+            case (.relationship, .relationship):
+                return true
+            case (.show, .show):
+                return true
+            case (.showDetail, .showDetail):
+                return true
+            case (.presentation, .presentation):
+                return true
+            case (.embed, .embed):
+                return true
+            case (.unwind, .unwind):
+                return true
+            case (.push, .push):
+                return true
+            case (.modal, modal):
+                return true
+            case (.popover, .popover):
+                return true
+            case (.replace, .replace):
+                return true
+            default:
+                return false
             }
         }
     }

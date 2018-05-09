@@ -9,14 +9,14 @@ import SWXMLHash
 
 // MARK: - ConnectionProtocol
 
-public protocol ConnectionProtocol {
+public protocol ConnectionProtocol: IBIdentifiable {
     var id: String { get }
     var destination: String { get }
 }
 
 // MARK: - AnyConnection
 
-public struct AnyConnection: XMLDecodable, KeyDecodable {
+public struct AnyConnection: IBDecodable {
 
     public let connection: ConnectionProtocol
 
@@ -40,4 +40,11 @@ public struct AnyConnection: XMLDecodable, KeyDecodable {
         }
     }
 
+}
+
+extension AnyConnection: IBAny {
+    public typealias NestedElement = ConnectionProtocol
+    public var nested: ConnectionProtocol {
+        return connection
+    }
 }

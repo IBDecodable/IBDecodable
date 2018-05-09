@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Image: XMLDecodable, KeyDecodable, ResourceProtocol {
+public struct Image: IBDecodable, ResourceProtocol {
     public let name: String
     public let width: String
     public let height: String
@@ -23,7 +23,7 @@ public struct Image: XMLDecodable, KeyDecodable, ResourceProtocol {
     }
 }
 
-public struct MutableData: XMLDecodable, KeyDecodable {
+public struct MutableData: IBDecodable {
     public let key: String
     public let content: String?
 

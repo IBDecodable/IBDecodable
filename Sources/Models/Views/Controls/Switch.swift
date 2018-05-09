@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Switch: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct Switch: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UISwitch"
 

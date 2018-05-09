@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct ScrollView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct ScrollView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIScrollView"
 

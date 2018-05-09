@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct ViewController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
+public struct ViewController: IBDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "UIViewController"
     public let id: String

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Button: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct Button: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIButton"
 
@@ -32,8 +32,8 @@ public struct Button: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct State: XMLDecodable, KeyDecodable {
-        public let key: String
+    public struct State: IBDecodable, IBKeyable {
+        public let key: String?
         public let title: String
         public let color: Color?
 

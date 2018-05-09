@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct NavigationBar: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct NavigationBar: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UINavigationBar"
 
@@ -27,7 +27,7 @@ public struct NavigationBar: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct NavigationItem: XMLDecodable, KeyDecodable {
+    public struct NavigationItem: IBDecodable {
         public let id: String
         public let style: String?
         public let systemItem: String?

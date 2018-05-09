@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct SceneKitView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct SceneKitView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "SCNView"
 

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct SplitViewController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
+public struct SplitViewController: IBDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "UISplitViewController"
     public let id: String

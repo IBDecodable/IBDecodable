@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct Label: IBDecodable, ViewProtocol {
 
     public let id: String
     public let elementClass: String = "UILabel"
@@ -52,7 +52,7 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
-        
+
         return Label(
             id:                                        try container.attribute(of: .id),
             adjustsFontSizeToFit:                      container.attributeIfPresent(of: .adjustsFontSizeToFit),
@@ -86,7 +86,7 @@ public struct Label: XMLDecodable, KeyDecodable, ViewProtocol {
 
 // MARK: - FontDescription
 
-public struct FontDescription: XMLDecodable, KeyDecodable {
+public struct FontDescription: IBDecodable {
     public let type: String
     public let pointSize: Float
     public let weight: String?

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct DatePicker: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct DatePicker: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIDatePicker"
 
@@ -40,7 +40,7 @@ public struct DatePicker: XMLDecodable, KeyDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
-        
+
         return DatePicker(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),

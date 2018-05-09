@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - TableView
 
-public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct TableView: IBDecodable, ViewProtocol {
 
     public let id: String
     public let elementClass: String = "UITableView"
@@ -39,7 +39,7 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
     public let sections: [TableViewSection]?
     public let prototypeCells: [TableViewCell]?
 
-    public enum DataMode: XMLAttributeDecodable, KeyDecodable {
+    public enum DataMode: XMLAttributeDecodable, KeyDecodable, Equatable {
         case `static`, prototypes
 
         public func encode(to encoder: Encoder) throws { fatalError() }
@@ -50,6 +50,17 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
             case "prototypes": return .prototypes
             default:
                 throw IBError.unsupportedTableViewDataMode(attribute.text)
+            }
+        }
+
+        public static func == (left: DataMode, right: DataMode) -> Bool {
+            switch (left, right) {
+            case (.`static`, .`static`):
+                return true
+            case (.prototypes, .prototypes):
+                return true
+            default:
+                return false
             }
         }
     }
@@ -101,7 +112,7 @@ public struct TableView: XMLDecodable, KeyDecodable, ViewProtocol {
 
 // MARK: - TableViewSection
 
-public struct TableViewSection: XMLDecodable, KeyDecodable {
+public struct TableViewSection: IBDecodable {
 
     public let id: String
     public let headerTitle: String?
@@ -130,7 +141,7 @@ public struct TableViewSection: XMLDecodable, KeyDecodable {
 }
 // MARK: - TableViewCell
 
-public struct TableViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct TableViewCell: IBDecodable, ViewProtocol {
 
     public let id: String
     public let elementClass: String = "UITableView"
@@ -154,7 +165,25 @@ public struct TableViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct TableViewContentView: XMLDecodable, KeyDecodable, ViewProtocol {
+    public var children: [IBElement] {
+        // do not let default implementation which lead to duplicate element contentView
+        var children: [IBElement] = [contentView] + [rect]
+        if let elements = constraints {
+            children += elements as [IBElement]
+        }
+        if let elements = _subviews {
+            children += elements as [IBElement]
+        }
+        if let elements = userDefinedRuntimeAttributes {
+            children += elements as [IBElement]
+        }
+        if let elements = connections {
+            children += elements as [IBElement]
+        }
+        return children
+    }
+
+    public struct TableViewContentView: IBDecodable, ViewProtocol {
         public let id: String
         public let elementClass: String = "UITableViewContentView"
 

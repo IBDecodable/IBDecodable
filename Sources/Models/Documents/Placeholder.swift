@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Placeholder: XMLDecodable, KeyDecodable {
+public struct Placeholder: IBDecodable, IBIdentifiable {
 
     public let id: String
     public let placeholderIdentifier: String

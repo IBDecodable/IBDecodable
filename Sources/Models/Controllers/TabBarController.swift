@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TabBarController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
+public struct TabBarController: IBDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "UITabBarController"
     public let id: String

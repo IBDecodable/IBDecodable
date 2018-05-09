@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct NavigationController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
+public struct NavigationController: IBDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "UINavgigationController"
     public let id: String

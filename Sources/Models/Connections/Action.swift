@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Action: XMLDecodable, KeyDecodable, ConnectionProtocol {
+public struct Action: IBDecodable, ConnectionProtocol {
     public let id: String
     public let destination: String
     public let selector: String

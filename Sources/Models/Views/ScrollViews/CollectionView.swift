@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - CollectionView
 
-public struct CollectionView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct CollectionView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UICollectionView"
 
@@ -74,7 +74,7 @@ public struct CollectionView: XMLDecodable, KeyDecodable, ViewProtocol {
 
 // MARK: - CollectionViewCell
 
-public struct CollectionViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct CollectionViewCell: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UICollectionViewCell"
 
@@ -96,6 +96,24 @@ public struct CollectionViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+
+    public var children: [IBElement] {
+        // do not let default implementation which lead to duplicate element contentView
+        var children: [IBElement] = [contentView] + [rect]
+        if let elements = constraints {
+            children += elements as [IBElement]
+        }
+        if let elements = _subviews {
+            children += elements as [IBElement]
+        }
+        if let elements = userDefinedRuntimeAttributes {
+            children += elements as [IBElement]
+        }
+        if let elements = connections {
+            children += elements as [IBElement]
+        }
+        return children
+    }
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
 
@@ -136,7 +154,7 @@ public struct CollectionViewCell: XMLDecodable, KeyDecodable, ViewProtocol {
 
 // MARK: - CollectionViewLayout
 
-public struct CollectionViewLayout: XMLDecodable, KeyDecodable {
+public struct CollectionViewLayout: IBDecodable, IBIdentifiable, IBKeyable {
 
     public let id: String
     public let key: String?
@@ -156,7 +174,7 @@ public struct CollectionViewLayout: XMLDecodable, KeyDecodable {
 
 // MARK: - CollectionViewFlowLayout
 
-public struct CollectionViewFlowLayout: XMLDecodable, KeyDecodable {
+public struct CollectionViewFlowLayout: IBDecodable, IBIdentifiable, IBKeyable {
 
     public let id: String
     public let key: String?

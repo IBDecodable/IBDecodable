@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct PageViewController: XMLDecodable, KeyDecodable, ViewControllerProtocol {
+public struct PageViewController: IBDecodable, ViewControllerProtocol {
 
     public let elementClass: String = "UIPageViewController"
     public let id: String

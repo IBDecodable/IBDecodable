@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct XibDocument: XMLDecodable, KeyDecodable {
+public struct XibDocument: IBDecodable {
     public let type: String
     public let version: String
     public let toolsVersion: String

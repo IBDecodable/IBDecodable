@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct NamedColor: XMLDecodable, KeyDecodable, ResourceProtocol {
+public struct NamedColor: IBDecodable, ResourceProtocol {
     public let name: String
     public let color: Color?
 

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Toolbar: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct Toolbar: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIToolbar"
 
@@ -27,7 +27,7 @@ public struct Toolbar: XMLDecodable, KeyDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
 
-    public struct BarButtonItem: XMLDecodable, KeyDecodable {
+    public struct BarButtonItem: IBDecodable {
         public let id: String
         public let style: String?
         public let systemItem: String?
@@ -59,7 +59,7 @@ public struct Toolbar: XMLDecodable, KeyDecodable, ViewProtocol {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let navigationItemsContainer = container.nestedContainerIfPresent(of: .items, keys: NavigationItemsCodingKeys.self)
-        
+
         return Toolbar(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),

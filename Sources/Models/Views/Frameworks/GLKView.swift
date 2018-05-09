@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct GLKView: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct GLKView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "GLKView"
 
@@ -40,7 +40,7 @@ public struct GLKView: XMLDecodable, KeyDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
-        
+
         return GLKView(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),

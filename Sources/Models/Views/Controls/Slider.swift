@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Slider: XMLDecodable, KeyDecodable, ViewProtocol {
+public struct Slider: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UISlider"
 
@@ -40,7 +40,7 @@ public struct Slider: XMLDecodable, KeyDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
-        
+
         return Slider(
             id:                                        try container.attribute(of: .id),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),

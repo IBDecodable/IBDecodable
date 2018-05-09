@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - ViewControllerProtocol
 
-public protocol ViewControllerProtocol {
+public protocol ViewControllerProtocol: IBIdentifiable {
     var elementClass: String { get }
     var id: String { get }
     var customClass: String? { get }
@@ -26,7 +26,7 @@ public protocol ViewControllerProtocol {
 
 // MARK: - AnyViewController
 
-public struct AnyViewController: XMLDecodable, KeyDecodable {
+public struct AnyViewController: IBDecodable {
 
     public let viewController: ViewControllerProtocol
 
@@ -56,9 +56,16 @@ public struct AnyViewController: XMLDecodable, KeyDecodable {
     }
 }
 
+extension AnyViewController: IBAny {
+    public typealias NestedElement = ViewControllerProtocol
+    public var nested: ViewControllerProtocol {
+        return viewController
+    }
+}
+
 // MARK: - ViewControllerLayoutGuide
 
-public struct ViewControllerLayoutGuide: XMLDecodable, KeyDecodable {
+public struct ViewControllerLayoutGuide: IBDecodable {
     public let id: String
     public let type: String
 
@@ -73,7 +80,7 @@ public struct ViewControllerLayoutGuide: XMLDecodable, KeyDecodable {
 
 // MARK: - ViewControllerPlaceholder
 
-public struct ViewControllerPlaceholder: XMLDecodable, KeyDecodable {
+public struct ViewControllerPlaceholder: IBDecodable {
     public let id: String
     public let storyboardName: String
     public let referencedIdentifier: String?
