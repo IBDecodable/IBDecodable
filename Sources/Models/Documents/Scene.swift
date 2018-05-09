@@ -17,6 +17,7 @@ public struct Scene: IBDecodable {
     public let customObjects: [CustomObject]?
     public let customViews: [AnyView]?
     public let searchDisplayControllers: [SearchDisplayController]?
+    public let exit: Exit?
 
     enum ExternalCodingKeys: CodingKey { case objects }
     enum ObjectsCodingKeys: CodingKey { case placeholder, customObject, searchDisplayController }
@@ -42,7 +43,8 @@ public struct Scene: IBDecodable {
             placeholders:              objectsContainer?.elementsIfPresent(of: .placeholder),
             customObjects:             objectsContainer?.elementsIfPresent(of: .customObject),
             customViews:               externalContainer.childrenIfPresent(of: .objects),
-            searchDisplayControllers:  objectsContainer?.elementsIfPresent(of: .searchDisplayController)
+            searchDisplayControllers:  objectsContainer?.elementsIfPresent(of: .searchDisplayController),
+            exit:                      container.elementIfPresent(of: .exit)
         )
     }
 
