@@ -22,6 +22,7 @@ public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable, IBUse
     var layoutGuides: [ViewControllerLayoutGuide]? { get }
     var userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]? { get }
     var connections: [AnyConnection]? { get }
+    var keyCommands: [KeyCommand]? { get }
     /// The tab bar item that represents the view controller when added to a tab bar controller.
     var tabBarItem: TabBar.TabBarItem? { get }
     var rootView: ViewProtocol? { get }

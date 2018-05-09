@@ -21,6 +21,7 @@ public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let keyCommands: [KeyCommand]?
     public let tabBarItem: TabBar.TabBarItem?
     public let view: AnyView?
     public var rootView: ViewProtocol? { return view?.view }
@@ -43,6 +44,7 @@ public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
             layoutGuides:         layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
             userDefinedRuntimeAttributes: container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:          container.childrenIfPresent(of: .connections),
+            keyCommands:          container.childrenIfPresent(of: .keyCommands),
             tabBarItem:           container.elementIfPresent(of: .tabBarItem),
             view:                 xml.children.first.flatMap(decodeValue),
             videoGravity:         container.attributeIfPresent(of: .videoGravity)

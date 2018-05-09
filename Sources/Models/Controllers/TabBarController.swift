@@ -21,6 +21,7 @@ public struct TabBarController: IBDecodable, ViewControllerProtocol {
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let keyCommands: [KeyCommand]?
     public let tabBarItem: TabBar.TabBarItem?
     public let tabBar: TabBar?
     public var rootView: ViewProtocol? { return tabBar }
@@ -42,6 +43,7 @@ public struct TabBarController: IBDecodable, ViewControllerProtocol {
             layoutGuides:                 layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
             userDefinedRuntimeAttributes: container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                  container.childrenIfPresent(of: .connections),
+            keyCommands:                  container.childrenIfPresent(of: .keyCommands),
             tabBarItem:                   container.elementIfPresent(of: .tabBarItem),
             tabBar:                       container.elementIfPresent(of: .tabBar)
         )

@@ -21,6 +21,7 @@ public struct CollectionViewController: IBDecodable, ViewControllerProtocol {
     public let layoutGuides: [ViewControllerLayoutGuide]?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let keyCommands: [KeyCommand]?
     public let tabBarItem: TabBar.TabBarItem?
     public let collectionView: CollectionView?
     public var rootView: ViewProtocol? { return collectionView }
@@ -43,6 +44,7 @@ public struct CollectionViewController: IBDecodable, ViewControllerProtocol {
             layoutGuides:                    layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
             userDefinedRuntimeAttributes:    container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                     container.childrenIfPresent(of: .connections),
+            keyCommands:                     container.childrenIfPresent(of: .keyCommands),
             tabBarItem:                      container.elementIfPresent(of: .tabBarItem),
             collectionView:                  container.elementIfPresent(of: .collectionView),
             clearsSelectionOnViewWillAppear: container.attributeIfPresent(of: .clearsSelectionOnViewWillAppear) ?? true
