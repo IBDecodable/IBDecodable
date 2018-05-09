@@ -21,6 +21,7 @@ public struct Button: IBDecodable, ViewProtocol {
     public let contentVerticalAlignment: String?
     public let customClass: String?
     public let customModule: String?
+    public let fixedFrame: Bool?
     public let fontDescription: FontDescription?
     public let lineBreakMode: String?
     public let isMisplaced: Bool?
@@ -74,6 +75,7 @@ public struct Button: IBDecodable, ViewProtocol {
             contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            fixedFrame:                                container.attributeIfPresent(of: .fixedFrame),
             fontDescription:                           container.elementIfPresent(of: .fontDescription),
             lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),

@@ -18,6 +18,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let fixedFrame: Bool?
     public let image: String
     public let insetsLayoutMarginsFromSafeArea: Bool?
     public let isMisplaced: Bool?
@@ -53,6 +54,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            fixedFrame:                                container.attributeIfPresent(of: .fixedFrame),
             image:                                     try container.attribute(of: .image),
             insetsLayoutMarginsFromSafeArea:           container.attributeIfPresent(of: .insetsLayoutMarginsFromSafeArea),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
