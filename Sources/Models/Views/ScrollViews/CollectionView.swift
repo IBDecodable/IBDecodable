@@ -99,6 +99,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let reuseIdentifier: String?
 
     public var children: [IBElement] {
         // do not let default implementation which lead to duplicate element contentView
@@ -151,7 +152,8 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
-            connections:                               container.childrenIfPresent(of: .connections)
+            connections:                               container.childrenIfPresent(of: .connections),
+            reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier)
         )
     }
 }
