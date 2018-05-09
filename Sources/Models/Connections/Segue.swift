@@ -12,6 +12,7 @@ public struct Segue: IBDecodable, ConnectionProtocol {
     public let destination: String
     public let kind: Segue.Kind
     public let relationship: String?
+    public let identifier: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Segue {
         let container = xml.container(keys: CodingKeys.self)
@@ -19,7 +20,9 @@ public struct Segue: IBDecodable, ConnectionProtocol {
             id:            try container.attribute(of: .id),
             destination:   try container.attribute(of: .destination),
             kind:          try container.attribute(of: .kind),
-            relationship:  container.attributeIfPresent(of: .relationship))
+            relationship:  container.attributeIfPresent(of: .relationship),
+            identifier:    container.attributeIfPresent(of: .identifier)
+        )
     }
 
     public enum Kind: XMLAttributeDecodable, KeyDecodable, Equatable {
@@ -67,6 +70,8 @@ public struct Segue: IBDecodable, ConnectionProtocol {
                 return true
             case (.replace, .replace):
                 return true
+            case (.custom(let left), .custom(let right)):
+                return left == right
             default:
                 return false
             }
