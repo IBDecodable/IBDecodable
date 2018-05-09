@@ -16,9 +16,10 @@ public struct Scene: IBDecodable {
     public let placeholders: [Placeholder]?
     public let customObjects: [CustomObject]?
     public let customViews: [AnyView]?
+    public let searchDisplayControllers: [SearchDisplayController]?
 
     enum ExternalCodingKeys: CodingKey { case objects }
-    enum ObjectsCodingKeys: CodingKey { case placeholder, customObject }
+    enum ObjectsCodingKeys: CodingKey { case placeholder, customObject, searchDisplayController }
 
     static func decode(_ xml: XMLIndexer) throws -> Scene {
         let externalContainer = xml.container(keys: ExternalCodingKeys.self)
@@ -40,7 +41,8 @@ public struct Scene: IBDecodable {
             canvasLocation:            container.elementIfPresent(of: .canvasLocation),
             placeholders:              objectsContainer?.elementsIfPresent(of: .placeholder),
             customObjects:             objectsContainer?.elementsIfPresent(of: .customObject),
-            customViews:               externalContainer.childrenIfPresent(of: .objects)
+            customViews:               externalContainer.childrenIfPresent(of: .objects),
+            searchDisplayControllers:  objectsContainer?.elementsIfPresent(of: .searchDisplayController)
         )
     }
 
