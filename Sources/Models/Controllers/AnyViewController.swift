@@ -16,6 +16,7 @@ public protocol ViewControllerProtocol: IBIdentifiable {
     var customModule: String? { get }
     var customModuleProvider: String? { get }
     var storyboardIdentifier: String? { get }
+    var sceneMemberID: String? { get }
     var layoutGuides: [ViewControllerLayoutGuide]? { get }
     var userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]? { get }
     var connections: [AnyConnection]? { get }
