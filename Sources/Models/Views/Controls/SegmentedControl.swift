@@ -20,6 +20,7 @@ public struct SegmentedControl: IBDecodable, ViewProtocol {
     public let contentVerticalAlignment: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -58,25 +59,26 @@ public struct SegmentedControl: IBDecodable, ViewProtocol {
         let segmentsContainer = container.nestedContainerIfPresent(of: .segments, keys: SegmentsCodingKeys.self)
 
         return SegmentedControl(
-            id:                                         try container.attribute(of: .id),
-            key:                                        container.attributeIfPresent(of: .key),
-            autoresizingMask:                           container.elementIfPresent(of: .autoresizingMask),
-            clipsSubviews:                              container.attributeIfPresent(of: .clipsSubviews),
-            constraints:                                constraintsContainer?.elementsIfPresent(of: .constraint),
-            contentHorizontalAlignment:                 container.attributeIfPresent(of: .contentHorizontalAlignment),
-            contentMode:                                container.attributeIfPresent(of: .contentMode),
-            contentVerticalAlignment:                   container.attributeIfPresent(of: .contentVerticalAlignment),
-            customClass:                                container.attributeIfPresent(of: .customClass),
-            customModule:                               container.attributeIfPresent(of: .customModule),
-            isMisplaced:                                container.attributeIfPresent(of: .isMisplaced),
-            opaque:                                     container.attributeIfPresent(of: .opaque),
-            rect:                                       try container.element(of: .rect),
-            segmentControlStyle:                        container.attributeIfPresent(of: .segmentControlStyle),
-            segments:                                   try segmentsContainer?.elements(of: .segment) ?? [],
-            selectedSegmentIndex:                       container.attributeIfPresent(of: .selectedSegmentIndex),
-            subviews:                                   container.childrenIfPresent(of: .subviews),
-            translatesAutoresizingMaskIntoConstraints:  container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
-            userInteractionEnabled:                     container.attributeIfPresent(of: .userInteractionEnabled),
+            id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
+            rect:                                      try container.element(of: .rect),
+            segmentControlStyle:                       container.attributeIfPresent(of: .segmentControlStyle),
+            segments:                                  try segmentsContainer?.elements(of: .segment) ?? [],
+            selectedSegmentIndex:                      container.attributeIfPresent(of: .selectedSegmentIndex),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections)
         )

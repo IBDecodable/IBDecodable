@@ -20,6 +20,18 @@ public protocol IBKeyable: IBElement {
     var key: String? { get }
 }
 
+/// Any element with `reuseIdentifier`
+public protocol IBReusable: IBElement {
+    var reuseIdentifier: String? { get }
+}
+
+/// Any element that could be created with custom class.
+public protocol IBCustomClassable: IBElement {
+    var customClass: String? { get }
+    var customModule: String? { get}
+    var customModuleProvider: String? { get}
+}
+
 // MARK: IBElement
 
 /// Represent a node into hierarchical tree.
@@ -57,6 +69,7 @@ extension IBElement {
         }
     }
 
+    /// Return all the children of specified type, recursively.
     public func children<T: IBElement>(of type: T.Type) -> [T] {
         var result: [T] = []
         _ = browse { element in

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct CustomObject: IBDecodable, IBIdentifiable {
+public struct CustomObject: IBDecodable, IBIdentifiable, IBCustomClassable {
 
     public let id: String
     public let customClass: String?

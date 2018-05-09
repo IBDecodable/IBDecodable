@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Placeholder: IBDecodable, IBIdentifiable {
+public struct Placeholder: IBDecodable, IBIdentifiable, IBCustomClassable {
 
     public let id: String
     public let placeholderIdentifier: String
@@ -15,6 +15,8 @@ public struct Placeholder: IBDecodable, IBIdentifiable {
     public let colorLabel: String?
     public let sceneMemberID: String?
     public let customClass: String?
+    public let customModule: String?
+    public let customModuleProvider: String?
     public let userComments: AttributedString?
 
     enum ExternalCodingKeys: CodingKey { case attributedString }
@@ -31,6 +33,8 @@ public struct Placeholder: IBDecodable, IBIdentifiable {
             colorLabel:            container.attributeIfPresent(of: .colorLabel),
             sceneMemberID:         container.attributeIfPresent(of: .sceneMemberID),
             customClass:           container.attributeIfPresent(of: .customClass),
+            customModule:          container.attributeIfPresent(of: .customModule),
+            customModuleProvider:  container.attributeIfPresent(of: .customModuleProvider),
             userComments:          attributedStringContainer?.withAttributeElement(.key, "userComments")
         )
     }

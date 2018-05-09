@@ -21,6 +21,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -59,6 +60,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
@@ -76,7 +78,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
 
 // MARK: - CollectionViewCell
 
-public struct CollectionViewCell: IBDecodable, ViewProtocol {
+public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let id: String
     public let elementClass: String = "UICollectionViewCell"
 
@@ -88,6 +90,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -145,6 +148,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
@@ -160,12 +164,13 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol {
 
 // MARK: - CollectionViewLayout
 
-public struct CollectionViewLayout: IBDecodable, IBIdentifiable, IBKeyable {
+public struct CollectionViewLayout: IBDecodable, IBIdentifiable, IBKeyable, IBCustomClassable {
 
     public let id: String
     public let key: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewLayout {
         let container = xml.container(keys: CodingKeys.self)
@@ -173,7 +178,8 @@ public struct CollectionViewLayout: IBDecodable, IBIdentifiable, IBKeyable {
             id:                       try container.attribute(of: .id),
             key:                      container.attributeIfPresent(of: .key),
             customClass:              container.attributeIfPresent(of: .customClass),
-            customModule:             container.attributeIfPresent(of: .customModule)
+            customModule:             container.attributeIfPresent(of: .customModule),
+            customModuleProvider:     container.attributeIfPresent(of: .customModuleProvider)
         )
     }
 }

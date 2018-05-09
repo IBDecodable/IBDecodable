@@ -21,6 +21,7 @@ public struct TextField: IBDecodable, ViewProtocol {
     public let contentVerticalAlignment: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let fixedFrame: Bool?
     public let fontDescription: FontDescription?
     public let minimumFontSize: Float?
@@ -60,6 +61,7 @@ public struct TextField: IBDecodable, ViewProtocol {
             contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
             fixedFrame:                                container.attributeIfPresent(of: .fixedFrame),
             fontDescription:                           container.elementIfPresent(of: .fontDescription),
             minimumFontSize:                           container.attributeIfPresent(of: .minimumFontSize),

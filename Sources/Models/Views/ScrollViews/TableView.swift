@@ -22,6 +22,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let dataMode: DataMode?
     public let estimatedRowHeight: Float?
     public let isMisplaced: Bool?
@@ -91,6 +92,7 @@ public struct TableView: IBDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
             dataMode:                                  container.attributeIfPresent(of: .dataMode),
             estimatedRowHeight:                        container.attributeIfPresent(of: .estimatedRowHeight),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
@@ -143,7 +145,7 @@ public struct TableViewSection: IBDecodable {
 }
 // MARK: - TableViewCell
 
-public struct TableViewCell: IBDecodable, ViewProtocol {
+public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
 
     public let id: String
     public let elementClass: String = "UITableView"
@@ -156,6 +158,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -198,6 +201,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol {
         public let contentMode: String?
         public let customClass: String?
         public let customModule: String?
+        public let customModuleProvider: String?
         public let isMisplaced: Bool?
         public let opaque: Bool?
         public let rect: Rect
@@ -222,12 +226,13 @@ public struct TableViewCell: IBDecodable, ViewProtocol {
             return TableViewContentView(
                 id:                                        try container.attribute(of: .id),
                 key:                                       container.attributeIfPresent(of: .key),
-            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
+                autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
                 clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
                 constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
                 contentMode:                               container.attributeIfPresent(of: .contentMode),
                 customClass:                               container.attributeIfPresent(of: .customClass),
                 customModule:                              container.attributeIfPresent(of: .customModule),
+                customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
                 isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
                 opaque:                                    container.attributeIfPresent(of: .opaque),
                 rect:                                      try container.element(of: .rect),
@@ -266,6 +271,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),

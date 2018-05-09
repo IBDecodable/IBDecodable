@@ -21,6 +21,7 @@ public struct Label: IBDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let fixedFrame: Bool?
     public let fontDescription: FontDescription?
     public let horizontalHuggingPriority: Int?
@@ -66,6 +67,7 @@ public struct Label: IBDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
             fixedFrame:                                container.attributeIfPresent(of: .fixedFrame),
             fontDescription:                           container.elementIfPresent(of: .fontDescription),
             horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),

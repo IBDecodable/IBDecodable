@@ -18,6 +18,7 @@ public struct Stepper: IBDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -51,6 +52,7 @@ public struct Stepper: IBDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),

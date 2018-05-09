@@ -18,6 +18,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
+    public let customModuleProvider: String?
     public let items: [TabBarItem]?
     public let isMisplaced: Bool?
     public let opaque: Bool?
@@ -72,6 +73,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
             items:                                     tabBarItemsContainer?.elementsIfPresent(of: .tabBarItem),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),

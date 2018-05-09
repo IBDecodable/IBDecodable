@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - ViewControllerProtocol
 
-public protocol ViewControllerProtocol: IBIdentifiable {
+public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable {
     var elementClass: String { get }
     var id: String { get }
     var customClass: String? { get }
