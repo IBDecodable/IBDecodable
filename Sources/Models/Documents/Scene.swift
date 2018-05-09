@@ -15,6 +15,7 @@ public struct Scene: IBDecodable {
     public let canvasLocation: Point?
     public let placeholders: [Placeholder]?
     public let customObjects: [CustomObject]?
+    public let customViews: [AnyView]?
 
     enum ExternalCodingKeys: CodingKey { case objects }
     enum ObjectsCodingKeys: CodingKey { case placeholder, customObject }
@@ -38,7 +39,8 @@ public struct Scene: IBDecodable {
             viewControllerPlaceholder: container.elementIfPresent(of: .viewControllerPlaceholder),
             canvasLocation:            container.elementIfPresent(of: .canvasLocation),
             placeholders:              objectsContainer?.elementsIfPresent(of: .placeholder),
-            customObjects:             objectsContainer?.elementsIfPresent(of: .customObject)
+            customObjects:             objectsContainer?.elementsIfPresent(of: .customObject),
+            customViews:               externalContainer.childrenIfPresent(of: .objects)
         )
     }
 

@@ -60,6 +60,7 @@ public struct AnyView: IBDecodable {
         case "label":                    return try AnyView(Label.decode(xml))
         case "mapView":                  return try AnyView(MapView.decode(xml))
         case "mtkView":                  return try AnyView(MTKView.decode(xml))
+        case "navigationBar":            return try AnyView(NavigationBar.decode(xml))
         case "pageControl":              return try AnyView(PageControl.decode(xml))
         case "pickerView":               return try AnyView(PickerView.decode(xml))
         case "progressView":             return try AnyView(ProgressView.decode(xml))

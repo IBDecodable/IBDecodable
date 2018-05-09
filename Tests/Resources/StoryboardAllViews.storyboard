@@ -207,13 +207,54 @@
                                     <navigationItem title="Title" id="e4e-9S-H4N"/>
                                 </items>
                             </navigationBar>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8fH-ae-M3F">
+                                <rect key="frame" x="20" y="1282" width="1024" height="56"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="QIk-Gi-1Tb" id="Xa6-TU-wkJ"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="tPV-Am-8N4"/>
                     </view>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="4wV-ri-nxy" id="yNQ-hc-sdO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RVK-y9-dC5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchBar contentMode="redraw" id="h5Q-Qp-rRo">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="QIk-Gi-1Tb" id="drm-vU-hhh"/>
+                    </connections>
+                </searchBar>
                 <customObject id="4XY-mL-nby" customClass="UIBezierPath"/>
+                <searchBar contentMode="redraw" id="pt3-dX-6PV">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
+                <searchDisplayController id="vTS-PP-bRj">
+                    <connections>
+                        <outlet property="delegate" destination="QIk-Gi-1Tb" id="GAK-0c-gjQ"/>
+                        <outlet property="searchContentsController" destination="QIk-Gi-1Tb" id="MUo-9K-Oyb"/>
+                        <outlet property="searchResultsDataSource" destination="QIk-Gi-1Tb" id="cL5-Y1-0gm"/>
+                        <outlet property="searchResultsDelegate" destination="QIk-Gi-1Tb" id="ElO-nu-tpu"/>
+                    </connections>
+                </searchDisplayController>
+                <searchDisplayController id="4wV-ri-nxy">
+                    <connections>
+                        <outlet property="delegate" destination="QIk-Gi-1Tb" id="mZX-vB-vlF"/>
+                        <outlet property="searchBar" destination="h5Q-Qp-rRo" id="rfP-aK-D0n"/>
+                        <outlet property="searchContentsController" destination="QIk-Gi-1Tb" id="RFv-Xi-2RW"/>
+                        <outlet property="searchResultsDataSource" destination="QIk-Gi-1Tb" id="7aZ-vR-b6l"/>
+                        <outlet property="searchResultsDelegate" destination="QIk-Gi-1Tb" id="saQ-kt-TyB"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="-34.5703125" y="167.34992679355781"/>
         </scene>

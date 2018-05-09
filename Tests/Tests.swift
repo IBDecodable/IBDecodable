@@ -73,12 +73,19 @@ class Tests: XCTestCase {
         let url = self.url(forResource:"StoryboardAllViews", withExtension: "storyboard")
         do {
             let file = try StoryboardFile(url: url)
-            guard let views = file.document.scenes?.first?.viewController?.viewController.rootView?.subviews, !views.isEmpty else {
+            guard let scene = file.document.scenes?.first else {
+                XCTFail("No scene")
+                return
+            }
+            guard let views = scene.viewController?.viewController.rootView?.subviews, !views.isEmpty else {
                 XCTFail("No subviews")
                 return
             }
             let clazz = views.map { $0.view.elementClass }
             print("\(clazz.count)")
+
+            XCTAssertFalse(scene.customObjects?.isEmpty ?? true)
+            XCTAssertFalse(scene.customViews?.isEmpty ?? true)
         } catch {
             XCTFail("\(error)")
         }
