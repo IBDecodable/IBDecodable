@@ -13,7 +13,7 @@ public struct StoryboardDocument: IBDecodable {
     public let type: String
     public let version: String
     public let toolsVersion: String
-    public let targetRuntime: String
+    public let targetRuntime: TargetRuntime
     public let propertyAccessControl: String?
     public let useAutolayout: Bool?
     public let useTraitCollections: Bool?
