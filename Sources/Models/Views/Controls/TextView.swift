@@ -21,6 +21,8 @@ public struct TextView: IBDecodable, ViewProtocol {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
     public let fontDescription: FontDescription?
     public let isMisplaced: Bool?
     public let opaque: Bool?
@@ -64,6 +66,8 @@ public struct TextView: IBDecodable, ViewProtocol {
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                                 container.attributeIfPresent(of: .userLabel),
+            colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             fontDescription:                           container.elementIfPresent(of: .fontDescription),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),

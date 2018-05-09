@@ -21,6 +21,8 @@ public struct Switch: IBDecodable, ViewProtocol {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
     public let horizontalHuggingPriority: Int?
     public let isMisplaced: Bool?
     public let on: Bool
@@ -61,6 +63,8 @@ public struct Switch: IBDecodable, ViewProtocol {
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                                 container.attributeIfPresent(of: .userLabel),
+            colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             on:                                        try container.attribute(of: .on),

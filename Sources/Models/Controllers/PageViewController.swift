@@ -14,6 +14,8 @@ public struct PageViewController: IBDecodable, ViewControllerProtocol {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
     public var storyboardIdentifier: String?
     public var sceneMemberID: String?
     public let layoutGuides: [ViewControllerLayoutGuide]?
@@ -22,6 +24,8 @@ public struct PageViewController: IBDecodable, ViewControllerProtocol {
     public let tabBarItem: TabBar.TabBarItem?
     public let view: View?
     public var rootView: ViewProtocol? { return view }
+    public var varspineLocation: String? // min, max, mid, none
+    public var doubleSided: Bool
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
@@ -33,13 +37,17 @@ public struct PageViewController: IBDecodable, ViewControllerProtocol {
             customClass:                  container.attributeIfPresent(of: .customClass),
             customModule:                 container.attributeIfPresent(of: .customModule),
             customModuleProvider:         container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                    container.attributeIfPresent(of: .userLabel),
+            colorLabel:                   container.attributeIfPresent(of: .colorLabel),
             storyboardIdentifier:         container.attributeIfPresent(of: .storyboardIdentifier),
             sceneMemberID:                container.attributeIfPresent(of: .sceneMemberID),
             layoutGuides:                 layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
             userDefinedRuntimeAttributes: container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                  container.childrenIfPresent(of: .connections),
             tabBarItem:                   container.elementIfPresent(of: .tabBarItem),
-            view:                         container.elementIfPresent(of: .view)
+            view:                         container.elementIfPresent(of: .view),
+            varspineLocation:             container.attributeIfPresent(of: .varspineLocation),
+            doubleSided:                  container.attributeIfPresent(of: .doubleSided) ?? false
         )
     }
 }

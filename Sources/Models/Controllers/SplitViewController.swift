@@ -14,6 +14,8 @@ public struct SplitViewController: IBDecodable, ViewControllerProtocol {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
     public var storyboardIdentifier: String?
     public var sceneMemberID: String?
     public let layoutGuides: [ViewControllerLayoutGuide]?
@@ -33,6 +35,8 @@ public struct SplitViewController: IBDecodable, ViewControllerProtocol {
             customClass:                  container.attributeIfPresent(of: .customClass),
             customModule:                 container.attributeIfPresent(of: .customModule),
             customModuleProvider:         container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                    container.attributeIfPresent(of: .userLabel),
+            colorLabel:                   container.attributeIfPresent(of: .colorLabel),
             storyboardIdentifier:         container.attributeIfPresent(of: .storyboardIdentifier),
             sceneMemberID:                container.attributeIfPresent(of: .sceneMemberID),
             layoutGuides:                 layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),

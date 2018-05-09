@@ -9,12 +9,14 @@ import SWXMLHash
 
 // MARK: - ViewControllerProtocol
 
-public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable {
+public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable, IBUserLabelable {
     var elementClass: String { get }
     var id: String { get }
     var customClass: String? { get }
     var customModule: String? { get }
     var customModuleProvider: String? { get }
+    var userLabel: String? { get }
+    var colorLabel: String? { get }
     var storyboardIdentifier: String? { get }
     var sceneMemberID: String? { get }
     var layoutGuides: [ViewControllerLayoutGuide]? { get }

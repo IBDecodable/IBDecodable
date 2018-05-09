@@ -23,6 +23,8 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
     public let dataMode: DataMode?
     public let estimatedRowHeight: Float?
     public let isMisplaced: Bool?
@@ -93,6 +95,8 @@ public struct TableView: IBDecodable, ViewProtocol {
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                                 container.attributeIfPresent(of: .userLabel),
+            colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             dataMode:                                  container.attributeIfPresent(of: .dataMode),
             estimatedRowHeight:                        container.attributeIfPresent(of: .estimatedRowHeight),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
@@ -159,6 +163,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -202,6 +208,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
         public let customClass: String?
         public let customModule: String?
         public let customModuleProvider: String?
+        public let userLabel: String?
+        public let colorLabel: String?
         public let isMisplaced: Bool?
         public let opaque: Bool?
         public let rect: Rect
@@ -233,6 +241,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
                 customClass:                               container.attributeIfPresent(of: .customClass),
                 customModule:                              container.attributeIfPresent(of: .customModule),
                 customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+                userLabel:                                 container.attributeIfPresent(of: .userLabel),
+                colorLabel:                                container.attributeIfPresent(of: .colorLabel),
                 isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
                 opaque:                                    container.attributeIfPresent(of: .opaque),
                 rect:                                      try container.element(of: .rect),
@@ -272,6 +282,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                                 container.attributeIfPresent(of: .userLabel),
+            colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),

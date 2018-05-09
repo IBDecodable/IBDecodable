@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - ViewProtocol
 
-public protocol ViewProtocol: IBIdentifiable, IBKeyable, IBCustomClassable {
+public protocol ViewProtocol: IBIdentifiable, IBKeyable, IBCustomClassable, IBUserLabelable {
     var elementClass: String { get }
     var id: String { get }
 
@@ -21,6 +21,8 @@ public protocol ViewProtocol: IBIdentifiable, IBKeyable, IBCustomClassable {
     var customClass: String? { get }
     var customModule: String? { get }
     var customModuleProvider: String? { get }
+    var userLabel: String? { get }
+    var colorLabel: String? { get }
     var isMisplaced: Bool? { get }
     var opaque: Bool? { get }
     var rect: Rect { get }

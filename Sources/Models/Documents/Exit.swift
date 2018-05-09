@@ -7,10 +7,11 @@
 
 import SWXMLHash
 
-public struct Exit: IBDecodable, IBIdentifiable {
+public struct Exit: IBDecodable, IBIdentifiable, IBUserLabelable {
 
     public let id: String
     public let userLabel: String?
+    public let colorLabel: String?
     public let sceneMemberID: String?
 
     static func decode(_ xml: XMLIndexer) throws -> Exit {
@@ -18,6 +19,7 @@ public struct Exit: IBDecodable, IBIdentifiable {
         return Exit(
             id:            try container.attribute(of: .id),
             userLabel:     container.attributeIfPresent(of: .userLabel),
+            colorLabel:    container.attributeIfPresent(of: .colorLabel),
             sceneMemberID: container.attributeIfPresent(of: .sceneMemberID)
         )
     }

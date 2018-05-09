@@ -32,6 +32,12 @@ public protocol IBCustomClassable: IBElement {
     var customModuleProvider: String? { get}
 }
 
+/// Any element that could be labeled by user.
+public protocol IBUserLabelable: IBElement {
+    var userLabel: String? { get }
+    var colorLabel: String? { get }
+}
+
 // MARK: IBElement
 
 /// Represent a node into hierarchical tree.

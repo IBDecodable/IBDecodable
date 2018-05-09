@@ -22,6 +22,8 @@ public struct CollectionView: IBDecodable, ViewProtocol {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -61,6 +63,8 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                                 container.attributeIfPresent(of: .userLabel),
+            colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
@@ -91,6 +95,8 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
     public let isMisplaced: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -149,6 +155,8 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                                 container.attributeIfPresent(of: .userLabel),
+            colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
@@ -171,6 +179,8 @@ public struct CollectionViewLayout: IBDecodable, IBIdentifiable, IBKeyable, IBCu
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewLayout {
         let container = xml.container(keys: CodingKeys.self)
@@ -179,7 +189,9 @@ public struct CollectionViewLayout: IBDecodable, IBIdentifiable, IBKeyable, IBCu
             key:                      container.attributeIfPresent(of: .key),
             customClass:              container.attributeIfPresent(of: .customClass),
             customModule:             container.attributeIfPresent(of: .customModule),
-            customModuleProvider:     container.attributeIfPresent(of: .customModuleProvider)
+            customModuleProvider:     container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                container.attributeIfPresent(of: .userLabel),
+            colorLabel:               container.attributeIfPresent(of: .colorLabel)
         )
     }
 }

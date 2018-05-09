@@ -13,6 +13,8 @@ public struct CustomObject: IBDecodable, IBIdentifiable, IBCustomClassable {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
 
     static func decode(_ xml: XMLIndexer) throws -> CustomObject {
         let container = xml.container(keys: CodingKeys.self)
@@ -20,7 +22,9 @@ public struct CustomObject: IBDecodable, IBIdentifiable, IBCustomClassable {
             id:                    try container.attribute(of: .id),
             customClass:           container.attributeIfPresent(of: .customClass),
             customModule:          container.attributeIfPresent(of: .customModule),
-            customModuleProvider:  container.attributeIfPresent(of: .customModuleProvider)
+            customModuleProvider:  container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:             container.attributeIfPresent(of: .userLabel),
+            colorLabel:            container.attributeIfPresent(of: .colorLabel)
         )
     }
 
