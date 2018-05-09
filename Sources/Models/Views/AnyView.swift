@@ -9,10 +9,11 @@ import SWXMLHash
 
 // MARK: - ViewProtocol
 
-public protocol ViewProtocol: IBIdentifiable {
+public protocol ViewProtocol: IBIdentifiable, IBKeyable {
     var elementClass: String { get }
     var id: String { get }
 
+    var key: String? { get }
     var autoresizingMask: AutoresizingMask? { get }
     var clipsSubviews: Bool? { get }
     var constraints: [Constraint]? { get }

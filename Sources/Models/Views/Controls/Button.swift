@@ -11,6 +11,7 @@ public struct Button: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIButton"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let buttonType: String?
     public let clipsSubviews: Bool?
@@ -63,6 +64,7 @@ public struct Button: IBDecodable, ViewProtocol {
 
         return Button(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             buttonType:                                container.attributeIfPresent(of: .buttonType),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),

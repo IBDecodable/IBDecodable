@@ -14,6 +14,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
     public let elementClass: String = "UICollectionView"
 
     public let alwaysBounceHorizontal: Bool?
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -51,6 +52,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
         return CollectionView(
             id:                                        try container.attribute(of: .id),
             alwaysBounceHorizontal:                    container.attributeIfPresent(of: .alwaysBounceHorizontal),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
@@ -78,6 +80,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UICollectionViewCell"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -133,6 +136,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol {
 
         return CollectionViewCell(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),

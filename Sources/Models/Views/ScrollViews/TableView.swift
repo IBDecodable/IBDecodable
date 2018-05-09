@@ -15,6 +15,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let elementClass: String = "UITableView"
 
     public let alwaysBounceVertical: Bool?
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -83,6 +84,7 @@ public struct TableView: IBDecodable, ViewProtocol {
         return TableView(
             id:                                        try container.attribute(of: .id),
             alwaysBounceVertical:                      container.attributeIfPresent(of: .alwaysBounceVertical),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
@@ -146,6 +148,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITableView"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -187,7 +190,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol {
         public let id: String
         public let elementClass: String = "UITableViewContentView"
 
-        public let autoresizingMask: AutoresizingMask?
+        public let key: String?
+    public let autoresizingMask: AutoresizingMask?
         public let clipsSubviews: Bool?
         public let constraints: [Constraint]?
         public let contentMode: String?
@@ -216,7 +220,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol {
 
             return TableViewContentView(
                 id:                                        try container.attribute(of: .id),
-                autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
+                key:                                       container.attributeIfPresent(of: .key),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
                 clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
                 constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
                 contentMode:                               container.attributeIfPresent(of: .contentMode),
@@ -252,6 +257,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol {
 
         return TableViewCell(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),

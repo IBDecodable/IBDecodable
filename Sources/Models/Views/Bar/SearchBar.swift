@@ -11,6 +11,7 @@ public struct SearchBar: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UISearchBar"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -43,6 +44,7 @@ public struct SearchBar: IBDecodable, ViewProtocol {
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         return SearchBar(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),

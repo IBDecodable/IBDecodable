@@ -11,6 +11,7 @@ public struct Switch: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UISwitch"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -49,6 +50,7 @@ public struct Switch: IBDecodable, ViewProtocol {
 
         return Switch(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),

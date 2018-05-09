@@ -11,6 +11,7 @@ public struct TextView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITextView"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let bounces: Bool?
     public let bouncesZoom: Bool?
@@ -52,6 +53,7 @@ public struct TextView: IBDecodable, ViewProtocol {
 
         return TextView(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             bounces:                                   container.attributeIfPresent(of: .bounces),
             bouncesZoom:                               container.attributeIfPresent(of: .bouncesZoom),

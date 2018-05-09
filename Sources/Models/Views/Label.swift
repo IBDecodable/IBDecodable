@@ -13,6 +13,7 @@ public struct Label: IBDecodable, ViewProtocol {
     public let elementClass: String = "UILabel"
 
     public let adjustsFontSizeToFit: Bool?
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let baselineAdjustment: String?
     public let clipsSubviews: Bool?
@@ -56,6 +57,7 @@ public struct Label: IBDecodable, ViewProtocol {
         return Label(
             id:                                        try container.attribute(of: .id),
             adjustsFontSizeToFit:                      container.attributeIfPresent(of: .adjustsFontSizeToFit),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             baselineAdjustment:                        container.attributeIfPresent(of: .baselineAdjustment),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),

@@ -11,6 +11,7 @@ public struct SKView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "SKView"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -43,6 +44,7 @@ public struct SKView: IBDecodable, ViewProtocol {
 
         return SKView(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),

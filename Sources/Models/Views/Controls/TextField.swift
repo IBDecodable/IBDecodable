@@ -11,6 +11,7 @@ public struct TextField: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITextField"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let borderStyle: String?
     public let clipsSubviews: Bool?
@@ -49,6 +50,7 @@ public struct TextField: IBDecodable, ViewProtocol {
 
         return TextField(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             borderStyle:                               container.attributeIfPresent(of: .borderStyle),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),

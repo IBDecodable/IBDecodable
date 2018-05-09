@@ -11,6 +11,7 @@ public struct Toolbar: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UIToolbar"
 
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
@@ -62,6 +63,7 @@ public struct Toolbar: IBDecodable, ViewProtocol {
 
         return Toolbar(
             id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),

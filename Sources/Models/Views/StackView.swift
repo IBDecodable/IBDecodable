@@ -12,6 +12,7 @@ public struct StackView: IBDecodable, ViewProtocol {
     public let elementClass: String = "UIStackView"
 
     public let alignment: String?
+    public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let axis: String?
     public let clipsSubviews: Bool?
@@ -45,6 +46,7 @@ public struct StackView: IBDecodable, ViewProtocol {
         return StackView(
             id:                                        try container.attribute(of: .id),
             alignment:                                 container.attributeIfPresent(of: .alignment),
+            key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             axis:                                      container.attributeIfPresent(of: .axis),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
