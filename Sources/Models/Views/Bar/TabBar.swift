@@ -30,6 +30,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let variations: [Variation]?
 
     public struct TabBarItem: IBDecodable, IBKeyable {
         public let id: String
@@ -51,6 +52,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
     }
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
     enum TabBarItemsCodingKeys: CodingKey { case tabBarItem }
 
     static func decode(_ xml: XMLIndexer) throws -> TabBar {
@@ -64,6 +66,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
         let tabBarItemsContainer = container.nestedContainerIfPresent(of: .items, keys: TabBarItemsCodingKeys.self)
 
         return TabBar(
@@ -86,7 +89,8 @@ public struct TabBar: IBDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
-            connections:                               container.childrenIfPresent(of: .connections)
+            connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation)
         )
     }
 }

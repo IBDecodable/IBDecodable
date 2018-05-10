@@ -36,6 +36,7 @@ public protocol IBCustomClassable: IBElement {
 public protocol IBUserLabelable: IBElement {
     var userLabel: String? { get }
     var colorLabel: String? { get }
+    // TODO add ?: var userComments: AttributedString?
 }
 
 // MARK: IBElement

@@ -36,8 +36,10 @@ public struct TextField: IBDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let variations: [Variation]?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
 
     static func decode(_ xml: XMLIndexer) throws -> TextField {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -50,6 +52,7 @@ public struct TextField: IBDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
 
         return TextField(
             id:                                        try container.attribute(of: .id),
@@ -77,7 +80,8 @@ public struct TextField: IBDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
-            connections:                               container.childrenIfPresent(of: .connections)
+            connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation)
         )
     }
 

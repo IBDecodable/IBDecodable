@@ -30,8 +30,10 @@ public struct SearchBar: IBDecodable, ViewProtocol {
     public let viewLayoutGuide: LayoutGuide?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let variations: [Variation]?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
 
     static func decode(_ xml: XMLIndexer) throws -> SearchBar {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -45,6 +47,7 @@ public struct SearchBar: IBDecodable, ViewProtocol {
         }
 
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
         return SearchBar(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),
@@ -65,7 +68,8 @@ public struct SearchBar: IBDecodable, ViewProtocol {
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             viewLayoutGuide:                           container.elementIfPresent(of: .viewLayoutGuide),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
-            connections:                               container.childrenIfPresent(of: .connections)
+            connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation)
         )
     }
 }

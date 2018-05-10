@@ -40,6 +40,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let variations: [Variation]?
     public let sections: [TableViewSection]?
     public let prototypeCells: [TableViewCell]?
 
@@ -70,6 +71,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     }
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
 
     static func decode(_ xml: XMLIndexer) throws -> TableView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -83,6 +85,7 @@ public struct TableView: IBDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
 
         return TableView(
             id:                                        try container.attribute(of: .id),
@@ -112,6 +115,7 @@ public struct TableView: IBDecodable, ViewProtocol {
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
             sections:                                  container.childrenIfPresent(of: .sections),
             prototypeCells:                            container.childrenIfPresent(of: .prototypeCells)
         )
@@ -176,6 +180,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let variations: [Variation]?
     public let reuseIdentifier: String?
 
     public var children: [IBElement] {
@@ -218,6 +223,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
         public let userInteractionEnabled: Bool?
         public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
         public let connections: [AnyConnection]?
+        public let variations: [Variation]?
 
         static func decode(_ xml: XMLIndexer) throws -> TableViewCell.TableViewContentView {
             let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -230,6 +236,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
                 return MappedCodingKey(stringValue: stringValue)
             }
             let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
 
             return TableViewContentView(
                 id:                                        try container.attribute(of: .id),
@@ -250,12 +257,14 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
                 translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
                 userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
                 userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
-                connections:                               container.childrenIfPresent(of: .connections)
+                connections:                               container.childrenIfPresent(of: .connections),
+                variations:                                variationContainer.elementsIfPresent(of: .variation)
             )
         }
     }
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
 
     static func decode(_ xml: XMLIndexer) throws -> TableViewCell {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -270,6 +279,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
 
         return TableViewCell(
             id:                                        try container.attribute(of: .id),
@@ -292,6 +302,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
             reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier)
         )
     }

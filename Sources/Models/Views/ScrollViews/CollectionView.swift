@@ -32,11 +32,13 @@ public struct CollectionView: IBDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let variations: [Variation]?
     public let cells: [CollectionViewCell]?
     public let layout: CollectionViewLayout?
     public let flowLayout: CollectionViewFlowLayout?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -51,6 +53,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
 
         return CollectionView(
             id:                                        try container.attribute(of: .id),
@@ -73,6 +76,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
             cells:                                     container.childrenIfPresent(of: .cells),
             layout:                                    container.elementIfPresent(of: .layout),
             flowLayout:                                container.elementIfPresent(of: .flowLayout)
@@ -108,6 +112,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let variations: [Variation]?
     public let reuseIdentifier: String?
 
     public var children: [IBElement] {
@@ -129,6 +134,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
     }
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewCell {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -143,6 +149,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
             return MappedCodingKey(stringValue: stringValue)
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
 
         return CollectionViewCell(
             id:                                        try container.attribute(of: .id),
@@ -165,6 +172,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
             reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier)
         )
     }

@@ -30,6 +30,7 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
+    public let variations: [Variation]?
 
     public struct NavigationItem: IBDecodable {
         public let id: String
@@ -49,6 +50,7 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
     }
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
     enum NavigationItemsCodingKeys: CodingKey { case navigationItem }
 
     static func decode(_ xml: XMLIndexer) throws -> NavigationBar {
@@ -63,6 +65,7 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
         }
 
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
         let navigationItemsContainer = container.nestedContainerIfPresent(of: .items, keys: NavigationItemsCodingKeys.self)
 
         return NavigationBar(
@@ -85,7 +88,8 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
-            connections:                               container.childrenIfPresent(of: .connections)
+            connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation)
         )
     }
 }
