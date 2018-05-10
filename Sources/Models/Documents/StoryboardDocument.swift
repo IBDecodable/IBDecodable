@@ -24,7 +24,6 @@ public struct StoryboardDocument: IBDecodable {
     public let device: Device?
     public let scenes: [Scene]?
     public let resources: [AnyResource]?
-    public let connections: [AnyConnection]?
 
     enum ScenesCodingKeys: CodingKey { case scene }
 
@@ -45,19 +44,7 @@ public struct StoryboardDocument: IBDecodable {
             launchScreen:          container.attributeIfPresent(of: .launchScreen) ?? false,
             device:                container.elementIfPresent(of: .device),
             scenes:                scenesContainer?.elementsIfPresent(of: .scene),
-            resources:             container.childrenIfPresent(of: .resources),
-            connections:           findConnections(in: xml)
+            resources:             container.childrenIfPresent(of: .resources)
         )
     }
-}
-
-// MARK: - Connection
-// FIXME: This implementation is temporary
-
-func findConnections(in xml: XMLIndexer) -> [AnyConnection] {
-    guard let connections: XMLIndexer = xml.byKey("connections") else {
-        return xml.children.flatMap(findConnections)
-    }
-    let parsedConnections = try? connections.children.map(AnyConnection.decode)
-    return (parsedConnections ?? []) + xml.children.flatMap(findConnections)
 }

@@ -20,7 +20,6 @@ public struct XibDocument: IBDecodable {
     public let device: Device?
     public let views: [AnyView]?
     public let placeholders: [Placeholder]?
-    public let connections: [AnyConnection]?
 
     enum ExternalCodingKeys: CodingKey { case objects }
     enum ObjectsCodingKeys: CodingKey { case placeholder }
@@ -41,8 +40,7 @@ public struct XibDocument: IBDecodable {
             colorMatched:          container.attributeIfPresent(of: .colorMatched),
             device:                container.elementIfPresent(of: .device),
             views:                 externalContainer.childrenIfPresent(of: .objects),
-            placeholders:          objectsContainer?.elementsIfPresent(of: .placeholder),
-            connections:           findConnections(in: xml)
+            placeholders:          objectsContainer?.elementsIfPresent(of: .placeholder)
         )
     }
 }

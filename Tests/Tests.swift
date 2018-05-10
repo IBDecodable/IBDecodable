@@ -135,15 +135,13 @@ class Tests: XCTestCase {
         let url = self.url(forResource:"StoryboardConnections", withExtension: "storyboard")
         do {
             let file = try StoryboardFile(url: url)
-            
+
             let viewControllers = file.document.scenes?.map { $0.viewController?.viewController } ?? []
             let rootConnections = viewControllers.compactMap { $0?.connections }.flatMap { $0 }.compactMap { $0.connection }
             XCTAssertFalse(rootConnections.isEmpty)
-            let allConnections = file.document.connections ?? []
-            XCTAssertEqual(allConnections.count, 9)
-            
-            //let connections: [AnyConnection] = file.document.children(of: AnyConnection.self)
-            //XCTAssertEqual(connections.count, 9)
+
+            let connections: [AnyConnection] = file.document.children(of: AnyConnection.self)
+            XCTAssertEqual(connections.count, 9)
         } catch {
             XCTFail("\(error)")
         }
