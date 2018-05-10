@@ -23,7 +23,7 @@ class Tests: XCTestCase {
         }
     }
 
-    func testEmptyLaunchScreen() {
+    func testLaunchScreen() {
         let url = self.url(forResource:"Launch Screen", withExtension: "storyboard")
         do {
             let file = try StoryboardFile(url: url)
@@ -205,28 +205,9 @@ class Tests: XCTestCase {
                         XCTAssertTrue(flattened.count > 2, "no flattened children element for doc \(name)")
                         
                         // Example code for indexation
-                        var duplicate: [IBIdentifiable] = []
-                        let mapById: [String: IBIdentifiable] = flattened.reduce([:]) { result, element in
-                            var result = result
-                            if let identifiable = element as? IBIdentifiable {
-                                if let oldValue = result[identifiable.id]/*, (identifiable as AnyObject !== oldValue as AnyObject)*/ {
-                                    duplicate.append(oldValue)
-                                    print("duplicate \(identifiable.id): \(identifiable) with \(oldValue)")
-                                } else {
-                                    result[identifiable.id] = identifiable
-                                }
-                            }
-                            return result
-                        }
-                        XCTAssertTrue(mapById.count > 2, "no element by id \(name)")
-                        XCTAssertTrue(duplicate.isEmpty, "there is duplicate element by id \(name)")
-                        
-                        // Example code for browsing
-                        _ = document.browse { element in
-                           
-                            return true // go on
-                        }
-                        
+                        let analyser = IBAnalyser(document)
+                        XCTAssertTrue(analyser.byId.count > 2, "no element by id \(name)")
+                        XCTAssertTrue(analyser.duplicateId.isEmpty, "there is duplicate element by id \(name)") 
                     }
                 } catch {
                     XCTFail("\(error)  \(url)")
