@@ -251,11 +251,11 @@ class Tests: XCTestCase {
     }
 
     func urls(withExtension ext: String) -> [URL]? {
-        if let urls = bundle.urls(forResourcesWithExtension: ext, subdirectory: nil) {
+        if let urls = bundle.urls(forResourcesWithExtension: ext, subdirectory: nil), !urls.isEmpty {
             return urls
         }
         if let paths = try? FileManager.default.contentsOfDirectory(atPath: "Tests/Resources") {
-            return paths.filter { $0.hasSuffix(".\(ext)") }.map { URL(fileURLWithPath: $0) }
+            return paths.filter { $0.hasSuffix(".\(ext)") }.map { URL(fileURLWithPath: "Tests/Resources/\($0)") }
         }
         return nil
     }
