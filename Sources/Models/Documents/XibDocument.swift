@@ -7,7 +7,8 @@
 
 import SWXMLHash
 
-public struct XibDocument: IBDecodable {
+public struct XibDocument: IBDecodable, InterfaceBuilderDocument {
+
     public let type: String
     public let version: String
     public let toolsVersion: String
@@ -43,4 +44,9 @@ public struct XibDocument: IBDecodable {
             placeholders:          objectsContainer?.elementsIfPresent(of: .placeholder)
         )
     }
+
+    public var ibType: IBType {
+        return .xib
+    }
+
 }

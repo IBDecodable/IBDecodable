@@ -9,7 +9,8 @@ import SWXMLHash
 
 // MARK: - StoryboardDocument
 
-public struct StoryboardDocument: IBDecodable {
+public struct StoryboardDocument: IBDecodable, InterfaceBuilderDocument {
+
     public let type: String
     public let version: String
     public let toolsVersion: String
@@ -47,4 +48,9 @@ public struct StoryboardDocument: IBDecodable {
             resources:             container.childrenIfPresent(of: .resources)
         )
     }
+
+    public var ibType: IBType {
+        return .storyboard
+    }
+
 }

@@ -12,6 +12,7 @@ public class StoryboardFile: InterfaceBuilderFile {
 
     public var pathString: String
 
+    public let ibType: IBType = .storyboard
     public let document: StoryboardDocument
 
     public init(path: String) throws {

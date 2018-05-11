@@ -12,6 +12,7 @@ public class XibFile: InterfaceBuilderFile {
 
     public var pathString: String
 
+    public let ibType: IBType = .xib
     public let document: XibDocument
 
     public init(path: String) throws {
