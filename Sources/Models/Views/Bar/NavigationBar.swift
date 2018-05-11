@@ -32,8 +32,9 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
 
-    public struct NavigationItem: IBDecodable {
+    public struct NavigationItem: IBDecodable, IBIdentifiable, IBKeyable {
         public let id: String
+        public let key: String?
         public let style: String?
         public let systemItem: String?
         public let title: String?
@@ -42,6 +43,7 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
             let container = xml.container(keys: CodingKeys.self)
             return NavigationItem(
                 id:         try container.attribute(of: .id),
+                key:        container.attributeIfPresent(of: .key),
                 style:      container.attributeIfPresent(of: .style),
                 systemItem: container.attributeIfPresent(of: .systemItem),
                 title:      container.attributeIfPresent(of: .title)

@@ -90,3 +90,30 @@ public struct Inset: IBDecodable, IBKeyable {
     }
 
 }
+
+// MARK: - Frame
+
+public struct Frame: IBDecodable, IBKeyable {
+
+    public let width: Float
+    public let height: Float
+    public let minX: Float
+    public let minY: Float
+    public let maxX: Float
+    public let maxY: Float
+    public let key: String?
+
+    static func decode(_ xml: XMLIndexer) throws -> Frame {
+        let container = xml.container(keys: CodingKeys.self)
+        return Frame(
+            width:  try container.attribute(of: .width),
+            height: try container.attribute(of: .height),
+            minX:   try container.attribute(of: .minX),
+            minY:   try container.attribute(of: .minY),
+            maxX:   try container.attribute(of: .maxX),
+            maxY:   try container.attribute(of: .maxY),
+            key:    container.attributeIfPresent(of: .key)
+        )
+    }
+
+}

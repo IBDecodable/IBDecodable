@@ -100,7 +100,8 @@ public struct Label: IBDecodable, ViewProtocol {
 
 // MARK: - FontDescription
 
-public struct FontDescription: IBDecodable {
+public struct FontDescription: IBDecodable, IBKeyable {
+    public let key: String?
     public let type: String
     public let pointSize: Float
     public let weight: String?
@@ -108,6 +109,7 @@ public struct FontDescription: IBDecodable {
     static func decode(_ xml: XMLIndexer) throws -> FontDescription {
         let container = xml.container(keys: CodingKeys.self)
         return FontDescription(
+            key:       container.attributeIfPresent(of: .key),
             type:      try container.attribute(of: .type),
             pointSize: try container.attribute(of: .pointSize),
             weight:    container.attributeIfPresent(of: .weight)

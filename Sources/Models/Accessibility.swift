@@ -57,20 +57,3 @@ public struct AccessibilityTraits: IBDecodable, IBKeyable {
     }
 
 }
-
-// MARK: - Bool
-
-public struct IBBool: IBDecodable, IBKeyable {
-
-    public let key: String?
-    public let value: Bool
-
-    static func decode(_ xml: XMLIndexer) throws -> IBBool {
-        let container = xml.container(keys: CodingKeys.self)
-        return IBBool(
-            key:   container.attributeIfPresent(of: .key),
-            value: container.attributeIfPresent(of: .value) ?? false
-        )
-    }
-
-}
