@@ -28,13 +28,13 @@ public class StoryboardFile: InterfaceBuilderFile {
     private static func parseContent(pathString: String) throws -> StoryboardDocument {
         let parser = InterfaceBuilderParser()
         let content = try String(contentsOfFile: pathString)
-        return try parser.parseStoryboard(xml: content)
+        return try parser.parseDocument(xml: content)
     }
 
     private static func parseContent(url: URL) throws -> StoryboardDocument {
         let parser = InterfaceBuilderParser()
-        let content = try String(contentsOf: url)
-        return try parser.parseStoryboard(xml: content)
+        let content = try Data(contentsOf: url)
+        return try parser.parseDocument(data: content)
     }
 
 }
