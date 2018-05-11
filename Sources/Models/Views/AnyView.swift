@@ -112,12 +112,12 @@ public struct AutoresizingMask: IBDecodable, IBKeyable {
 
     static func decode(_ xml: XMLIndexer) throws -> AutoresizingMask {
         let container = xml.container(keys: CodingKeys.self)
-        return try AutoresizingMask(
-            widthSizable:  container.attribute(of: .widthSizable),
-            heightSizable: container.attribute(of: .heightSizable),
-            key:           container.attribute(of: .key),
-            flexibleMaxX:  container.attribute(of: .flexibleMaxX),
-            flexibleMaxY:  container.attribute(of: .flexibleMaxY)
+        return AutoresizingMask(
+            widthSizable:  container.attributeIfPresent(of: .widthSizable) ?? false,
+            heightSizable: container.attributeIfPresent(of: .heightSizable) ?? false,
+            key:           container.attributeIfPresent(of: .key),
+            flexibleMaxX:  container.attributeIfPresent(of: .flexibleMaxX) ?? false,
+            flexibleMaxY:  container.attributeIfPresent(of: .flexibleMaxY) ?? false
         )
     }
 }
