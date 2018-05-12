@@ -72,20 +72,42 @@ public struct Size: IBDecodable, IBKeyable {
 
 public struct Inset: IBDecodable, IBKeyable {
 
-    public let minX: Float
-    public let minY: Float
-    public let maxX: Float
-    public let maxY: Float
     public let key: String?
+    public let minX: Float?
+    public let minY: Float?
+    public let maxX: Float?
+    public let maxY: Float?
 
     static func decode(_ xml: XMLIndexer) throws -> Inset {
         let container = xml.container(keys: CodingKeys.self)
         return Inset(
-            minX: try container.attribute(of: .minX),
-            minY: try container.attribute(of: .minY),
-            maxX: try container.attribute(of: .maxX),
-            maxY: try container.attribute(of: .maxY),
-            key:  container.attributeIfPresent(of: .key)
+            key:  container.attributeIfPresent(of: .key),
+            minX: container.attributeIfPresent(of: .minX),
+            minY: container.attributeIfPresent(of: .minY),
+            maxX: container.attributeIfPresent(of: .maxX),
+            maxY: container.attributeIfPresent(of: .maxY)
+        )
+    }
+
+}
+// MARK: - EdgeInset
+
+public struct EdgeInset: IBDecodable, IBKeyable {
+
+    public let key: String?
+    public let left: Float?
+    public let right: Float?
+    public let bottom: Float?
+    public let top: Float?
+
+    static func decode(_ xml: XMLIndexer) throws -> EdgeInset {
+        let container = xml.container(keys: CodingKeys.self)
+        return EdgeInset(
+            key:    container.attributeIfPresent(of: .key),
+            left:   container.attributeIfPresent(of: .left),
+            right:  container.attributeIfPresent(of: .right),
+            bottom: container.attributeIfPresent(of: .bottom),
+            top:    container.attributeIfPresent(of: .top)
         )
     }
 
