@@ -104,18 +104,18 @@ extension AnyView: IBAny {
 // MARK: - AutoresizingMask
 
 public struct AutoresizingMask: IBDecodable, IBKeyable {
+    public let key: String?
     public let widthSizable: Bool
     public let heightSizable: Bool
-    public let key: String?
     public let flexibleMaxX: Bool
     public let flexibleMaxY: Bool
 
     static func decode(_ xml: XMLIndexer) throws -> AutoresizingMask {
         let container = xml.container(keys: CodingKeys.self)
         return AutoresizingMask(
+            key:           container.attributeIfPresent(of: .key),
             widthSizable:  container.attributeIfPresent(of: .widthSizable) ?? false,
             heightSizable: container.attributeIfPresent(of: .heightSizable) ?? false,
-            key:           container.attributeIfPresent(of: .key),
             flexibleMaxX:  container.attributeIfPresent(of: .flexibleMaxX) ?? false,
             flexibleMaxY:  container.attributeIfPresent(of: .flexibleMaxY) ?? false
         )

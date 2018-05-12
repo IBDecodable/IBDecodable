@@ -12,13 +12,13 @@ import SWXMLHash
 public struct Variation: IBDecodable, IBKeyable {
 
     public let key: String?
-    public let mask: Mask?
+    public let mask: [Mask]?
 
     static func decode(_ xml: XMLIndexer) throws -> Variation {
         let container = xml.container(keys: CodingKeys.self)
         return Variation(
             key: container.attributeIfPresent(of: .key),
-            mask: container.elementIfPresent(of: .mask)
+            mask: container.elementsIfPresent(of: .mask)
         )
     }
 

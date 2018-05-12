@@ -11,19 +11,27 @@ public struct Device: IBDecodable, IBIdentifiable {
 
     public let id: String
     public let orientation: String?
-    public let adaptation: String?
-
-    enum AdaptationCodingKeys: CodingKey {
-        case id
-    }
+    public let adaptation: Adaptation?
 
     static func decode(_ xml: XMLIndexer) throws -> Device {
         let container = xml.container(keys: CodingKeys.self)
-        let adaptationContainer = container.nestedContainerIfPresent(of: .adaptation, keys: AdaptationCodingKeys.self)
         return Device(
             id:          try container.attribute(of: .id),
             orientation: container.attributeIfPresent(of: .orientation),
-            adaptation:  adaptationContainer?.attributeIfPresent(of: .id)
+            adaptation:  container.elementIfPresent(of: .adaptation)
         )
     }
+
+    public struct Adaptation: IBDecodable, IBIdentifiable {
+
+        public let id: String
+
+        static func decode(_ xml: XMLIndexer) throws -> Adaptation {
+            let container = xml.container(keys: CodingKeys.self)
+            return Adaptation(
+                id:  try container.attribute(of: .id)
+            )
+        }
+    }
+
 }
