@@ -39,6 +39,7 @@ public struct TextView: IBDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
+    public let editable: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -86,7 +87,8 @@ public struct TextView: IBDecodable, ViewProtocol {
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
-            variations:                                variationContainer.elementsIfPresent(of: .variation)
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
+            editable:                                  container.attributeIfPresent(of: .editable)
         )
     }
 }

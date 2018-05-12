@@ -30,6 +30,16 @@ public struct ScrollView: IBDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
+    public let isPagingEnabled: Bool?
+    public let bouncesZoom: Bool?
+    public let bounces: Bool?
+    public let alwaysBounceVertical: Bool?
+    public let keyboardDismissMode: String?
+    public let showsVerticalScrollIndicator: Bool?
+    public let showsHorizontalScrollIndicator: Bool?
+    public let maximumZoomScale: Float?
+    public let minimumZoomScale: Float?
+    public let isDirectionalLockEnabled: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -39,6 +49,8 @@ public struct ScrollView: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isPagingEnabled: return "pagingEnabled"
+                case .isDirectionalLockEnabled: return "directionalLockEnabled"
                 default: return key.stringValue
                 }
             }()
@@ -67,7 +79,17 @@ public struct ScrollView: IBDecodable, ViewProtocol {
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
-            variations:                                variationContainer.elementsIfPresent(of: .variation)
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
+            isPagingEnabled:                           container.attributeIfPresent(of: .isPagingEnabled),
+            bouncesZoom:                               container.attributeIfPresent(of: .bouncesZoom),
+            bounces:                                   container.attributeIfPresent(of: .bounces),
+            alwaysBounceVertical:                      container.attributeIfPresent(of: .alwaysBounceVertical),
+            keyboardDismissMode:                       container.attributeIfPresent(of: .keyboardDismissMode),
+            showsVerticalScrollIndicator:              container.attributeIfPresent(of: .showsVerticalScrollIndicator),
+            showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
+            maximumZoomScale:                          container.attributeIfPresent(of: .maximumZoomScale),
+            minimumZoomScale:                          container.attributeIfPresent(of: .minimumZoomScale),
+            isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled)
         )
     }
 }

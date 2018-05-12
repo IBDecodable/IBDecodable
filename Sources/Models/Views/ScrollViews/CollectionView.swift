@@ -36,6 +36,17 @@ public struct CollectionView: IBDecodable, ViewProtocol {
     public let cells: [CollectionViewCell]?
     public let layout: CollectionViewLayout?
     public let flowLayout: CollectionViewFlowLayout?
+    public let isPagingEnabled: Bool?
+    public let bouncesZoom: Bool?
+    public let bounces: Bool?
+    public let alwaysBounceVertical: Bool?
+    public let keyboardDismissMode: String?
+    public let showsVerticalScrollIndicator: Bool?
+    public let showsHorizontalScrollIndicator: Bool?
+    public let maximumZoomScale: Float?
+    public let minimumZoomScale: Float?
+    public let isDirectionalLockEnabled: Bool?
+    public let isPrefetchingEnabled: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -45,8 +56,11 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isPagingEnabled: return "pagingEnabled"
                 case .layout: return "collectionViewLayout"
                 case .flowLayout: return "collectionViewFlowLayout"
+                case .isDirectionalLockEnabled: return "directionalLockEnabled"
+                case .isPrefetchingEnabled: return "prefetchingEnabled"
                 default: return key.stringValue
                 }
             }()
@@ -79,7 +93,18 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             cells:                                     container.childrenIfPresent(of: .cells),
             layout:                                    container.elementIfPresent(of: .layout),
-            flowLayout:                                container.elementIfPresent(of: .flowLayout)
+            flowLayout:                                container.elementIfPresent(of: .flowLayout),
+            isPagingEnabled:                           container.attributeIfPresent(of: .isPagingEnabled),
+            bouncesZoom:                               container.attributeIfPresent(of: .bouncesZoom),
+            bounces:                                   container.attributeIfPresent(of: .bounces),
+            alwaysBounceVertical:                      container.attributeIfPresent(of: .alwaysBounceVertical),
+            keyboardDismissMode:                       container.attributeIfPresent(of: .keyboardDismissMode),
+            showsVerticalScrollIndicator:              container.attributeIfPresent(of: .showsVerticalScrollIndicator),
+            showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
+            maximumZoomScale:                          container.attributeIfPresent(of: .maximumZoomScale),
+            minimumZoomScale:                          container.attributeIfPresent(of: .minimumZoomScale),
+            isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled),
+            isPrefetchingEnabled:                      container.attributeIfPresent(of: .isPrefetchingEnabled)
         )
     }
 }
@@ -214,6 +239,9 @@ public struct CollectionViewFlowLayout: IBDecodable, IBIdentifiable, IBKeyable {
     public let minimumInteritemSpacing: String?
     public let sizes: [Size]?
     public let insets: [Inset]?
+    public let customClass: String?
+    public let customModule: String?
+    public let customModuleProvider: String?
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewFlowLayout {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -233,7 +261,10 @@ public struct CollectionViewFlowLayout: IBDecodable, IBIdentifiable, IBKeyable {
             minimumLineSpacing:       container.attributeIfPresent(of: .minimumLineSpacing),
             minimumInteritemSpacing:  container.attributeIfPresent(of: .minimumInteritemSpacing),
             sizes:                    container.elementsIfPresent(of: .sizes),
-            insets:                   container.elementsIfPresent(of: .insets)
+            insets:                   container.elementsIfPresent(of: .insets),
+            customClass:              container.attributeIfPresent(of: .customClass),
+            customModule:             container.attributeIfPresent(of: .customModule),
+            customModuleProvider:     container.attributeIfPresent(of: .customModuleProvider)
         )
     }
 }

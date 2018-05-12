@@ -50,10 +50,10 @@ public struct Source: IBDecodable, IBKeyable {
 // MARK: - Relationship
 
 public struct Relationship: IBDecodable {
-    
+
     public let kind: String?
     public let name: String?
-    
+
     static func decode(_ xml: XMLIndexer) throws -> Relationship {
         let container = xml.container(keys: CodingKeys.self)
         return Relationship(
@@ -61,5 +61,5 @@ public struct Relationship: IBDecodable {
             name: container.attributeIfPresent(of: .name)
         )
     }
-    
+
 }

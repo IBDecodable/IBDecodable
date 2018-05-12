@@ -14,7 +14,6 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let id: String
     public let elementClass: String = "UITableView"
 
-    public let alwaysBounceVertical: Bool?
     public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
@@ -43,6 +42,16 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let variations: [Variation]?
     public let sections: [TableViewSection]?
     public let prototypeCells: [TableViewCell]?
+    public let isPagingEnabled: Bool?
+    public let bouncesZoom: Bool?
+    public let bounces: Bool?
+    public let alwaysBounceVertical: Bool?
+    public let keyboardDismissMode: String?
+    public let showsVerticalScrollIndicator: Bool?
+    public let showsHorizontalScrollIndicator: Bool?
+    public let maximumZoomScale: Float?
+    public let minimumZoomScale: Float?
+    public let isDirectionalLockEnabled: Bool?
 
     public enum DataMode: XMLAttributeDecodable, KeyDecodable, Equatable {
         case `static`, prototypes
@@ -79,6 +88,8 @@ public struct TableView: IBDecodable, ViewProtocol {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .prototypeCells: return "prototypes"
+                case .isPagingEnabled: return "pagingEnabled"
+                case .isDirectionalLockEnabled: return "directionalLockEnabled"
                 default: return key.stringValue
                 }
             }()
@@ -89,7 +100,6 @@ public struct TableView: IBDecodable, ViewProtocol {
 
         return TableView(
             id:                                        try container.attribute(of: .id),
-            alwaysBounceVertical:                      container.attributeIfPresent(of: .alwaysBounceVertical),
             key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
@@ -117,7 +127,17 @@ public struct TableView: IBDecodable, ViewProtocol {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             sections:                                  container.childrenIfPresent(of: .sections),
-            prototypeCells:                            container.childrenIfPresent(of: .prototypeCells)
+            prototypeCells:                            container.childrenIfPresent(of: .prototypeCells),
+            isPagingEnabled:                           container.attributeIfPresent(of: .isPagingEnabled),
+            bouncesZoom:                               container.attributeIfPresent(of: .bouncesZoom),
+            bounces:                                   container.attributeIfPresent(of: .bounces),
+            alwaysBounceVertical:                      container.attributeIfPresent(of: .alwaysBounceVertical),
+            keyboardDismissMode:                       container.attributeIfPresent(of: .keyboardDismissMode),
+            showsVerticalScrollIndicator:              container.attributeIfPresent(of: .showsVerticalScrollIndicator),
+            showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
+            maximumZoomScale:                          container.attributeIfPresent(of: .maximumZoomScale),
+            minimumZoomScale:                          container.attributeIfPresent(of: .minimumZoomScale),
+            isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled)
         )
     }
 }
