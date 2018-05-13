@@ -25,8 +25,8 @@ public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable, IBUse
 }
 
 extension ViewControllerProtocol {
-    public var freeFormSize: Size? {
-        return self.with(key: "freeFormSize")
+    public var freeformSize: Size? {
+        return self.with(key: "freeformSize")
     }
 }
 
