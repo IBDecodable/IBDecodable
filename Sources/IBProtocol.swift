@@ -62,11 +62,11 @@ extension IBElement {
 
     /// Browse the element tree and call for each element the `visitor` callback.
     /// If the callback return false, stop browsing.
-    public func browse(_ visitor: (IBElement) -> Bool) -> Bool {
-        if visitor(self) {
+    public func browse(skipSelf: Bool = false, _ visitor: (IBElement) -> Bool) -> Bool {
+        if skipSelf || visitor(self) {
             let children = self.children
             for child in children {
-                if !child.browse(visitor) {
+                if !child.browse(skipSelf: false, visitor) {
                     return false
                 }
             }
@@ -77,16 +77,50 @@ extension IBElement {
     }
 
     /// Return all the children of specified type, recursively.
-    public func children<T: IBElement>(of type: T.Type) -> [T] {
+    public func children<T: IBElement>(of type: T.Type, recursive: Bool = true) -> [T] {
         var result: [T] = []
-        _ = browse { element in
-            if let casted = element as? T {
-                result.append(casted)
+        if recursive {
+            _ = browse(skipSelf: true) { element in
+                if let casted = element as? T {
+                    result.append(casted)
+                }
+                return true
             }
-            return true
+        } else {
+            let children = self.children
+            for child in children {
+                if let casted = child as? T {
+                    result.append(casted)
+                }
+            }
         }
-        // XXX this implementation could return self in result.
         return result
+    }
+
+    /// Return direct children element with specific key.
+    public func with<T: IBKeyable>(key: String) -> T? {
+        let children = self.children
+        for child in children {
+            if let keyable = child as? IBKeyable {
+                if keyable.key == key {
+                    return keyable as? T
+                }
+            }
+        }
+        return nil
+    }
+
+    /// Return direct children element with specific id.
+    public func with<T: IBIdentifiable>(id: String) -> T? {
+        let children = self.children
+        for child in children {
+            if let identifiable = child as? IBIdentifiable {
+                if identifiable.id == id {
+                    return identifiable as? T
+                }
+            }
+        }
+        return nil
     }
 
 }
