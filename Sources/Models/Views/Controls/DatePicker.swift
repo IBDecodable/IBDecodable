@@ -31,6 +31,11 @@ public struct DatePicker: IBDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
+    public let contentHorizontalAlignment: String?
+    public let contentVerticalAlignment: String?
+    public let datePickerMode: String?
+    public let minuteInterval: String? // Integer??
+    public let date: IBDate?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -69,7 +74,12 @@ public struct DatePicker: IBDecodable, ViewProtocol {
             viewLayoutGuide:                           container.elementIfPresent(of: .viewLayoutGuide),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
-            variations:                                variationContainer.elementsIfPresent(of: .variation)
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
+            datePickerMode:                            container.attributeIfPresent(of: .datePickerMode),
+            minuteInterval:                            container.attributeIfPresent(of: .minuteInterval),
+            date:                                      container.elementIfPresent(of: .date)
         )
     }
 }

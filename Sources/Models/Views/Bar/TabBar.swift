@@ -32,7 +32,8 @@ public struct TabBar: IBDecodable, ViewProtocol {
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
 
-    public struct TabBarItem: IBDecodable, IBKeyable, IBCustomClassable {
+    public struct TabBarItem: IBDecodable, IBKeyable, IBCustomClassable, IBUserLabelable {
+
         public let id: String
         public let key: String?
         public let style: String?
@@ -41,6 +42,8 @@ public struct TabBar: IBDecodable, ViewProtocol {
         public let customClass: String?
         public let customModule: String?
         public let customModuleProvider: String?
+        public let userLabel: String?
+        public let colorLabel: String?
 
         static func decode(_ xml: XMLIndexer) throws -> TabBar.TabBarItem {
             let container = xml.container(keys: CodingKeys.self)
@@ -52,7 +55,9 @@ public struct TabBar: IBDecodable, ViewProtocol {
                 title:      container.attributeIfPresent(of: .title),
                 customClass:          container.attributeIfPresent(of: .customClass),
                 customModule:         container.attributeIfPresent(of: .customModule),
-                customModuleProvider: container.attributeIfPresent(of: .customModuleProvider)
+                customModuleProvider: container.attributeIfPresent(of: .customModuleProvider),
+                userLabel:            container.attributeIfPresent(of: .userLabel),
+                colorLabel:           container.attributeIfPresent(of: .colorLabel)
             )
         }
     }

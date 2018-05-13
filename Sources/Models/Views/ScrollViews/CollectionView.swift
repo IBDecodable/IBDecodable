@@ -242,6 +242,7 @@ public struct CollectionViewFlowLayout: IBDecodable, IBIdentifiable, IBKeyable {
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
+    public let scrollDirection: String? // vertical, horizontal
 
     static func decode(_ xml: XMLIndexer) throws -> CollectionViewFlowLayout {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -264,7 +265,8 @@ public struct CollectionViewFlowLayout: IBDecodable, IBIdentifiable, IBKeyable {
             insets:                   container.elementsIfPresent(of: .insets),
             customClass:              container.attributeIfPresent(of: .customClass),
             customModule:             container.attributeIfPresent(of: .customModule),
-            customModuleProvider:     container.attributeIfPresent(of: .customModuleProvider)
+            customModuleProvider:     container.attributeIfPresent(of: .customModuleProvider),
+            scrollDirection:          container.attributeIfPresent(of: .scrollDirection)
         )
     }
 }

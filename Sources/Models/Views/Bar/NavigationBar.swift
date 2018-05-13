@@ -32,12 +32,18 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
 
-    public struct NavigationItem: IBDecodable, IBIdentifiable, IBKeyable {
+    public struct NavigationItem: IBDecodable, IBIdentifiable, IBKeyable, IBCustomClassable, IBUserLabelable {
+
         public let id: String
         public let key: String?
         public let style: String?
         public let systemItem: String?
         public let title: String?
+        public let customClass: String?
+        public let customModule: String?
+        public let customModuleProvider: String?
+        public let userLabel: String?
+        public let colorLabel: String?
 
         static func decode(_ xml: XMLIndexer) throws -> NavigationBar.NavigationItem {
             let container = xml.container(keys: CodingKeys.self)
@@ -46,7 +52,12 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
                 key:        container.attributeIfPresent(of: .key),
                 style:      container.attributeIfPresent(of: .style),
                 systemItem: container.attributeIfPresent(of: .systemItem),
-                title:      container.attributeIfPresent(of: .title)
+                title:      container.attributeIfPresent(of: .title),
+                customClass: container.attributeIfPresent(of: .customClass),
+                customModule: container.attributeIfPresent(of: .customModule),
+                customModuleProvider: container.attributeIfPresent(of: .customModuleProvider),
+                userLabel:  container.attributeIfPresent(of: .userLabel),
+                colorLabel: container.attributeIfPresent(of: .colorLabel)
             )
         }
     }

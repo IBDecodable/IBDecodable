@@ -35,8 +35,8 @@ public struct ScrollView: IBDecodable, ViewProtocol {
     public let bounces: Bool?
     public let alwaysBounceVertical: Bool?
     public let keyboardDismissMode: String?
-    public let showsVerticalScrollIndicator: Bool?
-    public let showsHorizontalScrollIndicator: Bool?
+    public let showsVerticalScrollIndicator: Bool? // default true
+    public let showsHorizontalScrollIndicator: Bool? // default true
     public let maximumZoomScale: Float?
     public let minimumZoomScale: Float?
     public let isDirectionalLockEnabled: Bool?

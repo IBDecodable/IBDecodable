@@ -31,6 +31,7 @@ public struct MapView: IBDecodable, ViewProtocol {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
+    public let mapType: String?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -69,7 +70,8 @@ public struct MapView: IBDecodable, ViewProtocol {
             viewLayoutGuide:                           container.elementIfPresent(of: .viewLayoutGuide),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
-            variations:                                variationContainer.elementsIfPresent(of: .variation)
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
+            mapType:                                   container.attributeIfPresent(of: .mapType)
         )
     }
 }

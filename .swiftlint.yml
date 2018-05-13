@@ -3,6 +3,9 @@ included:
 line_length:
   warning: 165
   ignores_comments: true
+function_body_length:
+  warning: 70
+  error: 100
 large_tuple:
   warning: 3
 disabled_rules:
