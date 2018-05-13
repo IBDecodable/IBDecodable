@@ -32,6 +32,21 @@ public struct MapView: IBDecodable, ViewProtocol {
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
     public let mapType: String?
+    public let multipleTouchEnabled: Bool?
+    public let showsTraffic: Bool?
+    public let scrollEnabled: Bool?
+    public let appearanceType: String?
+    public let verticalHuggingPriority: Int?
+    public let showsCompass: Bool?
+    public let showsPointsOfInterest: Bool?
+    public let restorationIdentifier: String?
+    public let showsUserLocation: Bool?
+    public let showsScale: Bool?
+    public let showsBuildings: Bool?
+    public let pitchEnabled: Bool?
+    public let rotateEnabled: Bool?
+    public let zoomEnabled: Bool?
+    public let verticalCompressionResistancePriority: String?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -71,7 +86,22 @@ public struct MapView: IBDecodable, ViewProtocol {
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
-            mapType:                                   container.attributeIfPresent(of: .mapType)
+            mapType:                                   container.attributeIfPresent(of: .mapType),
+            multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
+            showsTraffic:                              container.attributeIfPresent(of: .showsTraffic),
+            scrollEnabled:                             container.attributeIfPresent(of: .scrollEnabled),
+            appearanceType:                            container.attributeIfPresent(of: .appearanceType),
+            verticalHuggingPriority:                   container.attributeIfPresent(of: .verticalHuggingPriority),
+            showsCompass:                              container.attributeIfPresent(of: .showsCompass),
+            showsPointsOfInterest:                     container.attributeIfPresent(of: .showsPointsOfInterest),
+            restorationIdentifier:                     container.attributeIfPresent(of: .restorationIdentifier),
+            showsUserLocation:                         container.attributeIfPresent(of: .showsUserLocation),
+            showsScale:                                container.attributeIfPresent(of: .showsScale),
+            showsBuildings:                            container.attributeIfPresent(of: .showsBuildings),
+            pitchEnabled:                              container.attributeIfPresent(of: .pitchEnabled),
+            rotateEnabled:                             container.attributeIfPresent(of: .rotateEnabled),
+            zoomEnabled:                               container.attributeIfPresent(of: .zoomEnabled),
+            verticalCompressionResistancePriority:     container.attributeIfPresent(of: .verticalCompressionResistancePriority)
         )
     }
 }
