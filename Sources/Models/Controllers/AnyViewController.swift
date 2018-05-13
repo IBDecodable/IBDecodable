@@ -11,12 +11,7 @@ import SWXMLHash
 
 public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable, IBUserLabelable {
     var elementClass: String { get }
-    var id: String { get }
-    var customClass: String? { get }
-    var customModule: String? { get }
-    var customModuleProvider: String? { get }
-    var userLabel: String? { get }
-    var colorLabel: String? { get }
+
     var storyboardIdentifier: String? { get }
     var sceneMemberID: String? { get }
     var layoutGuides: [ViewControllerLayoutGuide]? { get }
@@ -26,6 +21,13 @@ public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable, IBUse
     /// The tab bar item that represents the view controller when added to a tab bar controller.
     var tabBarItem: TabBar.TabBarItem? { get }
     var rootView: ViewProtocol? { get }
+    var size: [Size]? { get }
+}
+
+extension ViewControllerProtocol {
+    public var freeFormSize: Size? {
+        return self.with(key: "freeFormSize")
+    }
 }
 
 // MARK: - AnyViewController

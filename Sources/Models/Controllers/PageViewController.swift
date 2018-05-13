@@ -27,6 +27,7 @@ public struct PageViewController: IBDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return view }
     public var varspineLocation: String? // min, max, mid, none
     public var doubleSided: Bool
+    public let size: [Size]?
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
@@ -45,11 +46,12 @@ public struct PageViewController: IBDecodable, ViewControllerProtocol {
             layoutGuides:                 layoutGuidesContainer?.elementsIfPresent(of: .viewControllerLayoutGuide),
             userDefinedRuntimeAttributes: container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                  container.childrenIfPresent(of: .connections),
-            keyCommands:                     container.childrenIfPresent(of: .keyCommands),
+            keyCommands:                  container.childrenIfPresent(of: .keyCommands),
             tabBarItem:                   container.elementIfPresent(of: .tabBarItem),
             view:                         container.elementIfPresent(of: .view),
             varspineLocation:             container.attributeIfPresent(of: .varspineLocation),
-            doubleSided:                  container.attributeIfPresent(of: .doubleSided) ?? false
+            doubleSided:                  container.attributeIfPresent(of: .doubleSided) ?? false,
+            size:                         container.elementsIfPresent(of: .size)
         )
     }
 }
