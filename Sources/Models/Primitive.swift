@@ -163,3 +163,20 @@ public struct IBData: IBDecodable, IBKeyable {
     }
 
 }
+
+// MARK: - TimeZone
+
+public struct IBTimeZone: IBDecodable, IBKeyable {
+
+    public let key: String?
+    public let name: String?
+
+    static func decode(_ xml: XMLIndexer) throws -> IBTimeZone {
+        let container = xml.container(keys: CodingKeys.self)
+        return IBTimeZone(
+            key: container.attributeIfPresent(of: .key),
+            name: container.attributeIfPresent(of: .name)
+        )
+    }
+
+}

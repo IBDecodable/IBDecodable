@@ -90,6 +90,7 @@ public struct Inset: IBDecodable, IBKeyable {
     }
 
 }
+
 // MARK: - EdgeInset
 
 public struct EdgeInset: IBDecodable, IBKeyable {
@@ -108,6 +109,29 @@ public struct EdgeInset: IBDecodable, IBKeyable {
             right:  container.attributeIfPresent(of: .right),
             bottom: container.attributeIfPresent(of: .bottom),
             top:    container.attributeIfPresent(of: .top)
+        )
+    }
+
+}
+
+// MARK: - DirectionalEdgeInsets
+
+public struct DirectionalEdgeInsets: IBDecodable, IBKeyable {
+
+    public let key: String?
+    public let leading: Float?
+    public let bottom: Float?
+    public let trailing: Float?
+    public let top: Float?
+
+    static func decode(_ xml: XMLIndexer) throws -> DirectionalEdgeInsets {
+        let container = xml.container(keys: CodingKeys.self)
+        return DirectionalEdgeInsets(
+            key:      container.attributeIfPresent(of: .key),
+            leading:  container.attributeIfPresent(of: .leading),
+            bottom:   container.attributeIfPresent(of: .bottom),
+            trailing: container.attributeIfPresent(of: .trailing),
+            top:      container.attributeIfPresent(of: .top)
         )
     }
 
