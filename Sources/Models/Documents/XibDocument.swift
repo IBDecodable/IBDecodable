@@ -20,6 +20,7 @@ public struct XibDocument: IBDecodable, InterfaceBuilderDocument {
     public let colorMatched: Bool?
     public let device: Device?
     public let views: [AnyView]?
+    public let resources: [AnyResource]?
     public let placeholders: [Placeholder]?
 
     enum ExternalCodingKeys: CodingKey { case objects }
@@ -41,6 +42,7 @@ public struct XibDocument: IBDecodable, InterfaceBuilderDocument {
             colorMatched:          container.attributeIfPresent(of: .colorMatched),
             device:                container.elementIfPresent(of: .device),
             views:                 externalContainer.childrenIfPresent(of: .objects),
+            resources:             container.childrenIfPresent(of: .resources),
             placeholders:          objectsContainer?.elementsIfPresent(of: .placeholder)
         )
     }
