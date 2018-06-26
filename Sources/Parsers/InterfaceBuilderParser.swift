@@ -59,7 +59,7 @@ public struct InterfaceBuilderParser {
     public enum Error: Swift.Error {
         case invalidFormatFile
         case legacyFormat
-        case parsingError(Swift.Error)
+        case parsingError(ParsingError)
     }
 
 }

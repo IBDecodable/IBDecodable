@@ -229,6 +229,21 @@ class Tests: XCTestCase {
         
     }
 
+    func testStoryboardNotParsable() {
+        let url = self.url(forResource:"StoryboardNotParsable", withExtension: "xml")
+        do {
+            _ = try StoryboardFile(url: url)
+            
+            XCTFail("Must not be parsable")
+        } catch {
+            if case let InterfaceBuilderParser.Error.parsingError(xmlError) = error {
+                XCTAssertEqual(xmlError.line, 13, "error must has specified line")
+            } else {
+                XCTFail("wrong error type \(error)")
+            }
+        }
+    }
+
     // MARK: Utils
 
     lazy var bundle: Bundle = {
