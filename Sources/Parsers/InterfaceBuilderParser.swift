@@ -9,14 +9,15 @@ import SWXMLHash
 import Foundation
 
 private let cocoaTouchKey = "com.apple.InterfaceBuilder3.CocoaTouch.XIB"
-private let cocoaKey = "com.apple.InterfaceBuilder3.Cocoa.XIB"
 
 public struct InterfaceBuilderParser {
 
     private let xmlParser: SWXMLHash
 
-    public init() {
-        xmlParser = SWXMLHash.config({ _ in })
+    public init(detectParsingErrors: Bool = true) {
+        xmlParser = SWXMLHash.config { options in
+            options.detectParsingErrors = detectParsingErrors
+        }
     }
 
     public func parseXib(xml: String) throws -> XibDocument {
@@ -36,6 +37,9 @@ public struct InterfaceBuilderParser {
     }
 
     internal func parseDocument<D: InterfaceBuilderDocument & IBDecodable>(xmlIndexer: XMLIndexer) throws -> D {
+        if case .parsingError(let error) = xmlIndexer {
+            throw Error.parsingError(error)
+        }
         guard let document: XMLIndexer = xmlIndexer.byKey("document") else {
             guard let archive: XMLIndexer = xmlIndexer.byKey("archive"),
                 let type: String = try? archive.attributeValue(of: "type") else {
@@ -45,8 +49,6 @@ public struct InterfaceBuilderParser {
             switch type {
             case cocoaTouchKey:
                 throw Error.legacyFormat
-            case cocoaKey:
-                throw Error.macFormat
             default:
                 throw Error.invalidFormatFile
             }
@@ -57,7 +59,7 @@ public struct InterfaceBuilderParser {
     public enum Error: Swift.Error {
         case invalidFormatFile
         case legacyFormat
-        case macFormat
+        case parsingError(Swift.Error)
     }
 
 }
