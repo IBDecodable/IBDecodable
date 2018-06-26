@@ -161,6 +161,18 @@ class Tests: XCTestCase {
         }
     }
 
+    func testStoryboardReferences() {
+        let url = self.url(forResource:"StoryboardReferences", withExtension: "storyboard")
+        do {
+            let file = try StoryboardFile(url: url)
+            
+            let references = file.document.scenes?.compactMap { $0.viewControllerPlaceholder } ?? []
+            XCTAssertEqual(references.count, 3)
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+
     func testStoryboardAlls() {
         if let urls = urls(withExtension: "storyboard") {
             for url in urls {
@@ -216,6 +228,7 @@ class Tests: XCTestCase {
         }
         
     }
+
     // MARK: Utils
 
     lazy var bundle: Bundle = {

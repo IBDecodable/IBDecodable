@@ -20,7 +20,7 @@ public struct Scene: IBDecodable {
     public let exit: Exit?
 
     enum ExternalCodingKeys: CodingKey { case objects }
-    enum ObjectsCodingKeys: CodingKey { case placeholder, customObject, searchDisplayController }
+    enum ObjectsCodingKeys: CodingKey { case placeholder, customObject, searchDisplayController, viewControllerPlaceholder }
 
     static func decode(_ xml: XMLIndexer) throws -> Scene {
         let externalContainer = xml.container(keys: ExternalCodingKeys.self)
@@ -38,7 +38,7 @@ public struct Scene: IBDecodable {
         return Scene(
             id:                        try container.attribute(of: .id),
             viewController:            externalContainer.childrenIfPresent(of: .objects)?.first,
-            viewControllerPlaceholder: container.elementIfPresent(of: .viewControllerPlaceholder),
+            viewControllerPlaceholder: objectsContainer?.elementIfPresent(of: .viewControllerPlaceholder),
             canvasLocation:            container.elementIfPresent(of: .canvasLocation),
             placeholders:              objectsContainer?.elementsIfPresent(of: .placeholder),
             customObjects:             objectsContainer?.elementsIfPresent(of: .customObject),
