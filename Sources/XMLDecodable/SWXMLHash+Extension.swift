@@ -17,8 +17,10 @@ extension XMLIndexer {
     func attributeValue<T: XMLAttributeDecodable>(of attr: String) throws -> T {
         switch self {
         case .element(let element):
-            guard let attr = element.attribute(by: attr) else { throw XMLDeserializationError.nodeHasNoValue }
-            return try T.decode(attr)
+            guard let attribute = element.attribute(by: attr) else { throw XMLDeserializationError.nodeHasNoValue }
+            let value = try T.decode(attribute)
+            element.allAttributes.removeValue(forKey: attr)
+            return value
         default: throw XMLDeserializationError.implementationIsMissing(method: "attributeValue for stream case")
         }
     }

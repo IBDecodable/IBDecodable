@@ -53,7 +53,32 @@ public struct InterfaceBuilderParser {
                 throw Error.invalidFormatFile
             }
         }
-        return try decodeValue(document)
+        let doc: D = try decodeValue(document)
+        if doc.targetRuntime.os == .iOS {
+            printattr(document)
+        }
+
+        return doc
+    }
+
+    func printattr(_ index: XMLIndexer) {
+        if let element = index.element {
+            if element.name != "simulatedMetricsContainer"
+                &&  element.name != "dependencies" {
+                if  element.name != "document"
+                    &&  element.name != "color" {
+                    let attr = element.allAttributes
+                    if !attr.isEmpty && (index.parsed ?? false) {
+
+                        AttributeMissing.instance.add(element.name, Array(attr.keys))
+                    }
+                }
+
+                for child in index.children {
+                    printattr(child)
+                }
+            }
+        }
     }
 
     public enum Error: Swift.Error {
@@ -62,4 +87,22 @@ public struct InterfaceBuilderParser {
         case parsingError(Swift.Error)
     }
 
+}
+
+public class AttributeMissing {
+    public static let instance: AttributeMissing = AttributeMissing()
+
+    public var values: [String: [String]] = [:]
+
+    func add(_ name: String, _ keys: [String]) {
+        if values[name] == nil {
+            values[name] = []
+        }
+
+        values[name]?.append(contentsOf: keys)
+
+        values[name] = Array(Set(values[name]!))
+
+       // print("\(name): \(keys)")
+    }
 }
