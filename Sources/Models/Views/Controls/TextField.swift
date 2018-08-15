@@ -31,6 +31,7 @@ public struct TextField: IBDecodable, ViewProtocol {
     public let opaque: Bool?
     public let rect: Rect
     public let subviews: [AnyView]?
+    public let text: String?
     public let textAlignment: String?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
@@ -76,6 +77,7 @@ public struct TextField: IBDecodable, ViewProtocol {
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
+            text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),

@@ -22,7 +22,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
     public let userLabel: String?
     public let colorLabel: String?
     public let fixedFrame: Bool?
-    public let image: String
+    public let image: String?
     public let insetsLayoutMarginsFromSafeArea: Bool?
     public let isMisplaced: Bool?
     public let multipleTouchEnabled: Bool?
@@ -64,7 +64,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
             userLabel:                                 container.attributeIfPresent(of: .userLabel),
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             fixedFrame:                                container.attributeIfPresent(of: .fixedFrame),
-            image:                                     try container.attribute(of: .image),
+            image:                                     container.attributeIfPresent(of: .image),
             insetsLayoutMarginsFromSafeArea:           container.attributeIfPresent(of: .insetsLayoutMarginsFromSafeArea),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
