@@ -31,7 +31,7 @@ public struct TextView: IBDecodable, ViewProtocol {
     public let showsHorizontalScrollIndicator: Bool?
     public let showsVerticalScrollIndicator: Bool?
     public let subviews: [AnyView]?
-    public let text: String
+    public let text: String?
     public let textAlignment: String?
     public let textColor: Color?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
@@ -80,7 +80,7 @@ public struct TextView: IBDecodable, ViewProtocol {
             showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
             showsVerticalScrollIndicator:              container.attributeIfPresent(of: .showsVerticalScrollIndicator),
             subviews:                                  container.childrenIfPresent(of: .subviews),
-            text:                                      try container.attribute(of: .text),
+            text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
             textColor:                                 container.elementIfPresent(of: .textColor),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
