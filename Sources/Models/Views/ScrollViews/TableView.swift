@@ -34,7 +34,10 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let sectionHeaderHeight: Float?
     public let separatorStyle: String?
     public let style: String?
-    public let subviews: [AnyView]?
+    private let _subviews: [AnyView]?
+    public var subviews: [AnyView]? {
+        return (_subviews ?? []) + (headersFooters ?? [])
+    }
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
@@ -52,6 +55,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let maximumZoomScale: Float?
     public let minimumZoomScale: Float?
     public let isDirectionalLockEnabled: Bool?
+    public let headersFooters: [AnyView]?
 
     public enum DataMode: XMLAttributeDecodable, KeyDecodable, Equatable {
         case `static`, prototypes
@@ -90,6 +94,8 @@ public struct TableView: IBDecodable, ViewProtocol {
                 case .prototypeCells: return "prototypes"
                 case .isPagingEnabled: return "pagingEnabled"
                 case .isDirectionalLockEnabled: return "directionalLockEnabled"
+                case ._subviews: return "subviews"
+                case .headersFooters: return "view"
                 default: return key.stringValue
                 }
             }()
@@ -120,7 +126,7 @@ public struct TableView: IBDecodable, ViewProtocol {
             sectionHeaderHeight:                       container.attributeIfPresent(of: .sectionHeaderHeight),
             separatorStyle:                            container.attributeIfPresent(of: .separatorStyle),
             style:                                     container.attributeIfPresent(of: .style),
-            subviews:                                  container.childrenIfPresent(of: .subviews),
+            _subviews:                                 container.childrenIfPresent(of: ._subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
@@ -137,7 +143,8 @@ public struct TableView: IBDecodable, ViewProtocol {
             showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
             maximumZoomScale:                          container.attributeIfPresent(of: .maximumZoomScale),
             minimumZoomScale:                          container.attributeIfPresent(of: .minimumZoomScale),
-            isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled)
+            isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled),
+            headersFooters:                            try? container.elements(of: .headersFooters)
         )
     }
 }
