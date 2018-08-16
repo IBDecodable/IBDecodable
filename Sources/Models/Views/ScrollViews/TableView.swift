@@ -144,7 +144,7 @@ public struct TableView: IBDecodable, ViewProtocol {
             maximumZoomScale:                          container.attributeIfPresent(of: .maximumZoomScale),
             minimumZoomScale:                          container.attributeIfPresent(of: .minimumZoomScale),
             isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled),
-            headersFooters:                            try? container.elements(of: .headersFooters)
+            headersFooters:                            container.elementsIfPresent(of: .headersFooters)
         )
     }
 }
