@@ -25,6 +25,7 @@ public struct Switch: IBDecodable, ViewProtocol {
     public let colorLabel: String?
     public let horizontalHuggingPriority: Int?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let on: Bool
     public let onTintColor: Color?
     public let opaque: Bool?
@@ -45,6 +46,7 @@ public struct Switch: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 case .onTintColor: return "color"
                 default: return key.stringValue
                 }
@@ -70,6 +72,7 @@ public struct Switch: IBDecodable, ViewProtocol {
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             on:                                        try container.attribute(of: .on),
             onTintColor:                               container.elementIfPresent(of: .onTintColor),
             opaque:                                    container.attributeIfPresent(of: .opaque),

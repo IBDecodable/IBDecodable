@@ -25,6 +25,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
     public let image: String?
     public let insetsLayoutMarginsFromSafeArea: Bool?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let multipleTouchEnabled: Bool?
     public let opaque: Bool?
     public let rect: Rect
@@ -43,6 +44,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 default: return key.stringValue
                 }
             }()
@@ -67,6 +69,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
             image:                                     container.attributeIfPresent(of: .image),
             insetsLayoutMarginsFromSafeArea:           container.attributeIfPresent(of: .insetsLayoutMarginsFromSafeArea),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),

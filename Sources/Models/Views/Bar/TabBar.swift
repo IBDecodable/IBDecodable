@@ -23,6 +23,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
     public let colorLabel: String?
     public let items: [TabBarItem]?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let opaque: Bool?
     public let rect: Rect
     public let subviews: [AnyView]?
@@ -71,6 +72,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 default: return key.stringValue
                 }
             }()
@@ -94,6 +96,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             items:                                     tabBarItemsContainer?.elementsIfPresent(of: .tabBarItem),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),

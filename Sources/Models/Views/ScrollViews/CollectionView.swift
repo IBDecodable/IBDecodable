@@ -25,6 +25,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
     public let userLabel: String?
     public let colorLabel: String?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let opaque: Bool?
     public let rect: Rect
     public let subviews: [AnyView]?
@@ -56,6 +57,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 case .isPagingEnabled: return "pagingEnabled"
                 case .layout: return "collectionViewLayout"
                 case .flowLayout: return "collectionViewFlowLayout"
@@ -83,6 +85,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             userLabel:                                 container.attributeIfPresent(of: .userLabel),
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
@@ -127,6 +130,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let userLabel: String?
     public let colorLabel: String?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let opaque: Bool?
     public let rect: Rect
     private let _subviews: [AnyView]?
@@ -166,6 +170,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 case ._subviews: return "subview"
                 case .contentView: return "view"
                 default: return key.stringValue
@@ -190,6 +195,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
             userLabel:                                 container.attributeIfPresent(of: .userLabel),
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             _subviews:                                 container.childrenIfPresent(of: ._subviews),

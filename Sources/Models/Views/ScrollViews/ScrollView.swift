@@ -22,6 +22,7 @@ public struct ScrollView: IBDecodable, ViewProtocol {
     public let userLabel: String?
     public let colorLabel: String?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let opaque: Bool?
     public let rect: Rect
     public let subviews: [AnyView]?
@@ -49,6 +50,7 @@ public struct ScrollView: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 case .isPagingEnabled: return "pagingEnabled"
                 case .isDirectionalLockEnabled: return "directionalLockEnabled"
                 default: return key.stringValue
@@ -72,6 +74,7 @@ public struct ScrollView: IBDecodable, ViewProtocol {
             userLabel:                                 container.attributeIfPresent(of: .userLabel),
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),

@@ -29,6 +29,7 @@ public struct Label: IBDecodable, ViewProtocol {
     public let horizontalHuggingPriority: Int?
     public let lineBreakMode: String?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let opaque: Bool?
     public let rect: Rect
     public let subviews: [AnyView]?
@@ -51,6 +52,7 @@ public struct Label: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 case .textColor: return "color"
                 case .attributedText: return "attributedString"
                 default: return key.stringValue
@@ -80,6 +82,7 @@ public struct Label: IBDecodable, ViewProtocol {
             horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
             lineBreakMode:                             container.attributeIfPresent(of: .lineBreakMode),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
