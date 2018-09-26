@@ -27,6 +27,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let dataMode: DataMode?
     public let estimatedRowHeight: Float?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let opaque: Bool?
     public let rect: Rect
     public let rowHeight: Float?
@@ -91,6 +92,7 @@ public struct TableView: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 case .prototypeCells: return "prototypes"
                 case .isPagingEnabled: return "pagingEnabled"
                 case .isDirectionalLockEnabled: return "directionalLockEnabled"
@@ -119,6 +121,7 @@ public struct TableView: IBDecodable, ViewProtocol {
             dataMode:                                  container.attributeIfPresent(of: .dataMode),
             estimatedRowHeight:                        container.attributeIfPresent(of: .estimatedRowHeight),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             rowHeight:                                 container.attributeIfPresent(of: .rowHeight),
@@ -197,6 +200,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let userLabel: String?
     public let colorLabel: String?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let opaque: Bool?
     public let rect: Rect
     private let _subviews: [AnyView]?
@@ -243,6 +247,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
         public let userLabel: String?
         public let colorLabel: String?
         public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
         public let opaque: Bool?
         public let rect: Rect
         public let subviews: [AnyView]?
@@ -257,6 +262,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
                 let stringValue: String = {
                     switch key {
                     case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                     default: return key.stringValue
                     }
                 }()
@@ -278,6 +284,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
                 userLabel:                                 container.attributeIfPresent(of: .userLabel),
                 colorLabel:                                container.attributeIfPresent(of: .colorLabel),
                 isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
                 opaque:                                    container.attributeIfPresent(of: .opaque),
                 rect:                                      try container.element(of: .rect),
                 subviews:                                  container.childrenIfPresent(of: .subviews),
@@ -298,6 +305,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 case ._subviews: return "subview"
                 case .contentView: return "tableViewCellContentView"
                 default: return key.stringValue
@@ -322,6 +330,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
             userLabel:                                 container.attributeIfPresent(of: .userLabel),
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             _subviews:                                 container.childrenIfPresent(of: ._subviews),

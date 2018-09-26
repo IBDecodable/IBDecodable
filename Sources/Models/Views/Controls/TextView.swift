@@ -25,6 +25,7 @@ public struct TextView: IBDecodable, ViewProtocol {
     public let colorLabel: String?
     public let fontDescription: FontDescription?
     public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
     public let opaque: Bool?
     public let rect: Rect
     public let scrollEnabled: Bool?
@@ -49,6 +50,7 @@ public struct TextView: IBDecodable, ViewProtocol {
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
                 case .textColor: return "color"
                 default: return key.stringValue
                 }
@@ -74,6 +76,7 @@ public struct TextView: IBDecodable, ViewProtocol {
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             fontDescription:                           container.elementIfPresent(of: .fontDescription),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      try container.element(of: .rect),
             scrollEnabled:                             container.attributeIfPresent(of: .scrollEnabled),

@@ -173,6 +173,25 @@ class Tests: XCTestCase {
         }
     }
 
+    func testStoryboardWithConstraintErrors() {
+        let url = self.url(forResource: "StoryboardConstraintErrors", withExtension: "storyboard")
+        do {
+            let file = try StoryboardFile(url: url)
+            var ambiguousViews: [IBElement] = []
+            _ = file.document.browse { element -> Bool in
+                guard let view = element as? ViewProtocol, view.isAmbiguous ?? false else {
+                    return true
+                }
+                ambiguousViews.append(element)
+                return true
+            }
+
+            XCTAssertEqual(ambiguousViews.count, 2)
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+
     func testStoryboardAlls() {
         if let urls = urls(withExtension: "storyboard") {
             for url in urls {

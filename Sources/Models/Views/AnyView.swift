@@ -24,6 +24,7 @@ public protocol ViewProtocol: IBIdentifiable, IBKeyable, IBCustomClassable, IBUs
     var userLabel: String? { get }
     var colorLabel: String? { get }
     var isMisplaced: Bool? { get }
+    var isAmbiguous: Bool? { get }
     var opaque: Bool? { get }
     var rect: Rect { get }
     var subviews: [AnyView]? { get }
