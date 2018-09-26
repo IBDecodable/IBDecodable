@@ -129,11 +129,13 @@ public struct AutoresizingMask: IBDecodable, IBKeyable {
 public struct Constraint: IBDecodable, IBIdentifiable {
     public let id: String
     public let constant: Int?
+    public let priority: Int?
     public let multiplier: String?
     public let firstItem: String?
     public let firstAttribute: LayoutAttribute?
     public let secondItem: String?
     public let secondAttribute: LayoutAttribute?
+    public let relation: Relation
 
     public enum LayoutAttribute: XMLAttributeDecodable, KeyDecodable, Equatable {
         case left, right, top, bottom, leading, trailing,
@@ -182,16 +184,34 @@ public struct Constraint: IBDecodable, IBIdentifiable {
         }
     }
 
+    public enum Relation: XMLAttributeDecodable, KeyDecodable, Equatable {
+        case lessThanOrEqual, greaterThanOrEqual, equal
+
+        case other(String)
+
+        public func encode(to encoder: Encoder) throws { fatalError() }
+
+        static func decode(_ attribute: XMLAttribute) throws -> Constraint.Relation {
+            switch attribute.text {
+            case "lessThanOrEqual":    return .lessThanOrEqual
+            case "greaterThanOrEqual": return .greaterThanOrEqual
+            default:                   return .other(attribute.text)
+            }
+        }
+    }
+
     static func decode(_ xml: XMLIndexer) throws -> Constraint {
         let container = xml.container(keys: CodingKeys.self)
         return Constraint(
             id:              try container.attribute(of: .id),
             constant:        container.attributeIfPresent(of: .constant),
+            priority:        container.attributeIfPresent(of: .priority),
             multiplier:      container.attributeIfPresent(of: .multiplier),
             firstItem:       container.attributeIfPresent(of: .firstItem),
             firstAttribute:  container.attributeIfPresent(of: .firstAttribute),
             secondItem:      container.attributeIfPresent(of: .secondItem),
-            secondAttribute: container.attributeIfPresent(of: .secondAttribute)
+            secondAttribute: container.attributeIfPresent(of: .secondAttribute),
+            relation:        container.attributeIfPresent(of: .relation) ?? .equal
         )
     }
 }
