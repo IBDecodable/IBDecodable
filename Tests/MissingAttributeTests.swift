@@ -28,9 +28,9 @@ class MissingAttributeTests: XCTestCase {
             do {
                 let content = try Data(contentsOf: remoteURL)
                 let parser = InterfaceBuilderParser()
-                let (xib, indexer) = try parser.parseDocumentTraverse(data: content, type: XibDocument.self)
+                let (_, indexer) = try parser.parseDocumentTraverse(data: content, type: XibDocument.self)
                 let result = indexer.dump()
-                result.dump()
+                print(result.description)
                 print("success: \(remoteURL)")
             }
             catch let error as InterfaceBuilderParser.Error {
@@ -67,7 +67,7 @@ class MissingAttributeTests: XCTestCase {
             return
         }
         let github = Github(accessToken: token)
-        github.downloadPage(extension: "xib", perPage: 10, handler: { (result) in
+        github.downloadPage(extension: "xib", perPage: 100, handler: { (result) in
             handler(result)
         })
     }
@@ -99,16 +99,16 @@ import enum SWXMLHash.XMLIndexer
 import class SWXMLHash.XMLElement
 import enum SWXMLHash.IndexingError
 
-struct TraverseResult {
+struct TraverseResult: CustomStringConvertible {
     let name: String
     let attributes: [String: String]
     let children: [TraverseResult]
 
-    func dump(depth: Int = 0) {
-        print(
-            "\(Array(repeating: " ", count: depth).joined())\(name): \(attributes)"
-        )
-        children.forEach { $0.dump(depth: depth + 2) }
+    var description: String { return dump() }
+
+    func dump(depth: Int = 0) -> String {
+        let indent = Array(repeating: "-", count: depth).joined()
+        return "\(indent)\(name): \(attributes)\n\(children.map { $0.dump(depth: depth + 2) }.joined())"
     }
 }
 
