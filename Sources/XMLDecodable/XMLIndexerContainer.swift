@@ -30,7 +30,7 @@ class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
 
     let indexer: XMLIndexerType
 
-    fileprivate init(indexer: XMLIndexerType) {
+    init(indexer: XMLIndexerType) {
         self.indexer = indexer
     }
 
