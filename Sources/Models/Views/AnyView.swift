@@ -49,7 +49,7 @@ public struct AnyView: IBDecodable {
     public func encode(to encoder: Encoder) throws { fatalError() }
 
     static func decode(_ xml: XMLIndexerType) throws -> AnyView {
-        guard let elementName = xml.element?.name else {
+        guard let elementName = xml.elementName else {
             throw IBError.elementNotFound
         }
         switch elementName {

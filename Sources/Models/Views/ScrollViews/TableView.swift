@@ -167,7 +167,7 @@ public struct TableViewSection: IBDecodable {
     enum AttributedStringCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> TableViewSection {
-        assert(xml.element?.name == "tableViewSection")
+        assert(xml.elementName == "tableViewSection")
         let container = xml.container(keys: CodingKeys.self)
         let attributedStringContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .attributedString, keys: AttributedStringCodingKeys.self)
