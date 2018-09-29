@@ -12,7 +12,7 @@ public struct Outlet: IBDecodable, ConnectionProtocol {
     public let destination: String
     public let property: String
 
-    static func decode(_ xml: XMLIndexer) throws -> Outlet {
+    static func decode(_ xml: XMLIndexerType) throws -> Outlet {
         let container = xml.container(keys: CodingKeys.self)
         return Outlet(
             id:            try container.attribute(of: .id),

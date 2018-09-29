@@ -22,7 +22,7 @@ public struct Scene: IBDecodable {
     enum ExternalCodingKeys: CodingKey { case objects }
     enum ObjectsCodingKeys: CodingKey { case placeholder, customObject, searchDisplayController, viewControllerPlaceholder }
 
-    static func decode(_ xml: XMLIndexer) throws -> Scene {
+    static func decode(_ xml: XMLIndexerType) throws -> Scene {
         let externalContainer = xml.container(keys: ExternalCodingKeys.self)
         let objectsContainer = externalContainer.nestedContainerIfPresent(of: .objects, keys: ObjectsCodingKeys.self)
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in

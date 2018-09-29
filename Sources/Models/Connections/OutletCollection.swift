@@ -14,7 +14,7 @@ public struct OutletCollection: IBDecodable, ConnectionProtocol {
     public let collectionClass: String?
     public let appends: Bool?
 
-    static func decode(_ xml: XMLIndexer) throws -> OutletCollection {
+    static func decode(_ xml: XMLIndexerType) throws -> OutletCollection {
         let container = xml.container(keys: CodingKeys.self)
         return OutletCollection(
             id:              try container.attribute(of: .id),

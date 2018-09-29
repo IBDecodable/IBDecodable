@@ -30,7 +30,7 @@ public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
-    static func decode(_ xml: XMLIndexer) throws -> AVPlayerViewController {
+    static func decode(_ xml: XMLIndexerType) throws -> AVPlayerViewController {
         let container = xml.container(keys: CodingKeys.self)
         let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return AVPlayerViewController(

@@ -13,7 +13,7 @@ public struct Action: IBDecodable, ConnectionProtocol {
     public let selector: String
     public let eventType: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Action {
+    static func decode(_ xml: XMLIndexerType) throws -> Action {
         let container = xml.container(keys: CodingKeys.self)
         return Action(
             id:          try container.attribute(of: .id),

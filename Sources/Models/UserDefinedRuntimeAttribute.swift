@@ -20,7 +20,7 @@ public struct UserDefinedRuntimeAttribute: IBDecodable {
         case value
     }
 
-    static func decode(_ xml: XMLIndexer) throws -> UserDefinedRuntimeAttribute {
+    static func decode(_ xml: XMLIndexerType) throws -> UserDefinedRuntimeAttribute {
         let container = xml.container(keys: CodingKeys.self)
         let type: String = try container.attribute(of: .type)
         let valueString: String? = container.attributeIfPresent(of: .value)
@@ -72,7 +72,7 @@ public struct Range: IBDecodable {
     public let location: Float
     public let length: Float
 
-    static func decode(_ xml: XMLIndexer) throws -> Range {
+    static func decode(_ xml: XMLIndexerType) throws -> Range {
         let container = xml.container(keys: CodingKeys.self)
         return Range(
             location:      try container.attribute(of: .location),

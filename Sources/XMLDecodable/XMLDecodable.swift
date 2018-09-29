@@ -14,14 +14,14 @@ protocol XMLAttributeDecodable {
 
 protocol XMLDecodable {
 
-    static func decode(_ xml: XMLIndexer) throws -> Self
+    static func decode(_ xml: XMLIndexerType) throws -> Self
 }
 
-func decodeValue<T: XMLDecodable>(_ xml: XMLIndexer) throws -> T {
+func decodeValue<T: XMLDecodable>(_ xml: XMLIndexerType) throws -> T {
     return try T.decode(xml)
 }
 
-func decodeValue<T: XMLDecodable>(_ xml: XMLIndexer) -> T? {
+func decodeValue<T: XMLDecodable>(_ xml: XMLIndexerType) -> T? {
     return try? T.decode(xml)
 }
 

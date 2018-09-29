@@ -18,7 +18,7 @@ public struct InterfaceBuilderParser {
         enum CodingKeys: String, CodingKey { case archiveType = "archive" }
         enum ArchiveCodingKeys: CodingKey { case type }
 
-        static func decode(_ xml: XMLIndexer) throws -> XMLHeader {
+        static func decode(_ xml: XMLIndexerType) throws -> XMLHeader {
             let container = xml.container(keys: CodingKeys.self)
             let archiveContainer = try container.nestedContainer(of: .archiveType, keys: ArchiveCodingKeys.self)
             return try XMLHeader(

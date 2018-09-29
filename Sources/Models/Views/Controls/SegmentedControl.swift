@@ -40,7 +40,7 @@ public struct SegmentedControl: IBDecodable, ViewProtocol {
     public struct Segment: IBDecodable {
         public let title: String
 
-        static func decode(_ xml: XMLIndexer) throws -> SegmentedControl.Segment {
+        static func decode(_ xml: XMLIndexerType) throws -> SegmentedControl.Segment {
             let container = xml.container(keys: CodingKeys.self)
             return try Segment(title: container.attribute(of: .title))
         }
@@ -50,7 +50,7 @@ public struct SegmentedControl: IBDecodable, ViewProtocol {
     enum VariationCodingKey: CodingKey { case variation }
     enum SegmentsCodingKeys: CodingKey { case segment }
 
-    static func decode(_ xml: XMLIndexer) throws -> SegmentedControl {
+    static func decode(_ xml: XMLIndexerType) throws -> SegmentedControl {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {

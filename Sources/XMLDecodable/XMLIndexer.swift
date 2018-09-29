@@ -5,4 +5,6 @@
 //  Created by Yuta Saito on 2018/09/29.
 //
 
-import Foundation
+protocol XMLIndexerType {
+    func container<K>(keys: K.Type) -> XMLIndexerContainer<K>
+}

@@ -14,7 +14,7 @@ public struct Exit: IBDecodable, IBIdentifiable, IBUserLabelable {
     public let colorLabel: String?
     public let sceneMemberID: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Exit {
+    static func decode(_ xml: XMLIndexerType) throws -> Exit {
         let container = xml.container(keys: CodingKeys.self)
         return Exit(
             id:            try container.attribute(of: .id),

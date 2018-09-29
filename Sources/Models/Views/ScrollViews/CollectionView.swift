@@ -52,7 +52,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> CollectionView {
+    static func decode(_ xml: XMLIndexerType) throws -> CollectionView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -165,7 +165,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> CollectionViewCell {
+    static func decode(_ xml: XMLIndexerType) throws -> CollectionViewCell {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -221,7 +221,7 @@ public struct CollectionViewLayout: IBDecodable, IBIdentifiable, IBKeyable, IBCu
     public let userLabel: String?
     public let colorLabel: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> CollectionViewLayout {
+    static func decode(_ xml: XMLIndexerType) throws -> CollectionViewLayout {
         let container = xml.container(keys: CodingKeys.self)
         return CollectionViewLayout(
             id:                       try container.attribute(of: .id),
@@ -250,7 +250,7 @@ public struct CollectionViewFlowLayout: IBDecodable, IBIdentifiable, IBKeyable {
     public let customModuleProvider: String?
     public let scrollDirection: String? // vertical, horizontal
 
-    static func decode(_ xml: XMLIndexer) throws -> CollectionViewFlowLayout {
+    static func decode(_ xml: XMLIndexerType) throws -> CollectionViewFlowLayout {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {

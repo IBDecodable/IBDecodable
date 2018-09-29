@@ -44,7 +44,7 @@ public struct Button: IBDecodable, ViewProtocol {
         public let title: String
         public let color: Color?
 
-        static func decode(_ xml: XMLIndexer) throws -> Button.State {
+        static func decode(_ xml: XMLIndexerType) throws -> Button.State {
             let container = xml.container(keys: CodingKeys.self)
             return State.init(
                 key:   try container.attribute(of: .key),
@@ -57,7 +57,7 @@ public struct Button: IBDecodable, ViewProtocol {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> Button {
+    static func decode(_ xml: XMLIndexerType) throws -> Button {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {

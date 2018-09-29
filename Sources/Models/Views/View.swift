@@ -37,7 +37,7 @@ public struct View: IBDecodable, ViewProtocol {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> View {
+    static func decode(_ xml: XMLIndexerType) throws -> View {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -84,7 +84,7 @@ public struct LayoutGuide: IBDecodable {
     public let key: String
     public let id: String
 
-    static func decode(_ xml: XMLIndexer) throws -> LayoutGuide {
+    static func decode(_ xml: XMLIndexerType) throws -> LayoutGuide {
         let container = xml.container(keys: CodingKeys.self)
         return try LayoutGuide(
             key: container.attribute(of: .key),

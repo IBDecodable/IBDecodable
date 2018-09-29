@@ -46,7 +46,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
         public let userLabel: String?
         public let colorLabel: String?
 
-        static func decode(_ xml: XMLIndexer) throws -> TabBar.TabBarItem {
+        static func decode(_ xml: XMLIndexerType) throws -> TabBar.TabBarItem {
             let container = xml.container(keys: CodingKeys.self)
             return TabBarItem(
                 id:         try container.attribute(of: .id),
@@ -67,7 +67,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
     enum VariationCodingKey: CodingKey { case variation }
     enum TabBarItemsCodingKeys: CodingKey { case tabBarItem }
 
-    static func decode(_ xml: XMLIndexer) throws -> TabBar {
+    static func decode(_ xml: XMLIndexerType) throws -> TabBar {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {

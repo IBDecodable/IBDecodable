@@ -30,7 +30,7 @@ public struct CollectionViewController: IBDecodable, ViewControllerProtocol {
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
-    static func decode(_ xml: XMLIndexer) throws -> CollectionViewController {
+    static func decode(_ xml: XMLIndexerType) throws -> CollectionViewController {
         let container = xml.container(keys: CodingKeys.self)
         let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return CollectionViewController(

@@ -12,7 +12,7 @@ public struct AttributedString: IBDecodable, IBKeyable {
     public let key: String?
     public let fragments: [Fragment]?
 
-    static func decode(_ xml: XMLIndexer) throws -> AttributedString {
+    static func decode(_ xml: XMLIndexerType) throws -> AttributedString {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -32,7 +32,7 @@ public struct AttributedString: IBDecodable, IBKeyable {
         public let content: String
         public let attributes: [AnyAttribute]?
 
-        static func decode(_ xml: XMLIndexer) throws -> Fragment {
+        static func decode(_ xml: XMLIndexerType) throws -> Fragment {
             let container = xml.container(keys: CodingKeys.self)
             return Fragment(
                 content:      try container.attribute(of: .content),
@@ -61,7 +61,7 @@ public struct AnyAttribute: IBDecodable {
 
     public func encode(to encoder: Encoder) throws { fatalError() }
 
-    static func decode(_ xml: XMLIndexer) throws -> AnyAttribute {
+    static func decode(_ xml: XMLIndexerType) throws -> AnyAttribute {
         guard let elementName = xml.element?.name else {
             throw IBError.elementNotFound
         }
@@ -91,7 +91,7 @@ public struct Font: IBDecodable, AttributeProtocol {
     public let name: String?
     public let metaFont: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Font {
+    static func decode(_ xml: XMLIndexerType) throws -> Font {
         let container = xml.container(keys: CodingKeys.self)
         return Font(
             key:        container.attributeIfPresent(of: .key),
@@ -113,7 +113,7 @@ public struct ParagraphStyle: IBDecodable, AttributeProtocol {
     public let tighteningFactorForTruncation: String?
     public let allowsDefaultTighteningForTruncation: Bool?
 
-    static func decode(_ xml: XMLIndexer) throws -> ParagraphStyle {
+    static func decode(_ xml: XMLIndexerType) throws -> ParagraphStyle {
         let container = xml.container(keys: CodingKeys.self)
         return ParagraphStyle(
             key:                                   container.attributeIfPresent(of: .key),

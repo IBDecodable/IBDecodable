@@ -26,7 +26,7 @@ public struct XibDocument: IBDecodable, InterfaceBuilderDocument {
     enum ExternalCodingKeys: CodingKey { case objects }
     enum ObjectsCodingKeys: CodingKey { case placeholder }
 
-    static func decode(_ xml: XMLIndexer) throws -> XibDocument {
+    static func decode(_ xml: XMLIndexerType) throws -> XibDocument {
         let container = xml.container(keys: CodingKeys.self)
         let externalContainer = xml.container(keys: ExternalCodingKeys.self)
         let objectsContainer = externalContainer.nestedContainerIfPresent(of: .objects, keys: ObjectsCodingKeys.self)

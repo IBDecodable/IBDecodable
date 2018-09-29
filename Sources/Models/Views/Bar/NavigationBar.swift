@@ -46,7 +46,7 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
         public let userLabel: String?
         public let colorLabel: String?
 
-        static func decode(_ xml: XMLIndexer) throws -> NavigationBar.NavigationItem {
+        static func decode(_ xml: XMLIndexerType) throws -> NavigationBar.NavigationItem {
             let container = xml.container(keys: CodingKeys.self)
             return NavigationItem(
                 id:         try container.attribute(of: .id),
@@ -67,7 +67,7 @@ public struct NavigationBar: IBDecodable, ViewProtocol {
     enum VariationCodingKey: CodingKey { case variation }
     enum NavigationItemsCodingKeys: CodingKey { case navigationItem }
 
-    static func decode(_ xml: XMLIndexer) throws -> NavigationBar {
+    static func decode(_ xml: XMLIndexerType) throws -> NavigationBar {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {

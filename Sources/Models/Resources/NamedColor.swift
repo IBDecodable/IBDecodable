@@ -11,7 +11,7 @@ public struct NamedColor: IBDecodable, ResourceProtocol {
     public let name: String
     public let color: Color?
 
-    static func decode(_ xml: XMLIndexer) throws -> NamedColor {
+    static func decode(_ xml: XMLIndexerType) throws -> NamedColor {
         let container = xml.container(keys: CodingKeys.self)
         return NamedColor(
             name:    try container.attribute(of: .name),

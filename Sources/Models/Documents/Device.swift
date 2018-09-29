@@ -13,7 +13,7 @@ public struct Device: IBDecodable, IBIdentifiable {
     public let orientation: String?
     public let adaptation: Adaptation?
 
-    static func decode(_ xml: XMLIndexer) throws -> Device {
+    static func decode(_ xml: XMLIndexerType) throws -> Device {
         let container = xml.container(keys: CodingKeys.self)
         return Device(
             id:          try container.attribute(of: .id),
@@ -26,7 +26,7 @@ public struct Device: IBDecodable, IBIdentifiable {
 
         public let id: String
 
-        static func decode(_ xml: XMLIndexer) throws -> Adaptation {
+        static func decode(_ xml: XMLIndexerType) throws -> Adaptation {
             let container = xml.container(keys: CodingKeys.self)
             return Adaptation(
                 id:  try container.attribute(of: .id)

@@ -18,7 +18,7 @@ public struct Accessibility: IBDecodable, IBKeyable {
     enum ExternalCodingKeys: CodingKey { case accessibilityTraits, bool }
     enum AttributedStringCodingKeys: CodingKey { case key }
 
-    static func decode(_ xml: XMLIndexer) throws -> Accessibility {
+    static func decode(_ xml: XMLIndexerType) throws -> Accessibility {
         let container = xml.container(keys: CodingKeys.self)
         let accessibilityTraitsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .accessibilityTraits, keys: AttributedStringCodingKeys.self)
@@ -44,7 +44,7 @@ public struct AccessibilityTraits: IBDecodable, IBKeyable {
     public let staticText: Bool
     public let header: Bool
 
-    static func decode(_ xml: XMLIndexer) throws -> AccessibilityTraits {
+    static func decode(_ xml: XMLIndexerType) throws -> AccessibilityTraits {
         let container = xml.container(keys: CodingKeys.self)
         return AccessibilityTraits(
             key: container.attributeIfPresent(of: .key),

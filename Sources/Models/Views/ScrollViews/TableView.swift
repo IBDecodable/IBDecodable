@@ -87,7 +87,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> TableView {
+    static func decode(_ xml: XMLIndexerType) throws -> TableView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -166,7 +166,7 @@ public struct TableViewSection: IBDecodable {
     enum ExternalCodingKeys: CodingKey { case attributedString }
     enum AttributedStringCodingKeys: CodingKey { case key }
 
-    static func decode(_ xml: XMLIndexer) throws -> TableViewSection {
+    static func decode(_ xml: XMLIndexerType) throws -> TableViewSection {
         assert(xml.element?.name == "tableViewSection")
         let container = xml.container(keys: CodingKeys.self)
         let attributedStringContainer = xml.container(keys: ExternalCodingKeys.self)
@@ -257,7 +257,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
         public let connections: [AnyConnection]?
         public let variations: [Variation]?
 
-        static func decode(_ xml: XMLIndexer) throws -> TableViewCell.TableViewContentView {
+        static func decode(_ xml: XMLIndexerType) throws -> TableViewCell.TableViewContentView {
             let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
                 let stringValue: String = {
                     switch key {
@@ -300,7 +300,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> TableViewCell {
+    static func decode(_ xml: XMLIndexerType) throws -> TableViewCell {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {

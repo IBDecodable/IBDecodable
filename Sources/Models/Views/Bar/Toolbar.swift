@@ -39,7 +39,7 @@ public struct Toolbar: IBDecodable, ViewProtocol {
         public let systemItem: String?
         public let title: String?
 
-        static func decode(_ xml: XMLIndexer) throws -> Toolbar.BarButtonItem {
+        static func decode(_ xml: XMLIndexerType) throws -> Toolbar.BarButtonItem {
             let container = xml.container(keys: CodingKeys.self)
             return BarButtonItem(
                 id:         try container.attribute(of: .id),
@@ -54,7 +54,7 @@ public struct Toolbar: IBDecodable, ViewProtocol {
     enum VariationCodingKey: CodingKey { case variation }
     enum NavigationItemsCodingKeys: CodingKey { case navigationItem }
 
-    static func decode(_ xml: XMLIndexer) throws -> Toolbar {
+    static func decode(_ xml: XMLIndexerType) throws -> Toolbar {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {

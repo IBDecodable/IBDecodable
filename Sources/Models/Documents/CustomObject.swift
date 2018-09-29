@@ -16,7 +16,7 @@ public struct CustomObject: IBDecodable, IBIdentifiable, IBCustomClassable {
     public let userLabel: String?
     public let colorLabel: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> CustomObject {
+    static func decode(_ xml: XMLIndexerType) throws -> CustomObject {
         let container = xml.container(keys: CodingKeys.self)
         return CustomObject(
             id:                    try container.attribute(of: .id),
