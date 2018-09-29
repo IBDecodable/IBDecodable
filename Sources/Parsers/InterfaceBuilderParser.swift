@@ -12,6 +12,21 @@ private let cocoaTouchKey = "com.apple.InterfaceBuilder3.CocoaTouch.XIB"
 
 public struct InterfaceBuilderParser {
 
+    struct XMLHeader: XMLDecodable, KeyDecodable {
+        let archiveType: String
+
+        enum CodingKeys: String, CodingKey { case archiveType = "archive" }
+        enum ArchiveCodingKeys: CodingKey { case type }
+
+        static func decode(_ xml: XMLIndexer) throws -> XMLHeader {
+            let container = xml.container(keys: CodingKeys.self)
+            let archiveContainer = try container.nestedContainer(of: .archiveType, keys: ArchiveCodingKeys.self)
+            return try XMLHeader(
+                archiveType: archiveContainer.attribute(of: .type)
+            )
+        }
+    }
+
     private let xmlParser: SWXMLHash
 
     public init(detectParsingErrors: Bool = true) {
@@ -36,24 +51,24 @@ public struct InterfaceBuilderParser {
         return try parseDocument(xmlIndexer: xmlParser.parse(data))
     }
 
+    enum Keys: CodingKey { case document }
+
     internal func parseDocument<D: InterfaceBuilderDocument & IBDecodable>(xmlIndexer: XMLIndexer) throws -> D {
         if case .parsingError(let error) = xmlIndexer {
             throw Error.parsingError(error)
         }
-        guard let document: XMLIndexer = xmlIndexer.byKey("document") else {
-            guard let archive: XMLIndexer = xmlIndexer.byKey("archive"),
-                let type: String = try? archive.attributeValue(of: "type") else {
-                    throw Error.invalidFormatFile
-            }
-
-            switch type {
+        let container = xmlIndexer.container(keys: Keys.self)
+        do {
+            return try container.element(of: .document)
+        } catch {
+            let xmlHeader: XMLHeader = try decodeValue(xmlIndexer)
+            switch xmlHeader.archiveType {
             case cocoaTouchKey:
                 throw Error.legacyFormat
             default:
                 throw Error.invalidFormatFile
             }
         }
-        return try decodeValue(document)
     }
 
     public enum Error: Swift.Error {
