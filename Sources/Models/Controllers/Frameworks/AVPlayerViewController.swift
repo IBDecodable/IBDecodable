@@ -47,7 +47,7 @@ public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
             connections:          container.childrenIfPresent(of: .connections),
             keyCommands:          container.childrenIfPresent(of: .keyCommands),
             tabBarItem:           container.elementIfPresent(of: .tabBarItem),
-            view:                 xml.children.first.flatMap(decodeValue),
+            view:                 xml.childrenElements.first.flatMap(decodeValue),
             videoGravity:         container.attributeIfPresent(of: .videoGravity),
             size:                 container.elementsIfPresent(of: .size)
         )

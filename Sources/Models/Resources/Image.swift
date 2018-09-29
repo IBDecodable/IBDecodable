@@ -31,6 +31,6 @@ public struct MutableData: IBDecodable {
         let container = xml.container(keys: CodingKeys.self)
         return MutableData(
             key:      try container.attribute(of: .key),
-            content:  xml.element?.text)
+            content:  xml.elementText)
     }
 }

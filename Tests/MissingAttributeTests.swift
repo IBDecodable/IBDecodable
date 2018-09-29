@@ -29,6 +29,14 @@ class MissingAttributeTests: XCTestCase {
                 _ = try XibFile(url: remoteURL)
                 print("success: \(remoteURL)")
             }
+            catch let error as InterfaceBuilderParser.Error {
+                switch error {
+                case .legacyFormat: return
+                case .macFormat: return
+                default:
+                    XCTFail("error: \(remoteURL): \(error)")
+                }
+            }
             catch {
                 XCTFail("error: \(remoteURL): \(error)")
             }
@@ -55,7 +63,7 @@ class MissingAttributeTests: XCTestCase {
             return
         }
         let github = Github(accessToken: token)
-        github.downloadPage(extension: "xib", handler: { (result) in
+        github.downloadPage(extension: "xib", perPage: 10, handler: { (result) in
             handler(result)
         })
     }

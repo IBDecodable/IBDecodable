@@ -32,9 +32,9 @@ public struct UserDefinedRuntimeAttribute: IBDecodable {
             let color: Color? = xml.byKey("color").flatMap(decodeValue)
             value = color
         case "number":
-            if let integer: XMLIndexer = xml.byKey("integer") {
+            if let integer: XMLIndexerType = xml.byKey("integer") {
                 value = Int(try integer.attributeValue(of: "value") as String)
-            } else  if let real: XMLIndexer = xml.byKey("real") {
+            } else  if let real: XMLIndexerType = xml.byKey("real") {
                 value = Double(try real.attributeValue(of: "value") as String)
             }
         case "rect":
