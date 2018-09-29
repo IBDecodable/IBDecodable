@@ -28,7 +28,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
     public let isAmbiguous: Bool?
     public let multipleTouchEnabled: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
@@ -72,7 +72,7 @@ public struct ImageView: IBDecodable, ViewProtocol {
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),

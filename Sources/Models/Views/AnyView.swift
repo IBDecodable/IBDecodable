@@ -26,7 +26,7 @@ public protocol ViewProtocol: IBIdentifiable, IBKeyable, IBCustomClassable, IBUs
     var isMisplaced: Bool? { get }
     var isAmbiguous: Bool? { get }
     var opaque: Bool? { get }
-    var rect: Rect { get }
+    var rect: Rect? { get }
     var subviews: [AnyView]? { get }
     var translatesAutoresizingMaskIntoConstraints: Bool? { get }
     var userInteractionEnabled: Bool? { get }

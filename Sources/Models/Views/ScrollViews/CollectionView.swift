@@ -27,7 +27,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
@@ -87,7 +87,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
@@ -132,7 +132,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     private let _subviews: [AnyView]?
     public var subviews: [AnyView]? {
         return (_subviews ?? []) + [AnyView(contentView)]
@@ -146,7 +146,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
 
     public var children: [IBElement] {
         // do not let default implementation which lead to duplicate element contentView
-        var children: [IBElement] = [contentView] + [rect]
+        var children: [IBElement] = [contentView] + (rect.map { [$0] } ?? [])
         if let elements = constraints {
             children += elements as [IBElement]
         }
@@ -197,7 +197,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             _subviews:                                 container.childrenIfPresent(of: ._subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),

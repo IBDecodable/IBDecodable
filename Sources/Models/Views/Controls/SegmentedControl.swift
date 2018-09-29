@@ -26,7 +26,7 @@ public struct SegmentedControl: IBDecodable, ViewProtocol {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let segmentControlStyle: String?
     public let segments: [Segment]
     public let selectedSegmentIndex: Int?
@@ -82,7 +82,7 @@ public struct SegmentedControl: IBDecodable, ViewProtocol {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             segmentControlStyle:                       container.attributeIfPresent(of: .segmentControlStyle),
             segments:                                  try segmentsContainer?.elements(of: .segment) ?? [],
             selectedSegmentIndex:                      container.attributeIfPresent(of: .selectedSegmentIndex),
