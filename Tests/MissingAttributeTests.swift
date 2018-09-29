@@ -26,7 +26,11 @@ class MissingAttributeTests: XCTestCase {
 
         func testFile(remoteURL: URL) {
             do {
-                _ = try XibFile(url: remoteURL)
+                let content = try Data(contentsOf: remoteURL)
+                let parser = InterfaceBuilderParser()
+                let (xib, indexer) = try parser.parseDocumentTraverse(data: content, type: XibDocument.self)
+                let result = indexer.dump()
+                result.dump()
                 print("success: \(remoteURL)")
             }
             catch let error as InterfaceBuilderParser.Error {
@@ -81,5 +85,165 @@ class MissingAttributeTests: XCTestCase {
             includingPropertiesForKeys: nil,
             options: []
         )
+    }
+}
+
+extension InterfaceBuilderParser {
+    internal func parseDocumentTraverse<D: InterfaceBuilderDocument & IBDecodable>(data: Data, type: D.Type) throws -> (D, TraverseXMLIndexer) {
+        let indexer = TraverseXMLIndexer(indexer: xmlParser.parse(data))
+        return (try parseDocument(xmlIndexer: indexer), indexer)
+    }
+}
+
+import enum SWXMLHash.XMLIndexer
+import class SWXMLHash.XMLElement
+import enum SWXMLHash.IndexingError
+
+struct TraverseResult {
+    let name: String
+    let attributes: [String: String]
+    let children: [TraverseResult]
+
+    func dump(depth: Int = 0) {
+        print(
+            "\(Array(repeating: " ", count: depth).joined())\(name): \(attributes)"
+        )
+        children.forEach { $0.dump(depth: depth + 2) }
+    }
+}
+
+class TraverseXMLIndexer: XMLIndexerType {
+    var elementName: String? { return indexer.elementName }
+    var elementText: String? { return indexer.elementText }
+
+
+    let childrenElements: [XMLIndexerType]
+    let allElements: [XMLIndexerType]
+
+    let indexer: XMLIndexer
+    var attributes: [String: String]
+    var allElementNames: [String]
+
+    let all: [TraverseXMLIndexer]
+    let children: [TraverseXMLIndexer]
+
+    init(indexer: XMLIndexer) {
+        self.indexer = indexer
+        self.attributes = indexer.element?.allAttributes.mapValues { $0.text } ?? [:]
+        self.allElementNames = indexer.allElements.compactMap { $0.elementName }
+        self.all = indexer.all
+            .filter { !($0.element === indexer.element) }
+            .map(TraverseXMLIndexer.init(indexer: ))
+        self.children = indexer.children.map(TraverseXMLIndexer.init(indexer: ))
+        allElements = indexer.allElements
+        childrenElements = indexer.childrenElements
+    }
+
+    func container<K>(keys: K.Type) -> XMLIndexerContainer<K> where K : CodingKey {
+        return TraverseXMLIndexerContainer<K>(traverseIndexer: self)
+    }
+
+    func byKey(_ key: String) throws -> XMLIndexerType {
+        if let index = allElementNames.index(of: key) {
+            allElementNames.remove(at: index)
+        }
+        guard let element = children.first(where: { $0.elementName! == key }) else {
+            throw IndexingError.key(key: key)
+        }
+        return element
+    }
+
+    func byKey(_ key: String) -> XMLIndexerType? {
+        if let index = allElementNames.index(of: key) {
+            allElementNames.remove(at: index)
+        }
+        return children.first { $0.elementName! == key }
+    }
+
+    func attributeValue<T>(of attr: String) throws -> T where T : XMLAttributeDecodable {
+        if let index = attributes.index(forKey: attr) {
+            attributes.remove(at: index)
+        }
+        return try indexer.attributeValue(of: attr)
+    }
+
+    func attributeValue<T>(of attr: String) -> T? where T : XMLAttributeDecodable {
+        if let index = attributes.index(forKey: attr) {
+            attributes.remove(at: index)
+        }
+        return indexer.attributeValue(of: attr)
+    }
+
+    func withAttribute(_ attr: String, _ value: String) throws -> XMLIndexerType {
+        if let index = attributes.index(forKey: attr) {
+            attributes.remove(at: index)
+        }
+        let element: XMLElement = try indexer.withAttribute(attr, value).element!
+        return children.first(where: { $0.indexer.element! === element })!
+    }
+
+    func withAttribute(_ attr: String, _ value: String) -> XMLIndexerType? {
+        if let index = attributes.index(forKey: attr) {
+            attributes.remove(at: index)
+        }
+        let element: XMLElement?? = try? indexer.withAttribute(attr, value).element
+        return element.flatMap { elm in children.first(where: { $0.indexer.element! === elm! }) }
+    }
+
+
+    func dump() -> TraverseResult {
+        return TraverseResult(
+            name: elementName!,
+            attributes: attributes,
+            children: children.map { $0.dump() }
+        )
+    }
+}
+
+class TraverseXMLIndexerContainer<K: CodingKey>: XMLIndexerContainer<K> {
+
+    let traverseIndexer: TraverseXMLIndexer
+
+    init(traverseIndexer: TraverseXMLIndexer) {
+        self.traverseIndexer = traverseIndexer
+        super.init(indexer: traverseIndexer)
+    }
+
+    override func elements<T>(of key: K) throws -> [T] where T: XMLDecodable {
+        let nestedIndexer: XMLIndexerType = try indexer.byKey(key.stringValue)
+        return try (nestedIndexer as! TraverseXMLIndexer).all.map(decodeValue)
+    }
+
+    override func children<T>(of key: K) throws -> [T] where T: XMLDecodable {
+        let nestedIndexer: XMLIndexerType = try indexer.byKey(key.stringValue)
+        return try (nestedIndexer as! TraverseXMLIndexer).children.map(decodeValue)
+    }
+
+    override func childrenIfPresent<T>(of key: K) -> [T]? where T: XMLDecodable {
+        guard let nestedIndexer: XMLIndexerType = indexer.byKey(key.stringValue) else {
+            return nil
+        }
+        return (nestedIndexer as! TraverseXMLIndexer).children.compactMap(decodeValue)
+    }
+
+    override func withAttributeElements<T>(_ attr: K, _ value: String) -> [T]? where T : XMLDecodable {
+        let elements: [TraverseXMLIndexer]? = indexer.withAttribute(attr.stringValue, value)
+            .map { $0 as! TraverseXMLIndexer }?.all
+        return elements?.compactMap(decodeValue)
+    }
+
+    override func nestedContainer<A>(of key: K, keys: A.Type) throws -> XMLIndexerContainer<A> {
+        let nestedIndexer: XMLIndexerType = try indexer.byKey(key.stringValue)
+        return TraverseXMLIndexerContainer<A>(traverseIndexer: nestedIndexer as! TraverseXMLIndexer)
+    }
+
+    override func nestedContainerIfPresent<A>(of key: K, keys: A.Type) -> XMLIndexerContainer<A>? {
+        return try? nestedContainer(of: key, keys: keys)
+    }
+
+    override func nestedContainers<A>(of key: K, keys: A.Type) throws -> [XMLIndexerContainer<A>] {
+        let nestedIndexer: XMLIndexerType = try indexer.byKey(key.stringValue)
+        let elements = (nestedIndexer as! TraverseXMLIndexer).all
+        return elements.map(TraverseXMLIndexerContainer<A>.init)
     }
 }

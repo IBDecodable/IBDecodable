@@ -28,7 +28,7 @@ protocol XMLIndexerContainerType {
 
 class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
 
-    private let indexer: XMLIndexerType
+    let indexer: XMLIndexerType
 
     fileprivate init(indexer: XMLIndexerType) {
         self.indexer = indexer

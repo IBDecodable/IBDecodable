@@ -28,7 +28,7 @@ public struct InterfaceBuilderParser {
         }
     }
 
-    private let xmlParser: SWXMLHash
+    let xmlParser: SWXMLHash
 
     public init(detectParsingErrors: Bool = true) {
         xmlParser = SWXMLHash.config { options in
