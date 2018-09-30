@@ -56,7 +56,7 @@ class MissingAttributeTests: XCTestCase {
                 XCTFail("\(error)")
             }
         }
-        waitForExpectations(timeout: 100) { (error) in
+        waitForExpectations(timeout: 300) { (error) in
             _ = error.map { XCTFail("\($0)") }
         }
     }
