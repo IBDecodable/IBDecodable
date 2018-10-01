@@ -63,7 +63,7 @@ class MissingAttributeTests: XCTestCase {
 
     func fetchSample(handler: @escaping (Result<Github.Response>) -> Void) {
         guard let token = ProcessInfo.processInfo.environment["GITHUB_ACCESS_TOKEN"] else {
-            XCTFail("You must define env var GITHUB_ACCESS_TOKEN")
+            handler(.failed(Error.missingAccessToken))
             return
         }
         let github = Github(accessToken: token)
@@ -85,6 +85,10 @@ class MissingAttributeTests: XCTestCase {
             includingPropertiesForKeys: nil,
             options: []
         )
+    }
+
+    enum Error: Swift.Error {
+        case missingAccessToken
     }
 }
 
