@@ -13,7 +13,7 @@ public struct Image: IBDecodable, ResourceProtocol {
     public let height: String
     public let mutableData: MutableData?
 
-    static func decode(_ xml: XMLIndexer) throws -> Image {
+    static func decode(_ xml: XMLIndexerType) throws -> Image {
         let container = xml.container(keys: CodingKeys.self)
         return Image(
             name:          try container.attribute(of: .name),
@@ -27,10 +27,10 @@ public struct MutableData: IBDecodable {
     public let key: String
     public let content: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> MutableData {
+    static func decode(_ xml: XMLIndexerType) throws -> MutableData {
         let container = xml.container(keys: CodingKeys.self)
         return MutableData(
             key:      try container.attribute(of: .key),
-            content:  xml.element?.text)
+            content:  xml.elementText)
     }
 }

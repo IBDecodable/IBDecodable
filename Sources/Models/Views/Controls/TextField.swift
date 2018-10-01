@@ -30,7 +30,7 @@ public struct TextField: IBDecodable, ViewProtocol {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let subviews: [AnyView]?
     public let text: String?
     public let textAlignment: String?
@@ -43,7 +43,7 @@ public struct TextField: IBDecodable, ViewProtocol {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> TextField {
+    static func decode(_ xml: XMLIndexerType) throws -> TextField {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -78,7 +78,7 @@ public struct TextField: IBDecodable, ViewProtocol {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),

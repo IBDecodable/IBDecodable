@@ -31,7 +31,7 @@ public struct Label: IBDecodable, ViewProtocol {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let subviews: [AnyView]?
     public let text: String?
     public let textAlignment: String?
@@ -47,7 +47,7 @@ public struct Label: IBDecodable, ViewProtocol {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> Label {
+    static func decode(_ xml: XMLIndexerType) throws -> Label {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -84,7 +84,7 @@ public struct Label: IBDecodable, ViewProtocol {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
@@ -109,7 +109,7 @@ public struct FontDescription: IBDecodable, IBKeyable {
     public let pointSize: Float
     public let weight: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> FontDescription {
+    static func decode(_ xml: XMLIndexerType) throws -> FontDescription {
         let container = xml.container(keys: CodingKeys.self)
         return FontDescription(
             key:       container.attributeIfPresent(of: .key),

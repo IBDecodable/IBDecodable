@@ -25,7 +25,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
@@ -46,7 +46,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
         public let userLabel: String?
         public let colorLabel: String?
 
-        static func decode(_ xml: XMLIndexer) throws -> TabBar.TabBarItem {
+        static func decode(_ xml: XMLIndexerType) throws -> TabBar.TabBarItem {
             let container = xml.container(keys: CodingKeys.self)
             return TabBarItem(
                 id:         try container.attribute(of: .id),
@@ -67,7 +67,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
     enum VariationCodingKey: CodingKey { case variation }
     enum TabBarItemsCodingKeys: CodingKey { case tabBarItem }
 
-    static func decode(_ xml: XMLIndexer) throws -> TabBar {
+    static func decode(_ xml: XMLIndexerType) throws -> TabBar {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -98,7 +98,7 @@ public struct TabBar: IBDecodable, ViewProtocol {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),

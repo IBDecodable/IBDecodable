@@ -14,7 +14,7 @@ public struct Segue: IBDecodable, ConnectionProtocol {
     public let relationship: String?
     public let identifier: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Segue {
+    static func decode(_ xml: XMLIndexerType) throws -> Segue {
         let container = xml.container(keys: CodingKeys.self)
         return Segue(
             id:            try container.attribute(of: .id),

@@ -42,8 +42,8 @@ public struct AnyViewController: IBDecodable {
 
     public func encode(to encoder: Encoder) throws { fatalError() }
 
-    static func decode(_ xml: XMLIndexer) throws -> AnyViewController {
-        guard let elementName = xml.element?.name else {
+    static func decode(_ xml: XMLIndexerType) throws -> AnyViewController {
+        guard let elementName = xml.elementName else {
             throw IBError.elementNotFound
         }
         switch elementName {
@@ -75,7 +75,7 @@ public struct ViewControllerLayoutGuide: IBDecodable {
     public let id: String
     public let type: String
 
-    static func decode(_ xml: XMLIndexer) throws -> ViewControllerLayoutGuide {
+    static func decode(_ xml: XMLIndexerType) throws -> ViewControllerLayoutGuide {
         let container = xml.container(keys: CodingKeys.self)
         return try ViewControllerLayoutGuide(
             id: container.attribute(of: .id),
@@ -92,8 +92,8 @@ public struct ViewControllerPlaceholder: IBDecodable {
     public let referencedIdentifier: String?
     public let sceneMemberID: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> ViewControllerPlaceholder {
-        assert(xml.element?.name == "viewControllerPlaceholder")
+    static func decode(_ xml: XMLIndexerType) throws -> ViewControllerPlaceholder {
+        assert(xml.elementName == "viewControllerPlaceholder")
         let container = xml.container(keys: CodingKeys.self)
         return ViewControllerPlaceholder(
             id: try container.attribute(of: .id),

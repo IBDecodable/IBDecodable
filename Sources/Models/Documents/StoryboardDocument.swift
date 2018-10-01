@@ -29,7 +29,7 @@ public struct StoryboardDocument: IBDecodable, InterfaceBuilderDocument {
 
     enum ScenesCodingKeys: CodingKey { case scene }
 
-    static func decode(_ xml: XMLIndexer) throws -> StoryboardDocument {
+    static func decode(_ xml: XMLIndexerType) throws -> StoryboardDocument {
         let container = xml.container(keys: CodingKeys.self)
         let scenesContainer = container.nestedContainerIfPresent(of: .scenes, keys: ScenesCodingKeys.self)
         return StoryboardDocument(

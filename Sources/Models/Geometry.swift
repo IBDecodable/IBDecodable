@@ -17,7 +17,7 @@ public struct Rect: IBDecodable, IBKeyable {
     public let height: Float
     public let key: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Rect {
+    static func decode(_ xml: XMLIndexerType) throws -> Rect {
         let container = xml.container(keys: CodingKeys.self)
         return Rect(
             x:      try container.attribute(of: .x),
@@ -38,7 +38,7 @@ public struct Point: IBDecodable, IBKeyable {
     public let y: Float
     public let key: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Point {
+    static func decode(_ xml: XMLIndexerType) throws -> Point {
         let container = xml.container(keys: CodingKeys.self)
         return Point(
             x:      try container.attribute(of: .x),
@@ -57,7 +57,7 @@ public struct Size: IBDecodable, IBKeyable {
     public let height: Float
     public let key: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Size {
+    static func decode(_ xml: XMLIndexerType) throws -> Size {
         let container = xml.container(keys: CodingKeys.self)
         return Size(
             width:  try container.attribute(of: .width),
@@ -78,7 +78,7 @@ public struct Inset: IBDecodable, IBKeyable {
     public let maxX: Float?
     public let maxY: Float?
 
-    static func decode(_ xml: XMLIndexer) throws -> Inset {
+    static func decode(_ xml: XMLIndexerType) throws -> Inset {
         let container = xml.container(keys: CodingKeys.self)
         return Inset(
             key:  container.attributeIfPresent(of: .key),
@@ -101,7 +101,7 @@ public struct EdgeInset: IBDecodable, IBKeyable {
     public let bottom: Float?
     public let top: Float?
 
-    static func decode(_ xml: XMLIndexer) throws -> EdgeInset {
+    static func decode(_ xml: XMLIndexerType) throws -> EdgeInset {
         let container = xml.container(keys: CodingKeys.self)
         return EdgeInset(
             key:    container.attributeIfPresent(of: .key),
@@ -124,7 +124,7 @@ public struct DirectionalEdgeInsets: IBDecodable, IBKeyable {
     public let trailing: Float?
     public let top: Float?
 
-    static func decode(_ xml: XMLIndexer) throws -> DirectionalEdgeInsets {
+    static func decode(_ xml: XMLIndexerType) throws -> DirectionalEdgeInsets {
         let container = xml.container(keys: CodingKeys.self)
         return DirectionalEdgeInsets(
             key:      container.attributeIfPresent(of: .key),
@@ -149,7 +149,7 @@ public struct Frame: IBDecodable, IBKeyable {
     public let maxY: Float
     public let key: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Frame {
+    static func decode(_ xml: XMLIndexerType) throws -> Frame {
         let container = xml.container(keys: CodingKeys.self)
         return Frame(
             width:  try container.attribute(of: .width),

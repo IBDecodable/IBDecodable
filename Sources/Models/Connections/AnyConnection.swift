@@ -26,8 +26,8 @@ public struct AnyConnection: IBDecodable {
 
     public func encode(to encoder: Encoder) throws { fatalError() }
 
-    static func decode(_ xml: XMLIndexer) throws -> AnyConnection {
-        guard let elementName = xml.element?.name else {
+    static func decode(_ xml: XMLIndexerType) throws -> AnyConnection {
+        guard let elementName = xml.elementName else {
             throw IBError.elementNotFound
         }
         switch elementName {

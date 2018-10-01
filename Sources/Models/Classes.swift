@@ -16,7 +16,7 @@ public struct IBClass: IBDecodable {
     public let source: Source?
     public let relationships: [Relationship]?
 
-    static func decode(_ xml: XMLIndexer) throws -> IBClass {
+    static func decode(_ xml: XMLIndexerType) throws -> IBClass {
         let container = xml.container(keys: CodingKeys.self)
         return IBClass(
             className:      container.attributeIfPresent(of: .className),
@@ -36,7 +36,7 @@ public struct Source: IBDecodable, IBKeyable {
     public let type: String?
     public let relativePath: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Source {
+    static func decode(_ xml: XMLIndexerType) throws -> Source {
         let container = xml.container(keys: CodingKeys.self)
         return Source(
             key:          container.attributeIfPresent(of: .key),
@@ -54,7 +54,7 @@ public struct Relationship: IBDecodable {
     public let kind: String?
     public let name: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> Relationship {
+    static func decode(_ xml: XMLIndexerType) throws -> Relationship {
         let container = xml.container(keys: CodingKeys.self)
         return Relationship(
             kind: container.attributeIfPresent(of: .kind),

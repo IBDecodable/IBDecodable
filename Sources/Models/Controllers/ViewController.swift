@@ -29,7 +29,7 @@ public struct ViewController: IBDecodable, ViewControllerProtocol {
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
-    static func decode(_ xml: XMLIndexer) throws -> ViewController {
+    static func decode(_ xml: XMLIndexerType) throws -> ViewController {
         let container = xml.container(keys: CodingKeys.self)
         let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return ViewController(

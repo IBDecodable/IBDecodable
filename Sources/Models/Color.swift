@@ -57,7 +57,7 @@ public enum Color: IBDecodable {
         case name
     }
 
-    static func decode(_ xml: XMLIndexer) throws -> Color {
+    static func decode(_ xml: XMLIndexerType) throws -> Color {
         let container = xml.container(keys: CodingKeys.self)
         let key: String? = container.attributeIfPresent(of: .key)
         if let colorSpace: String = container.attributeIfPresent(of: .colorSpace) {

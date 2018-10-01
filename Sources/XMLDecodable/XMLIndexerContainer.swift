@@ -28,9 +28,9 @@ protocol XMLIndexerContainerType {
 
 class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
 
-    private let indexer: XMLIndexer
+    let indexer: XMLIndexerType
 
-    fileprivate init(indexer: XMLIndexer) {
+    init(indexer: XMLIndexerType) {
         self.indexer = indexer
     }
 
@@ -43,7 +43,7 @@ class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
     }
 
     func element<T>(of key: K) throws -> T where T: XMLDecodable {
-        let nestedIndexer: XMLIndexer = try indexer.byKey(key.stringValue)
+        let nestedIndexer: XMLIndexerType = try indexer.byKey(key.stringValue)
         return try decodeValue(nestedIndexer)
     }
 
@@ -52,8 +52,8 @@ class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
     }
 
     func elements<T>(of key: K) throws -> [T] where T: XMLDecodable {
-        let nestedIndexer: XMLIndexer = try indexer.byKey(key.stringValue)
-        return try nestedIndexer.all.map(decodeValue)
+        let nestedIndexer: XMLIndexerType = try indexer.byKey(key.stringValue)
+        return try nestedIndexer.allElements.map(decodeValue)
     }
 
     func elementsIfPresent<T>(of key: K) -> [T]? where T: XMLDecodable {
@@ -61,27 +61,27 @@ class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
     }
 
     func children<T>(of key: K) throws -> [T] where T: XMLDecodable {
-        let nestedIndexer: XMLIndexer = try indexer.byKey(key.stringValue)
-        return try nestedIndexer.children.map(decodeValue)
+        let nestedIndexer: XMLIndexerType = try indexer.byKey(key.stringValue)
+        return try nestedIndexer.childrenElements.map(decodeValue)
     }
 
     func childrenIfPresent<T>(of key: K) -> [T]? where T: XMLDecodable {
-        let nestedIndexer: XMLIndexer? = indexer.byKey(key.stringValue)
-        return nestedIndexer?.children.compactMap(decodeValue)
+        let nestedIndexer: XMLIndexerType? = indexer.byKey(key.stringValue)
+        return nestedIndexer?.childrenElements.compactMap(decodeValue)
     }
 
     func withAttributeElements<T>(_ attr: K, _ value: String) -> [T]? where T : XMLDecodable {
-        let elements: [XMLIndexer]? = indexer.withAttribute(attr.stringValue, value)?.all
+        let elements: [XMLIndexerType]? = indexer.withAttribute(attr.stringValue, value)?.allElements
         return elements?.compactMap(decodeValue)
     }
 
     func withAttributeElement<T>(_ attr: K, _ value: String) -> T? where T : XMLDecodable {
-        let element: XMLIndexer? = indexer.withAttribute(attr.stringValue, value)
+        let element: XMLIndexerType? = indexer.withAttribute(attr.stringValue, value)
         return element.flatMap(decodeValue)
     }
 
     func nestedContainer<A>(of key: K, keys: A.Type) throws -> XMLIndexerContainer<A> {
-        let nestedIndexer: XMLIndexer = try indexer.byKey(key.stringValue)
+        let nestedIndexer: XMLIndexerType = try indexer.byKey(key.stringValue)
         return XMLIndexerContainer<A>.init(indexer: nestedIndexer)
     }
 
@@ -90,12 +90,38 @@ class XMLIndexerContainer<K>: XMLIndexerContainerType where K: CodingKey {
     }
 
     func nestedContainers<A>(of key: K, keys: A.Type) throws -> [XMLIndexerContainer<A>] {
-        let nestedIndexers: [XMLIndexer] = try indexer.byKey(key.stringValue).all
+        let nestedIndexers: [XMLIndexerType] = try indexer.byKey(key.stringValue).allElements
         return nestedIndexers.map(XMLIndexerContainer<A>.init)
     }
 }
 
-extension XMLIndexer {
+extension XMLIndexer: XMLIndexerType {
+    var childrenElements: [XMLIndexerType] {
+        return children
+    }
+
+    var allElements: [XMLIndexerType] {
+        return all
+    }
+
+    func byKey(_ key: String) throws -> XMLIndexerType {
+        return try byKey(key) as XMLIndexer
+    }
+
+    func byKey(_ key: String) -> XMLIndexerType? {
+        return byKey(key) as XMLIndexer?
+    }
+
+    func withAttribute(_ attr: String, _ value: String) throws -> XMLIndexerType {
+        return try withAttribute(attr, value) as XMLIndexer
+    }
+
+    func withAttribute(_ attr: String, _ value: String) -> XMLIndexerType? {
+        return withAttribute(attr, value) as XMLIndexer?
+    }
+
+    var elementName: String? { return element?.name }
+    var elementText: String? { return element?.text }
     func container<K>(keys: K.Type) -> XMLIndexerContainer<K> {
         return XMLIndexerContainer.init(indexer: self)
     }

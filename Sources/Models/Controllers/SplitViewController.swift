@@ -29,7 +29,7 @@ public struct SplitViewController: IBDecodable, ViewControllerProtocol {
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
-    static func decode(_ xml: XMLIndexer) throws -> SplitViewController {
+    static func decode(_ xml: XMLIndexerType) throws -> SplitViewController {
         let container = xml.container(keys: CodingKeys.self)
         let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
         return SplitViewController(

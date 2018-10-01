@@ -14,7 +14,7 @@ public struct KeyCommand: IBDecodable {
     public let actionName: String?
     public let discoverabilityTitle: String?
 
-    static func decode(_ xml: XMLIndexer) throws -> KeyCommand {
+    static func decode(_ xml: XMLIndexerType) throws -> KeyCommand {
         let container = xml.container(keys: CodingKeys.self)
         return KeyCommand(
             input:                container.attributeIfPresent(of: .input),

@@ -29,7 +29,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let rowHeight: Float?
     public let sectionFooterHeight: Float?
     public let sectionHeaderHeight: Float?
@@ -87,7 +87,7 @@ public struct TableView: IBDecodable, ViewProtocol {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> TableView {
+    static func decode(_ xml: XMLIndexerType) throws -> TableView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -123,7 +123,7 @@ public struct TableView: IBDecodable, ViewProtocol {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             rowHeight:                                 container.attributeIfPresent(of: .rowHeight),
             sectionFooterHeight:                       container.attributeIfPresent(of: .sectionFooterHeight),
             sectionHeaderHeight:                       container.attributeIfPresent(of: .sectionHeaderHeight),
@@ -166,8 +166,8 @@ public struct TableViewSection: IBDecodable {
     enum ExternalCodingKeys: CodingKey { case attributedString }
     enum AttributedStringCodingKeys: CodingKey { case key }
 
-    static func decode(_ xml: XMLIndexer) throws -> TableViewSection {
-        assert(xml.element?.name == "tableViewSection")
+    static func decode(_ xml: XMLIndexerType) throws -> TableViewSection {
+        assert(xml.elementName == "tableViewSection")
         let container = xml.container(keys: CodingKeys.self)
         let attributedStringContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .attributedString, keys: AttributedStringCodingKeys.self)
@@ -202,7 +202,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     private let _subviews: [AnyView]?
     public var subviews: [AnyView]? {
         return (_subviews ?? []) + [AnyView(contentView)]
@@ -216,7 +216,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
 
     public var children: [IBElement] {
         // do not let default implementation which lead to duplicate element contentView
-        var children: [IBElement] = [contentView] + [rect]
+        var children: [IBElement] = [contentView] + (rect.map { [$0] } ?? [])
         if let elements = constraints {
             children += elements as [IBElement]
         }
@@ -249,7 +249,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
         public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
         public let opaque: Bool?
-        public let rect: Rect
+        public let rect: Rect?
         public let subviews: [AnyView]?
         public let translatesAutoresizingMaskIntoConstraints: Bool?
         public let userInteractionEnabled: Bool?
@@ -257,7 +257,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
         public let connections: [AnyConnection]?
         public let variations: [Variation]?
 
-        static func decode(_ xml: XMLIndexer) throws -> TableViewCell.TableViewContentView {
+        static func decode(_ xml: XMLIndexerType) throws -> TableViewCell.TableViewContentView {
             let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
                 let stringValue: String = {
                     switch key {
@@ -286,7 +286,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
                 isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
                 opaque:                                    container.attributeIfPresent(of: .opaque),
-                rect:                                      try container.element(of: .rect),
+                rect:                                      container.elementIfPresent(of: .rect),
                 subviews:                                  container.childrenIfPresent(of: .subviews),
                 translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
                 userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
@@ -300,7 +300,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> TableViewCell {
+    static func decode(_ xml: XMLIndexerType) throws -> TableViewCell {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -332,7 +332,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             _subviews:                                 container.childrenIfPresent(of: ._subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),

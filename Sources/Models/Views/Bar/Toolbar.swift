@@ -25,7 +25,7 @@ public struct Toolbar: IBDecodable, ViewProtocol {
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
@@ -39,7 +39,7 @@ public struct Toolbar: IBDecodable, ViewProtocol {
         public let systemItem: String?
         public let title: String?
 
-        static func decode(_ xml: XMLIndexer) throws -> Toolbar.BarButtonItem {
+        static func decode(_ xml: XMLIndexerType) throws -> Toolbar.BarButtonItem {
             let container = xml.container(keys: CodingKeys.self)
             return BarButtonItem(
                 id:         try container.attribute(of: .id),
@@ -54,7 +54,7 @@ public struct Toolbar: IBDecodable, ViewProtocol {
     enum VariationCodingKey: CodingKey { case variation }
     enum NavigationItemsCodingKeys: CodingKey { case navigationItem }
 
-    static func decode(_ xml: XMLIndexer) throws -> Toolbar {
+    static func decode(_ xml: XMLIndexerType) throws -> Toolbar {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -85,7 +85,7 @@ public struct Toolbar: IBDecodable, ViewProtocol {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),

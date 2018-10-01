@@ -26,7 +26,7 @@ public protocol ViewProtocol: IBIdentifiable, IBKeyable, IBCustomClassable, IBUs
     var isMisplaced: Bool? { get }
     var isAmbiguous: Bool? { get }
     var opaque: Bool? { get }
-    var rect: Rect { get }
+    var rect: Rect? { get }
     var subviews: [AnyView]? { get }
     var translatesAutoresizingMaskIntoConstraints: Bool? { get }
     var userInteractionEnabled: Bool? { get }
@@ -48,8 +48,8 @@ public struct AnyView: IBDecodable {
 
     public func encode(to encoder: Encoder) throws { fatalError() }
 
-    static func decode(_ xml: XMLIndexer) throws -> AnyView {
-        guard let elementName = xml.element?.name else {
+    static func decode(_ xml: XMLIndexerType) throws -> AnyView {
+        guard let elementName = xml.elementName else {
             throw IBError.elementNotFound
         }
         switch elementName {
@@ -112,7 +112,7 @@ public struct AutoresizingMask: IBDecodable, IBKeyable {
     public let flexibleMaxX: Bool
     public let flexibleMaxY: Bool
 
-    static func decode(_ xml: XMLIndexer) throws -> AutoresizingMask {
+    static func decode(_ xml: XMLIndexerType) throws -> AutoresizingMask {
         let container = xml.container(keys: CodingKeys.self)
         return AutoresizingMask(
             key:           container.attributeIfPresent(of: .key),
@@ -200,7 +200,7 @@ public struct Constraint: IBDecodable, IBIdentifiable {
         }
     }
 
-    static func decode(_ xml: XMLIndexer) throws -> Constraint {
+    static func decode(_ xml: XMLIndexerType) throws -> Constraint {
         let container = xml.container(keys: CodingKeys.self)
         return Constraint(
             id:              try container.attribute(of: .id),

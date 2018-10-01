@@ -29,7 +29,7 @@ public struct Switch: IBDecodable, ViewProtocol {
     public let on: Bool
     public let onTintColor: Color?
     public let opaque: Bool?
-    public let rect: Rect
+    public let rect: Rect?
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
@@ -41,7 +41,7 @@ public struct Switch: IBDecodable, ViewProtocol {
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
 
-    static func decode(_ xml: XMLIndexer) throws -> Switch {
+    static func decode(_ xml: XMLIndexerType) throws -> Switch {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
@@ -76,7 +76,7 @@ public struct Switch: IBDecodable, ViewProtocol {
             on:                                        try container.attribute(of: .on),
             onTintColor:                               container.elementIfPresent(of: .onTintColor),
             opaque:                                    container.attributeIfPresent(of: .opaque),
-            rect:                                      try container.element(of: .rect),
+            rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),

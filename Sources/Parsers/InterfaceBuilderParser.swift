@@ -9,10 +9,26 @@ import SWXMLHash
 import Foundation
 
 private let cocoaTouchKey = "com.apple.InterfaceBuilder3.CocoaTouch.XIB"
+private let cocoaKey = "com.apple.InterfaceBuilder3.Cocoa.XIB"
 
 public struct InterfaceBuilderParser {
 
-    private let xmlParser: SWXMLHash
+    struct XMLHeader: XMLDecodable, KeyDecodable {
+        let archiveType: String
+
+        enum CodingKeys: String, CodingKey { case archiveType = "archive" }
+        enum ArchiveCodingKeys: CodingKey { case type }
+
+        static func decode(_ xml: XMLIndexerType) throws -> XMLHeader {
+            let container = xml.container(keys: CodingKeys.self)
+            let archiveContainer = try container.nestedContainer(of: .archiveType, keys: ArchiveCodingKeys.self)
+            return try XMLHeader(
+                archiveType: archiveContainer.attribute(of: .type)
+            )
+        }
+    }
+
+    let xmlParser: SWXMLHash
 
     public init(detectParsingErrors: Bool = true) {
         xmlParser = SWXMLHash.config { options in
@@ -36,29 +52,34 @@ public struct InterfaceBuilderParser {
         return try parseDocument(xmlIndexer: xmlParser.parse(data))
     }
 
-    internal func parseDocument<D: InterfaceBuilderDocument & IBDecodable>(xmlIndexer: XMLIndexer) throws -> D {
-        if case .parsingError(let error) = xmlIndexer {
-            throw Error.parsingError(error)
-        }
-        guard let document: XMLIndexer = xmlIndexer.byKey("document") else {
-            guard let archive: XMLIndexer = xmlIndexer.byKey("archive"),
-                let type: String = try? archive.attributeValue(of: "type") else {
-                    throw Error.invalidFormatFile
-            }
+    enum Keys: CodingKey { case document }
 
-            switch type {
+    internal func parseDocument<D: InterfaceBuilderDocument & IBDecodable>(xmlIndexer: XMLIndexerType) throws -> D {
+        if let swxmlIndexer = xmlIndexer as? XMLIndexer {
+            if case .parsingError(let error) = swxmlIndexer {
+                throw Error.parsingError(error)
+            }
+        }
+        let container = xmlIndexer.container(keys: Keys.self)
+        do {
+            return try container.element(of: .document)
+        } catch {
+            let xmlHeader: XMLHeader = try decodeValue(xmlIndexer)
+            switch xmlHeader.archiveType {
             case cocoaTouchKey:
                 throw Error.legacyFormat
+            case cocoaKey:
+                throw Error.macFormat
             default:
                 throw Error.invalidFormatFile
             }
         }
-        return try decodeValue(document)
     }
 
     public enum Error: Swift.Error {
         case invalidFormatFile
         case legacyFormat
+        case macFormat
         case parsingError(ParsingError)
     }
 
