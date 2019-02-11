@@ -186,7 +186,7 @@ public struct TableViewSection: IBDecodable {
 public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
 
     public let id: String
-    public let elementClass: String = "UITableView"
+    public let elementClass: String = "UITableViewCell"
 
     public let key: String?
     public let autoresizingMask: AutoresizingMask?
