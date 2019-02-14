@@ -18,6 +18,7 @@ public struct Placeholder: IBDecodable, IBIdentifiable, IBCustomClassable, IBUse
     public let customModule: String?
     public let customModuleProvider: String?
     public let userComments: AttributedString?
+    public let connections: [AnyConnection]?
 
     enum ExternalCodingKeys: CodingKey { case attributedString }
     enum AttributedStringCodingKeys: CodingKey { case key }
@@ -35,7 +36,8 @@ public struct Placeholder: IBDecodable, IBIdentifiable, IBCustomClassable, IBUse
             customClass:           container.attributeIfPresent(of: .customClass),
             customModule:          container.attributeIfPresent(of: .customModule),
             customModuleProvider:  container.attributeIfPresent(of: .customModuleProvider),
-            userComments:          attributedStringContainer?.withAttributeElement(.key, "userComments")
+            userComments:          attributedStringContainer?.withAttributeElement(.key, "userComments"),
+            connections:           container.childrenIfPresent(of: .connections)
         )
     }
 
