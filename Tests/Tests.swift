@@ -263,6 +263,26 @@ class Tests: XCTestCase {
         }
     }
 
+    func testViewControllerWithPlaceholderOutlet() {
+        let url = self.url(forResource: "ViewControllerWithOutlets", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+            let placeholders = file.document.placeholders ?? []
+            XCTAssertEqual(placeholders.count, 2)
+
+            let fileOwnerPlaceholder = placeholders.first { $0.placeholderIdentifier == "IBFilesOwner" }
+            XCTAssertNotNil(fileOwnerPlaceholder)
+
+            let connections = fileOwnerPlaceholder?.connections ?? []
+            XCTAssertEqual(connections.count, 1)
+
+            let outlet = connections.first?.connection as? Outlet
+            XCTAssertNotNil(outlet)
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+
     // MARK: Utils
 
     lazy var bundle: Bundle = {
