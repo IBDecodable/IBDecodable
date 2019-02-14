@@ -8,6 +8,8 @@
 import XCTest
 @testable import IBDecodable
 
+#if DISABLE_REMOTE_RESOURCES_TEST
+#else
 class MissingAttributeTests: XCTestCase {
 
     lazy var cacheDirPath: URL = {
@@ -251,3 +253,4 @@ class TraverseXMLIndexerContainer<K: CodingKey>: XMLIndexerContainer<K> {
         return elements.map(TraverseXMLIndexerContainer<A>.init)
     }
 }
+#endif
