@@ -283,6 +283,24 @@ class Tests: XCTestCase {
         }
     }
 
+    func testCollectionViewCellContentView() {
+        let url = self.url(forResource: "CollectionViewCell", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+            let rootView = file.document.views?.first?.view
+            XCTAssertNotNil(rootView, "There should be a root view")
+            XCTAssertEqual(rootView?.elementClass, "UICollectionViewCell")
+
+            guard let cell = rootView as? CollectionViewCell else {
+                XCTFail("The root view should be a collection view cell")
+                return
+            }
+            XCTAssertEqual(cell.contentView.key, "contentView")
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+
     // MARK: Utils
 
     lazy var bundle: Bundle = {
