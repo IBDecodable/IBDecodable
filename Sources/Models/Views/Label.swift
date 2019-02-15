@@ -46,6 +46,8 @@ public struct Label: IBDecodable, ViewProtocol {
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> Label {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -53,7 +55,6 @@ public struct Label: IBDecodable, ViewProtocol {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
-                case .textColor: return "color"
                 case .attributedText: return "attributedString"
                 default: return key.stringValue
                 }
@@ -62,6 +63,8 @@ public struct Label: IBDecodable, ViewProtocol {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
         return Label(
             id:                                        try container.attribute(of: .id),
@@ -88,7 +91,7 @@ public struct Label: IBDecodable, ViewProtocol {
             subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
-            textColor:                                 container.elementIfPresent(of: .textColor),
+            textColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.textColor.stringValue),
             attributedText:                            container.elementIfPresent(of: .attributedText),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),

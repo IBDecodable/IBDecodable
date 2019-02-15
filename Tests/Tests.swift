@@ -342,6 +342,33 @@ class Tests: XCTestCase {
         }
     }
 
+    func testViewsWithTextColorAndBackgroundColor() {
+        let url = self.url(forResource: "ViewsWithTextColorAndBackgroundColor", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+
+            let stackView = file.document.views?.first?.view.subviews?.first?.view
+            XCTAssertNotNil(stackView, "There should be a stack view")
+            XCTAssertEqual(stackView?.elementClass, "UIStackView")
+
+            let subviews: [ViewProtocol] = (stackView?.subviews ?? []).map { $0.view }
+            XCTAssertEqual(subviews.count, 3)
+
+            guard let labelWithTextAndBackgroundColor = subviews[0] as? Label,
+                let labelWithTextColorOnly = subviews[1] as? Label,
+                let textViewWithTextAndBackgroundColor = subviews[2] as? TextView else {
+                    XCTFail("Stackview should have two labels and one textview")
+                    return
+            }
+
+            XCTAssertNotNil(labelWithTextAndBackgroundColor.textColor)
+            XCTAssertNotNil(labelWithTextColorOnly.textColor)
+            XCTAssertNotNil(textViewWithTextAndBackgroundColor.textColor)
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+
     // MARK: Utils
 
     lazy var bundle: Bundle = {
