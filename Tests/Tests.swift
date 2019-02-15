@@ -324,6 +324,7 @@ class Tests: XCTestCase {
                 XCTFail("The label should have a custom type")
                 return
             }
+            XCTAssertEqual(customFont.pointSize, 17.0)
 
             let systemFont = fontDescriptions[1]
             guard case .system = systemFont else {

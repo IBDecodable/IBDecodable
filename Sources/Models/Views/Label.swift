@@ -111,6 +111,17 @@ public enum FontDescription: IBDecodable {
     case custom(CustomFont)
     case textStyle(TextStyle)
 
+    public var pointSize: Float? {
+        switch self {
+        case .system(let systemFont):
+            return systemFont.pointSize
+        case .custom(let customFont):
+            return customFont.pointSize
+        case .textStyle:
+            return nil
+        }
+    }
+
     enum CodingKeys: CodingKey {
         case key, type, weight, pointSize, name, family, style
     }
