@@ -4,6 +4,6 @@ install: swift package update
 script:
   - swift build
   - swift build -c release
-  - swift test -Xswiftc "-DDISABLE_REMOTE_RESOURCES_TEST"
+  - swift test
 after_success:
   - bash <(curl -s https://codecov.io/bash)

@@ -8,8 +8,7 @@
 import XCTest
 @testable import IBDecodable
 
-#if DISABLE_REMOTE_RESOURCES_TEST
-#else
+#if ENABLE_REMOTE_RESOURCES_TEST
 class MissingAttributeTests: XCTestCase {
 
     lazy var cacheDirPath: URL = {
@@ -24,9 +23,14 @@ class MissingAttributeTests: XCTestCase {
 
     let fileManager: FileManager = .default
 
+    let blackList: [URL] = [
+        URL(string: "https://raw.githubusercontent.com/optixx/snes-sdk/9fa04efab6b3c9817badf6c9ab2518e5572a6fba/snes9x/macosx/English.lproj/Snes9x.nib/objects.xib")!
+    ]
+
     func testRemoteResouces() {
 
         func testFile(remoteURL: URL) {
+            guard !blackList.contains(remoteURL) else { return }
             do {
                 let content = try Data(contentsOf: remoteURL)
                 let parser = InterfaceBuilderParser()
