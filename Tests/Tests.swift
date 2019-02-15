@@ -301,6 +301,46 @@ class Tests: XCTestCase {
         }
     }
 
+    func testLabelsWithFonts() {
+        let url = self.url(forResource: "LabelsWithFonts", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+
+            let rootView = file.document.views?.first?.view
+            XCTAssertNotNil(rootView, "There should be a root view")
+
+            let stackView = rootView?.subviews?.first?.view
+            XCTAssertNotNil(stackView, "There should be a stack view")
+            XCTAssertEqual(stackView?.elementClass, "UIStackView")
+
+            let labels = (stackView?.subviews ?? []).compactMap { $0.view as? Label }
+            XCTAssertEqual(labels.count, 3)
+
+            let fontDescriptions = labels.compactMap { $0.fontDescription }
+            XCTAssertEqual(fontDescriptions.count, 3)
+
+            let customFont = fontDescriptions[0]
+            guard case .custom = customFont else {
+                XCTFail("The label should have a custom type")
+                return
+            }
+
+            let systemFont = fontDescriptions[1]
+            guard case .system = systemFont else {
+                XCTFail("The label should have a system type")
+                return
+            }
+
+            let textStyle = fontDescriptions[2]
+            guard case .textStyle = textStyle else {
+                XCTFail("The label should have a textStyle type")
+                return
+            }
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+
     // MARK: Utils
 
     lazy var bundle: Bundle = {
