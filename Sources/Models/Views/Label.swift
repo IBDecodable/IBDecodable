@@ -103,19 +103,56 @@ public struct Label: IBDecodable, ViewProtocol {
 
 // MARK: - FontDescription
 
-public struct FontDescription: IBDecodable, IBKeyable {
-    public let key: String?
-    public let type: String
-    public let pointSize: Float
-    public let weight: String?
+public enum FontDescription: IBDecodable {
+    public typealias SystemFont = (key: String?, type: String, weight: String?, pointSize: Float)
+    public typealias CustomFont = (key: String?, name: String, family: String, pointSize: Float)
+    public typealias TextStyle = (key: String?, style: String)
+    case system(SystemFont)
+    case custom(CustomFont)
+    case textStyle(TextStyle)
+
+    enum CodingKeys: CodingKey {
+        case key, type, weight, pointSize, name, family, style
+    }
+
+    public func encode(to encoder: Encoder) throws { fatalError() }
 
     static func decode(_ xml: XMLIndexerType) throws -> FontDescription {
         let container = xml.container(keys: CodingKeys.self)
-        return FontDescription(
-            key:       container.attributeIfPresent(of: .key),
-            type:      try container.attribute(of: .type),
-            pointSize: try container.attribute(of: .pointSize),
-            weight:    container.attributeIfPresent(of: .weight)
-        )
+        let key: String? = container.attributeIfPresent(of: .key)
+        if let type: String = container.attributeIfPresent(of: .type) {
+            return try .system((key: key,
+                                type: type,
+                                weight: container.attributeIfPresent(of: .weight),
+                                pointSize: container.attribute(of: .pointSize)
+            ))
+        } else if let name: String = container.attributeIfPresent(of: .name),
+            let family: String = container.attributeIfPresent(of: .family) {
+            return try .custom((key: key,
+                                name: name,
+                                family: family,
+                                pointSize: container.attribute(of: .pointSize)
+            ))
+        } else if let style: String = container.attributeIfPresent(of: .style) {
+            return .textStyle((key: key,
+                               style: style
+            ))
+        } else {
+            throw IBError.unsupportedFontDescription
+        }
+    }
+}
+
+extension FontDescription: AttributeProtocol {
+
+    public var key: String? {
+        switch self {
+        case .system(let systemFont):
+            return systemFont.key
+        case .custom(let customFont):
+            return customFont.key
+        case .textStyle(let textStyle):
+            return textStyle.key
+        }
     }
 }

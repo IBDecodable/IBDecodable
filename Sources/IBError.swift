@@ -14,6 +14,7 @@ public enum IBError: Swift.Error, CustomStringConvertible {
     case unsupportedConstraint(String)
     case unsupportedTableViewDataMode(String)
     case unsupportedColorSpace(String)
+    case unsupportedFontDescription
 
     public var description: String {
         switch self {
@@ -29,6 +30,8 @@ public enum IBError: Swift.Error, CustomStringConvertible {
             return "unsupported dataMode '\(name)'"
         case .unsupportedColorSpace(let colorSpace):
             return "unsupported color space '\(colorSpace)'"
+        case .unsupportedFontDescription:
+            return "unsupported font description"
         }
     }
 }
