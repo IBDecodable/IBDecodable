@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct ActivityindicatorView: IBDecodable, ViewProtocol {
+public struct ActivityindicatorView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIActivityindicatorView"
 

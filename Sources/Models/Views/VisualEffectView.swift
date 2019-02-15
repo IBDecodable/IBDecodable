@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct VisualEffectView: IBDecodable, ViewProtocol {
+public struct VisualEffectView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIVisualEffectView"
 

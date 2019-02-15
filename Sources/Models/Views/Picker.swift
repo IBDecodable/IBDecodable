@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct PickerView: IBDecodable, ViewProtocol {
+public struct PickerView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIPickerView"
 

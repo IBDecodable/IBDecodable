@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - TableView
 
-public struct TableView: IBDecodable, ViewProtocol {
+public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
 
     public let id: String
     public let elementClass: String = "UITableView"
@@ -183,7 +183,7 @@ public struct TableViewSection: IBDecodable {
 }
 // MARK: - TableViewCell
 
-public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
+public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusable {
 
     public let id: String
     public let elementClass: String = "UITableViewCell"
@@ -232,7 +232,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBReusable {
         return children
     }
 
-    public struct TableViewContentView: IBDecodable, ViewProtocol {
+    public struct TableViewContentView: IBDecodable, ViewProtocol, IBIdentifiable {
         public let id: String
         public let elementClass: String = "UITableViewContentView"
 
