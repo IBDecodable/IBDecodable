@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct GLKView: IBDecodable, ViewProtocol {
+public struct GLKView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "GLKView"
 

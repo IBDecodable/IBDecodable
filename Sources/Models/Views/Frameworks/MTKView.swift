@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct MTKView: IBDecodable, ViewProtocol {
+public struct MTKView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "MTKView"
 

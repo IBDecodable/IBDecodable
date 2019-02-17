@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - CollectionView
 
-public struct CollectionView: IBDecodable, ViewProtocol {
+public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UICollectionView"
 
@@ -114,7 +114,7 @@ public struct CollectionView: IBDecodable, ViewProtocol {
 
 // MARK: - CollectionViewCell
 
-public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
+public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusable {
     public let id: String
     public let elementClass: String = "UICollectionViewCell"
 
@@ -164,7 +164,6 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBReusable {
 
     public struct CollectionViewContentView: IBDecodable, ViewProtocol {
 
-        public let id: String = ""
         public let elementClass: String = "UIView"
 
         public let key: String?

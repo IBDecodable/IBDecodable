@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct DatePicker: IBDecodable, ViewProtocol {
+public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIDatePicker"
 

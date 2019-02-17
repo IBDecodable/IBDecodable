@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct PageControl: IBDecodable, ViewProtocol {
+public struct PageControl: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIPageControl"
 

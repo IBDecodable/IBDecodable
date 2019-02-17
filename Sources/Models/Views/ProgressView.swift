@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct ProgressView: IBDecodable, ViewProtocol {
+public struct ProgressView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIProgressView"
 

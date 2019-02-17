@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Button: IBDecodable, ViewProtocol {
+public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIButton"
 

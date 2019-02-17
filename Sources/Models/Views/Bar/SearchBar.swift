@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct SearchBar: IBDecodable, ViewProtocol {
+public struct SearchBar: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UISearchBar"
 

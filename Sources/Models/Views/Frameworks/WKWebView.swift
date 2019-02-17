@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct WKWebView: IBDecodable, ViewProtocol {
+public struct WKWebView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "WKWebView"
 

@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct View: IBDecodable, ViewProtocol {
+public struct View: IBDecodable, ViewProtocol, IBIdentifiable {
 
     public let id: String
     public let elementClass: String = "UIView"

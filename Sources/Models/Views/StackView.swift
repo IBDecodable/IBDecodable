@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct StackView: IBDecodable, ViewProtocol {
+public struct StackView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIStackView"
 

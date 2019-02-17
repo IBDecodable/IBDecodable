@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct NavigationBar: IBDecodable, ViewProtocol {
+public struct NavigationBar: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UINavigationBar"
 

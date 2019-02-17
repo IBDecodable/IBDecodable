@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct Toolbar: IBDecodable, ViewProtocol {
+public struct Toolbar: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIToolbar"
 

@@ -9,9 +9,8 @@ import SWXMLHash
 
 // MARK: - ViewProtocol
 
-public protocol ViewProtocol: IBIdentifiable, IBKeyable, IBCustomClassable, IBUserLabelable {
+public protocol ViewProtocol: IBKeyable, IBCustomClassable, IBUserLabelable {
     var elementClass: String { get }
-    var id: String { get }
 
     var key: String? { get }
     var autoresizingMask: AutoresizingMask? { get }
