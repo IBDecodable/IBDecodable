@@ -44,6 +44,8 @@ public struct TextView: IBDecodable, ViewProtocol {
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> TextView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -51,7 +53,6 @@ public struct TextView: IBDecodable, ViewProtocol {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
-                case .textColor: return "color"
                 default: return key.stringValue
                 }
             }()
@@ -59,7 +60,9 @@ public struct TextView: IBDecodable, ViewProtocol {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
-
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+        
         return TextView(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),
@@ -85,7 +88,7 @@ public struct TextView: IBDecodable, ViewProtocol {
             subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
-            textColor:                                 container.elementIfPresent(of: .textColor),
+            textColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.textColor.stringValue),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
