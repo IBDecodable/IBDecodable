@@ -36,9 +36,13 @@ public struct GLKView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let enableSetNeedsDisplay: Bool?
     public let drawableDepthFormat: String?
     public let multipleTouchEnabled: Bool?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> GLKView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -53,6 +57,8 @@ public struct GLKView: IBDecodable, ViewProtocol, IBIdentifiable {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
         return GLKView(
             id:                                        try container.attribute(of: .id),
@@ -80,7 +86,9 @@ public struct GLKView: IBDecodable, ViewProtocol, IBIdentifiable {
             tag:                                       container.attributeIfPresent(of: .tag),
             enableSetNeedsDisplay:                     container.attributeIfPresent(of: .enableSetNeedsDisplay),
             drawableDepthFormat:                       container.attributeIfPresent(of: .drawableDepthFormat),
-            multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled)
+            multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
     }
 }

@@ -34,9 +34,13 @@ public struct ARSCNView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let allowsCameraControl: Bool?
     public let multipleTouchEnabled: Bool?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> ARSCNView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -51,6 +55,8 @@ public struct ARSCNView: IBDecodable, ViewProtocol, IBIdentifiable {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
         return ARSCNView(
             id:                                        try container.attribute(of: .id),
@@ -76,7 +82,9 @@ public struct ARSCNView: IBDecodable, ViewProtocol, IBIdentifiable {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             allowsCameraControl:                       container.attributeIfPresent(of: .allowsCameraControl),
-            multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled)
+            multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
     }
 }
