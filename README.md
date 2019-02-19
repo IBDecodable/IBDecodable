@@ -4,9 +4,37 @@
 
 A tool to translate `.xib` and `.storyboard` XML into Swift models.
 
-## Parse Storyboard from file URL 
+## Installing
+
+### Using [Cocoapods](https://cocoapods.org/):
+
+Simply add the following line to your Podfile:
+
+```
+pod 'IBDecodable'
+```
+
+### Using [Swift Package Manager](https://swift.org/package-manager/):
+
+To include IBDecodable into a Swift Package Manager package, add it to the dependencies attribute defined in your `Package.swift` file.
+
+```
+dependencies: [
+    .Package(url: "https://github.com/IBDecodable/IBDecodable.git", majorVersion: <majorVersion>, minor: <minor>)
+]
+```
+
+## Parse Storyboard
+
+From file url:
 ```swift
 let file = try StoryboardFile(url: fileURL)
+```
+
+From string content:
+```swift
+let parser = InterfaceBuilderParser()
+let storyboardDocument = try parser.parseStoryboard(xml: "<?xml ... ")
 ```
 
 ### Browse the storyboard scene
@@ -29,7 +57,15 @@ if let resources = file.document.resources {
 }
 ```
 
-## Parse Xib from file URL 
+## Parse Xib
+
+From file url:
 ```swift
 let file = try XibFile(url: fileURL)
+```
+
+From string content:
+```swift
+let parser = InterfaceBuilderParser()
+let xibDocument = try parser.parseXib(xml: "<?xml ... ")
 ```
