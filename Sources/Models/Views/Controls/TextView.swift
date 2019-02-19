@@ -41,6 +41,8 @@ public struct TextView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
     public let editable: Bool?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -62,7 +64,7 @@ public struct TextView: IBDecodable, ViewProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
-        
+
         return TextView(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),
@@ -94,7 +96,9 @@ public struct TextView: IBDecodable, ViewProtocol, IBIdentifiable {
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
-            editable:                                  container.attributeIfPresent(of: .editable)
+            editable:                                  container.attributeIfPresent(of: .editable),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, TextView.CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, TextView.CodingKeys.tintColor.stringValue)
         )
     }
 }

@@ -37,9 +37,13 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
     public let datePickerMode: String?
     public let minuteInterval: String? // Integer??
     public let date: IBDate?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> DatePicker {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -54,6 +58,8 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
         return DatePicker(
             id:                                        try container.attribute(of: .id),
@@ -82,7 +88,9 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
             contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             datePickerMode:                            container.attributeIfPresent(of: .datePickerMode),
             minuteInterval:                            container.attributeIfPresent(of: .minuteInterval),
-            date:                                      container.elementIfPresent(of: .date)
+            date:                                      container.elementIfPresent(of: .date),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
     }
 }

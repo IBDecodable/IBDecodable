@@ -57,6 +57,8 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let minimumZoomScale: Float?
     public let isDirectionalLockEnabled: Bool?
     public let headersFooters: [AnyView]?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     public enum DataMode: XMLAttributeDecodable, KeyDecodable, Equatable {
         case `static`, prototypes
@@ -86,6 +88,8 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> TableView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -105,6 +109,8 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
         return TableView(
             id:                                        try container.attribute(of: .id),
@@ -147,7 +153,9 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
             maximumZoomScale:                          container.attributeIfPresent(of: .maximumZoomScale),
             minimumZoomScale:                          container.attributeIfPresent(of: .minimumZoomScale),
             isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled),
-            headersFooters:                            container.elementsIfPresent(of: .headersFooters)
+            headersFooters:                            container.elementsIfPresent(of: .headersFooters),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
     }
 }
@@ -213,6 +221,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
     public let reuseIdentifier: String?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     public var children: [IBElement] {
         // do not let default implementation which lead to duplicate element contentView
@@ -256,6 +266,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
         public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
         public let connections: [AnyConnection]?
         public let variations: [Variation]?
+        public let backgroundColor: Color?
+        public let tintColor: Color?
 
         static func decode(_ xml: XMLIndexerType) throws -> TableViewCell.TableViewContentView {
             let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -270,6 +282,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
             }
             let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
             return TableViewContentView(
                 id:                                        try container.attribute(of: .id),
@@ -292,13 +306,17 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
                 userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
                 userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
                 connections:                               container.childrenIfPresent(of: .connections),
-                variations:                                variationContainer.elementsIfPresent(of: .variation)
+                variations:                                variationContainer.elementsIfPresent(of: .variation),
+                backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+                tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
             )
         }
     }
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> TableViewCell {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -315,6 +333,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
         return TableViewCell(
             id:                                        try container.attribute(of: .id),
@@ -339,7 +359,9 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
-            reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier)
+            reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
     }
 }

@@ -41,9 +41,13 @@ public struct ScrollView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let maximumZoomScale: Float?
     public let minimumZoomScale: Float?
     public let isDirectionalLockEnabled: Bool?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> ScrollView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -60,6 +64,8 @@ public struct ScrollView: IBDecodable, ViewProtocol, IBIdentifiable {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
         return ScrollView(
             id:                                        try container.attribute(of: .id),
@@ -92,7 +98,9 @@ public struct ScrollView: IBDecodable, ViewProtocol, IBIdentifiable {
             showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
             maximumZoomScale:                          container.attributeIfPresent(of: .maximumZoomScale),
             minimumZoomScale:                          container.attributeIfPresent(of: .minimumZoomScale),
-            isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled)
+            isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
     }
 }

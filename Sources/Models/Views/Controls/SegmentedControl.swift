@@ -36,6 +36,8 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     public struct Segment: IBDecodable {
         public let title: String
@@ -48,6 +50,8 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
     enum SegmentsCodingKeys: CodingKey { case segment }
 
     static func decode(_ xml: XMLIndexerType) throws -> SegmentedControl {
@@ -63,6 +67,8 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
         let segmentsContainer = container.nestedContainerIfPresent(of: .segments, keys: SegmentsCodingKeys.self)
 
         return SegmentedControl(
@@ -91,7 +97,9 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
-            variations:                                variationContainer.elementsIfPresent(of: .variation)
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
     }
 

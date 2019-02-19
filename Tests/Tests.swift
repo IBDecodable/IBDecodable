@@ -369,6 +369,21 @@ class Tests: XCTestCase {
         }
     }
 
+    func testViewsWithBackgroundColorAndTintColor() {
+        let url = self.url(forResource: "ViewsWithBackgroundColor", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+            let views = (file.document.views ?? []).map { $0.view }
+            XCTAssertTrue(views.count > 0)
+            views.forEach {
+                XCTAssertNotNil($0.backgroundColor)
+                XCTAssertNotNil($0.tintColor)
+            }
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+
     // MARK: Utils
 
     lazy var bundle: Bundle = {

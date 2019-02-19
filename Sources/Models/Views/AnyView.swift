@@ -32,7 +32,8 @@ public protocol ViewProtocol: IBKeyable, IBCustomClassable, IBUserLabelable {
     var userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]? { get }
     var connections: [AnyConnection]? { get }
     var variations: [Variation]? { get }
-
+    var backgroundColor: Color? { get }
+    var tintColor: Color? { get }
 }
 
 // MARK: - AnyView

@@ -43,6 +43,8 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -98,7 +100,9 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
             verticalHuggingPriority:                   container.attributeIfPresent(of: .verticalHuggingPriority),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
-            variations:                                variationContainer.elementsIfPresent(of: .variation)
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
     }
 
