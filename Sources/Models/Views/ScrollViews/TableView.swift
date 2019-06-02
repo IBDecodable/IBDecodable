@@ -274,7 +274,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
                 let stringValue: String = {
                     switch key {
                     case .isMisplaced: return "misplaced"
-                case .isAmbiguous: return "ambiguous"
+                    case .isAmbiguous: return "ambiguous"
                     default: return key.stringValue
                     }
                 }()
