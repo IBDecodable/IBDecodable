@@ -150,7 +150,7 @@ class TraverseXMLIndexer: XMLIndexerType {
     }
 
     func byKey(_ key: String) throws -> XMLIndexerType {
-        if let index = allElementNames.index(of: key) {
+        if let index = allElementNames.firstIndex(of: key) {
             allElementNames.remove(at: index)
         }
         guard let element = children.first(where: { $0.elementName! == key }) else {
@@ -159,8 +159,8 @@ class TraverseXMLIndexer: XMLIndexerType {
         return element
     }
 
-    func byKey(_ key: String) -> XMLIndexerType? {
-        if let index = allElementNames.index(of: key) {
+    func byKeyIfPresent(_ key: String) -> XMLIndexerType? {
+        if let index = allElementNames.firstIndex(of: key) {
             allElementNames.remove(at: index)
         }
         return children.first { $0.elementName! == key }
@@ -177,7 +177,7 @@ class TraverseXMLIndexer: XMLIndexerType {
         if let index = attributes.index(forKey: attr) {
             attributes.remove(at: index)
         }
-        return indexer.attributeValue(of: attr)
+        return try? indexer.attributeValue(of: attr)
     }
 
     func withAttribute(_ attr: String, _ value: String) throws -> XMLIndexerType {
@@ -188,7 +188,7 @@ class TraverseXMLIndexer: XMLIndexerType {
         return children.first(where: { $0.indexer.element! === element })!
     }
 
-    func withAttribute(_ attr: String, _ value: String) -> XMLIndexerType? {
+    func withAttributeIfPresent(_ attr: String, _ value: String) -> XMLIndexerType? {
         if let index = attributes.index(forKey: attr) {
             attributes.remove(at: index)
         }
@@ -226,14 +226,14 @@ class TraverseXMLIndexerContainer<K: CodingKey>: XMLIndexerContainer<K> {
     }
 
     override func childrenIfPresent<T>(of key: K) -> [T]? where T: XMLDecodable {
-        guard let nestedIndexer: XMLIndexerType = indexer.byKey(key.stringValue) else {
+        guard let nestedIndexer: XMLIndexerType = indexer.byKeyIfPresent(key.stringValue) else {
             return nil
         }
         return (nestedIndexer as! TraverseXMLIndexer).children.compactMap(decodeValue)
     }
 
     override func withAttributeElements<T>(_ attr: K, _ value: String) -> [T]? where T : XMLDecodable {
-        let elements: [TraverseXMLIndexer]? = indexer.withAttribute(attr.stringValue, value)
+        let elements: [TraverseXMLIndexer]? = indexer.withAttributeIfPresent(attr.stringValue, value)
             .map { $0 as! TraverseXMLIndexer }?.all
         return elements?.compactMap(decodeValue)
     }

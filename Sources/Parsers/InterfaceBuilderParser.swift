@@ -56,22 +56,30 @@ public struct InterfaceBuilderParser {
 
     internal func parseDocument<D: InterfaceBuilderDocument & IBDecodable>(xmlIndexer: XMLIndexerType) throws -> D {
         if let swxmlIndexer = xmlIndexer as? XMLIndexer {
-            if case .parsingError(let error) = swxmlIndexer {
-                throw Error.parsingError(error)
+            if let error = swxmlIndexer.error {
+                throw error
             }
         }
         let container = xmlIndexer.container(keys: Keys.self)
         do {
             return try container.element(of: .document)
         } catch {
-            let xmlHeader: XMLHeader = try decodeValue(xmlIndexer)
-            switch xmlHeader.archiveType {
-            case cocoaTouchKey:
-                throw Error.legacyFormat
-            case cocoaKey:
-                throw Error.macFormat
-            default:
-                throw Error.invalidFormatFile
+            do {
+                let xmlHeader: XMLHeader = try decodeValue(xmlIndexer)
+                switch xmlHeader.archiveType {
+                case cocoaTouchKey:
+                    throw Error.legacyFormat
+                case cocoaKey:
+                    throw Error.macFormat
+                default:
+                    throw Error.invalidFormatFile
+                }
+            } catch let error as ParsingError {
+                throw Error.parsingError(error)
+            } catch let error as IndexingError {
+                throw Error.xmlError(error)
+            } catch {
+                throw error
             }
         }
     }
@@ -81,6 +89,20 @@ public struct InterfaceBuilderParser {
         case legacyFormat
         case macFormat
         case parsingError(ParsingError)
+        case xmlError(IndexingError)
     }
 
+}
+
+extension XMLIndexer {
+    var error: InterfaceBuilderParser.Error? {
+        switch self {
+        case .parsingError(let error):
+            return .parsingError(error)
+        case .xmlError(let error):
+            return .xmlError(error)
+        default:
+            return nil
+        }
+    }
 }

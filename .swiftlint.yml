@@ -8,6 +8,9 @@ function_body_length:
   error: 100
 large_tuple:
   warning: 3
+nesting:
+  type_level:
+    warning: 2
 disabled_rules:
   - colon
   - identifier_name

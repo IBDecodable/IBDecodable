@@ -27,3 +27,15 @@ func decodeValue<T: XMLDecodable>(_ xml: XMLIndexerType) -> T? {
 
 protocol KeyDecodable: Encodable {
 }
+
+extension XMLAttributeDeserializable where Self: XMLAttributeDecodable {
+    static func decode(_ attribute: XMLAttribute) throws -> Self {
+        return try deserialize(attribute)
+    }
+}
+
+extension String: XMLAttributeDecodable {}
+extension Int: XMLAttributeDecodable {}
+extension Float: XMLAttributeDecodable {}
+extension Bool: XMLAttributeDecodable {}
+extension Double: XMLAttributeDecodable {}

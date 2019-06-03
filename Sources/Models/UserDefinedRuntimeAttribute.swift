@@ -24,27 +24,27 @@ public struct UserDefinedRuntimeAttribute: IBDecodable {
         let container = xml.container(keys: CodingKeys.self)
         let type: String = try container.attribute(of: .type)
         let valueString: String? = container.attributeIfPresent(of: .value)
-        var value: Any? = nil
+        var value: Any?
         switch type {
         case "boolean":
             value = ((valueString ?? "") == "YES")
         case "color":
-            let color: Color? = xml.byKey("color").flatMap(decodeValue)
+            let color: Color? = xml.byKeyIfPresent("color").flatMap(decodeValue)
             value = color
         case "number":
-            if let integer: XMLIndexerType = xml.byKey("integer") {
+            if let integer: XMLIndexerType = xml.byKeyIfPresent("integer") {
                 value = Int(try integer.attributeValue(of: "value") as String)
-            } else  if let real: XMLIndexerType = xml.byKey("real") {
+            } else  if let real: XMLIndexerType = xml.byKeyIfPresent("real") {
                 value = Double(try real.attributeValue(of: "value") as String)
             }
         case "rect":
-            let rect: Rect? = xml.byKey("rect").flatMap(decodeValue)
+            let rect: Rect? = xml.byKeyIfPresent("rect").flatMap(decodeValue)
             value = rect
         case "point":
-            let point: Point? = xml.byKey("point").flatMap(decodeValue)
+            let point: Point? = xml.byKeyIfPresent("point").flatMap(decodeValue)
             value = point
         case "range":
-            let range: Range? = xml.byKey("range").flatMap(decodeValue)
+            let range: Range? = xml.byKeyIfPresent("range").flatMap(decodeValue)
             value = range
         case "nil":
             value = nil
