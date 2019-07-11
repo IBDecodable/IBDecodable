@@ -56,6 +56,7 @@ public struct AnyViewController: IBDecodable {
         case "splitViewController": return try AnyViewController(SplitViewController.decode(xml))
         case "avPlayerViewController": return try AnyViewController(AVPlayerViewController.decode(xml))
         case "glkViewController": return try AnyViewController(GLKViewController.decode(xml))
+        case "hostingController": return try AnyViewController(HostingController.decode(xml))
         default:
            throw IBError.unsupportedViewControllerClass(elementName)
         }
