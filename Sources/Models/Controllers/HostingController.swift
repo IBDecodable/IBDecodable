@@ -1,15 +1,15 @@
 //
-//  AVPlayerViewController.swift
+//  HostingController.swift
 //  IBDecodable
 //
-//  Created by phimage on 04/04/2018.
+//  Created by Eric Marchand on 11/07/2019.
 //
 
-import SWXMLHash
+import Foundation
 
-public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
+public struct HostingController: IBDecodable, ViewControllerProtocol {
 
-    public let elementClass: String = "AVPlayerViewController"
+    public let elementClass: String = "UIHostingController"
     public let id: String
     public let customClass: String?
     public let customModule: String?
@@ -23,18 +23,17 @@ public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
     public let connections: [AnyConnection]?
     public let keyCommands: [KeyCommand]?
     public let tabBarItem: TabBar.TabBarItem?
-    public let view: AnyView?
-    public var rootView: ViewProtocol? { return view?.view }
-    public let videoGravity: String?
+    public let view: View?
+    public var rootView: ViewProtocol? { return view }
     public let size: [Size]?
-    public var framework: String { return "AVKit" }
+    public var framework: String { return "SwiftUI" }
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
-    static func decode(_ xml: XMLIndexerType) throws -> AVPlayerViewController {
+    static func decode(_ xml: XMLIndexerType) throws -> HostingController {
         let container = xml.container(keys: CodingKeys.self)
         let layoutGuidesContainer = container.nestedContainerIfPresent(of: .layoutGuides, keys: LayoutGuidesCodingKeys.self)
-        return AVPlayerViewController(
+        return HostingController(
             id:                   try container.attribute(of: .id),
             customClass:          container.attributeIfPresent(of: .customClass),
             customModule:         container.attributeIfPresent(of: .customModule),
@@ -48,8 +47,7 @@ public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
             connections:          container.childrenIfPresent(of: .connections),
             keyCommands:          container.childrenIfPresent(of: .keyCommands),
             tabBarItem:           container.elementIfPresent(of: .tabBarItem),
-            view:                 xml.childrenElements.first.flatMap(decodeValue),
-            videoGravity:         container.attributeIfPresent(of: .videoGravity),
+            view:                 container.elementIfPresent(of: .view),
             size:                 container.elementsIfPresent(of: .size)
         )
     }

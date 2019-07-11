@@ -22,11 +22,15 @@ public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable, IBUse
     var tabBarItem: TabBar.TabBarItem? { get }
     var rootView: ViewProtocol? { get }
     var size: [Size]? { get }
+    var framework: String  { get }
 }
 
 extension ViewControllerProtocol {
     public var freeformSize: Size? {
         return self.with(key: "freeformSize")
+    }
+    public var framework: String {
+        return "UIKit"
     }
 }
 
@@ -56,6 +60,7 @@ public struct AnyViewController: IBDecodable {
         case "splitViewController": return try AnyViewController(SplitViewController.decode(xml))
         case "avPlayerViewController": return try AnyViewController(AVPlayerViewController.decode(xml))
         case "glkViewController": return try AnyViewController(GLKViewController.decode(xml))
+        case "hostingController": return try AnyViewController(HostingController.decode(xml))
         default:
            throw IBError.unsupportedViewControllerClass(elementName)
         }

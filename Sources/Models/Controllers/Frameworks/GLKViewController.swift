@@ -26,6 +26,7 @@ public struct GLKViewController: IBDecodable, ViewControllerProtocol {
     public let glkView: GLKView?
     public var rootView: ViewProtocol? { return glkView }
     public let size: [Size]?
+    public var framework: String { return "GLKit" }
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
