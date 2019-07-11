@@ -213,9 +213,11 @@ class Tests: XCTestCase {
                     for scene in file.document.scenes ?? [] {
                         if let viewController = scene.viewController?.viewController {
                             #if os(iOS)
-                                // Check that element class could be loaded (need to import framework first, so some could failed)
-                            let cls: AnyClass? = NSClassFromString(viewController.elementClass)
-                            XCTAssertNotNil(cls, viewController.elementClass)
+                            // Check that element class could be loaded (need to import framework first, so some could failed)
+                            if viewController.framework == "UIKit" {
+                                let cls: AnyClass? = NSClassFromString(viewController.elementClass)
+                                XCTAssertNotNil(cls, viewController.elementClass)
+                            }
                             #endif
                         }
                     }

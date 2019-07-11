@@ -27,6 +27,7 @@ public struct AVPlayerViewController: IBDecodable, ViewControllerProtocol {
     public var rootView: ViewProtocol? { return view?.view }
     public let videoGravity: String?
     public let size: [Size]?
+    public var framework: String { return "AVKit" }
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
