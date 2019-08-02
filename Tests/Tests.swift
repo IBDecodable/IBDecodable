@@ -141,7 +141,7 @@ class Tests: XCTestCase {
             XCTAssertFalse(rootConnections.isEmpty)
 
             let connections: [AnyConnection] = file.document.children(of: AnyConnection.self)
-            XCTAssertEqual(connections.count, 9)
+            XCTAssertEqual(connections.count, 10)
         } catch {
             XCTFail("\(error)")
         }

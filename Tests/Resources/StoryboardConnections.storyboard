@@ -113,6 +113,7 @@
                     <navigationItem key="navigationItem" title="Root View Controller" id="xiz-i2-ses"/>
                     <connections>
                         <segue destination="ElF-Se-9Ra" kind="showDetail" identifier="test" id="E9O-7R-REh"/>
+                        <segue destination="ElF-Se-9Ra" kind="show" destinationCreationSelector="aSegueAction:" id="71I-4Y-Tjy"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ae6-X0-vsc" userLabel="First Responder" sceneMemberID="firstResponder"/>
