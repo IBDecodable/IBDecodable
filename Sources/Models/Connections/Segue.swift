@@ -13,6 +13,7 @@ public struct Segue: IBDecodable, ConnectionProtocol {
     public let kind: Segue.Kind
     public let relationship: String?
     public let identifier: String?
+    public let destinationCreationSelector: String?
 
     static func decode(_ xml: XMLIndexerType) throws -> Segue {
         let container = xml.container(keys: CodingKeys.self)
@@ -21,7 +22,8 @@ public struct Segue: IBDecodable, ConnectionProtocol {
             destination:   try container.attribute(of: .destination),
             kind:          try container.attribute(of: .kind),
             relationship:  container.attributeIfPresent(of: .relationship),
-            identifier:    container.attributeIfPresent(of: .identifier)
+            identifier:    container.attributeIfPresent(of: .identifier),
+            destinationCreationSelector:  container.attributeIfPresent(of: .destinationCreationSelector)
         )
     }
 
