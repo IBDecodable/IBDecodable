@@ -14,6 +14,8 @@ public struct Segue: IBDecodable, ConnectionProtocol {
     public let relationship: String?
     public let identifier: String?
     public let destinationCreationSelector: String?
+    public let modalPresentationStyle: Segue.ModalPresentationStyle?
+    public let modalTransitionStyle: Segue.ModalTransitionStyle?
 
     static func decode(_ xml: XMLIndexerType) throws -> Segue {
         let container = xml.container(keys: CodingKeys.self)
@@ -23,7 +25,9 @@ public struct Segue: IBDecodable, ConnectionProtocol {
             kind:          try container.attribute(of: .kind),
             relationship:  container.attributeIfPresent(of: .relationship),
             identifier:    container.attributeIfPresent(of: .identifier),
-            destinationCreationSelector:  container.attributeIfPresent(of: .destinationCreationSelector)
+            destinationCreationSelector:  container.attributeIfPresent(of: .destinationCreationSelector),
+            modalPresentationStyle:       container.attributeIfPresent(of: .modalPresentationStyle),
+            modalTransitionStyle:         container.attributeIfPresent(of: .modalTransitionStyle)
         )
     }
 
@@ -80,4 +84,89 @@ public struct Segue: IBDecodable, ConnectionProtocol {
         }
     }
 
+    public enum ModalPresentationStyle: XMLAttributeDecodable, KeyDecodable, Equatable {
+        case automatic, fullScreen, pageSheet, formSheet, currentContext
+        case custom, overFullScreen, overCurrentContext, blurOverFullScreen, popover, none
+
+        public func encode(to encoder: Encoder) throws { fatalError() }
+
+        static func decode(_ attribute: XMLAttribute) throws -> Segue.ModalPresentationStyle {
+            switch attribute.text {
+            case "automatic": return .automatic
+            case "fullScreen": return .fullScreen
+            case "pageSheet": return .pageSheet
+            case "formSheet": return .formSheet
+            case "currentContext": return .currentContext
+            case "custom": return .custom
+            case "overFullScreen": return .overFullScreen
+            case "overCurrentContext": return .overCurrentContext
+            case "blurOverFullScreen": return .blurOverFullScreen
+            case "popover": return .popover
+            case "none": return .none
+            default:
+                return .none
+            }
+        }
+
+        public static func == (left: ModalPresentationStyle, right: ModalPresentationStyle) -> Bool {
+            switch (left, right) {
+            case (.automatic, .automatic):
+                return true
+            case (.fullScreen, .fullScreen):
+                return true
+            case (.pageSheet, .pageSheet):
+                return true
+            case (.formSheet, .formSheet):
+                return true
+            case (.currentContext, .currentContext):
+                return true
+            case (.overFullScreen, .overFullScreen):
+                return true
+            case (.overCurrentContext, .overCurrentContext):
+                return true
+            case (.blurOverFullScreen, blurOverFullScreen):
+                return true
+            case (.popover, .popover):
+                return true
+            case (.custom, .custom):
+                return true
+            case (.none, .none):
+                return true
+            default:
+                return false
+            }
+        }
+    }
+
+    public enum ModalTransitionStyle: XMLAttributeDecodable, KeyDecodable, Equatable {
+        case coverVertical, flipHorizontal, crossDissolve, partialCurl
+
+        public func encode(to encoder: Encoder) throws { fatalError() }
+
+        static func decode(_ attribute: XMLAttribute) throws -> Segue.ModalTransitionStyle {
+            switch attribute.text {
+            case "coverVertical": return .coverVertical
+            case "flipHorizontal": return .flipHorizontal
+            case "crossDissolve": return .crossDissolve
+            case "partialCurl": return .partialCurl
+            default:
+                throw IBError.elementNotFound
+            }
+        }
+
+        public static func == (left: ModalTransitionStyle, right: ModalTransitionStyle) -> Bool {
+            switch (left, right) {
+            case (.coverVertical, .coverVertical):
+                return true
+            case (.flipHorizontal, .flipHorizontal):
+                return true
+            case (.crossDissolve, .crossDissolve):
+                return true
+            case (.partialCurl, .partialCurl):
+                return true
+            default:
+                return false
+            }
+        }
+    }
 }
