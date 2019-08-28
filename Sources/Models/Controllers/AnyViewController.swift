@@ -22,7 +22,7 @@ public protocol ViewControllerProtocol: IBIdentifiable, IBCustomClassable, IBUse
     var tabBarItem: TabBar.TabBarItem? { get }
     var rootView: ViewProtocol? { get }
     var size: [Size]? { get }
-    var framework: String  { get }
+    var framework: String { get }
 }
 
 extension ViewControllerProtocol {
