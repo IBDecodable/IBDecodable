@@ -107,35 +107,6 @@ public struct Segue: IBDecodable, ConnectionProtocol {
                 return .none
             }
         }
-
-        public static func == (left: ModalPresentationStyle, right: ModalPresentationStyle) -> Bool {
-            switch (left, right) {
-            case (.automatic, .automatic):
-                return true
-            case (.fullScreen, .fullScreen):
-                return true
-            case (.pageSheet, .pageSheet):
-                return true
-            case (.formSheet, .formSheet):
-                return true
-            case (.currentContext, .currentContext):
-                return true
-            case (.overFullScreen, .overFullScreen):
-                return true
-            case (.overCurrentContext, .overCurrentContext):
-                return true
-            case (.blurOverFullScreen, blurOverFullScreen):
-                return true
-            case (.popover, .popover):
-                return true
-            case (.custom, .custom):
-                return true
-            case (.none, .none):
-                return true
-            default:
-                return false
-            }
-        }
     }
 
     public enum ModalTransitionStyle: XMLAttributeDecodable, KeyDecodable, Equatable {
@@ -151,21 +122,6 @@ public struct Segue: IBDecodable, ConnectionProtocol {
             case "partialCurl": return .partialCurl
             default:
                 throw IBError.elementNotFound
-            }
-        }
-
-        public static func == (left: ModalTransitionStyle, right: ModalTransitionStyle) -> Bool {
-            switch (left, right) {
-            case (.coverVertical, .coverVertical):
-                return true
-            case (.flipHorizontal, .flipHorizontal):
-                return true
-            case (.crossDissolve, .crossDissolve):
-                return true
-            case (.partialCurl, .partialCurl):
-                return true
-            default:
-                return false
             }
         }
     }
