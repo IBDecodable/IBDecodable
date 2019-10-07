@@ -22,7 +22,8 @@ public struct XibDocument: IBDecodable, InterfaceBuilderDocument {
     public let views: [AnyView]?
     public let resources: [AnyResource]?
     public let placeholders: [Placeholder]?
-
+    public let dependencies: [AnyDependency]?
+    
     enum ExternalCodingKeys: CodingKey { case objects }
     enum ObjectsCodingKeys: CodingKey { case placeholder }
 
@@ -43,7 +44,8 @@ public struct XibDocument: IBDecodable, InterfaceBuilderDocument {
             device:                container.elementIfPresent(of: .device),
             views:                 externalContainer.childrenIfPresent(of: .objects),
             resources:             container.childrenIfPresent(of: .resources),
-            placeholders:          objectsContainer?.elementsIfPresent(of: .placeholder)
+            placeholders:          objectsContainer?.elementsIfPresent(of: .placeholder),
+            dependencies:          container.childrenIfPresent(of: .dependencies)
         )
     }
 
