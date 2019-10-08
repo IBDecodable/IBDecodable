@@ -17,4 +17,5 @@ public protocol InterfaceBuilderDocument {
     var useSafeAreas: Bool? {get}
     var colorMatched: Bool? {get}
     var device: Device? {get}
+    var dependencies: [AnyDependency]? { get }
 }

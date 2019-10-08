@@ -241,19 +241,19 @@ class Tests: XCTestCase {
         
                     let children = document.children
                     let flattened = document.flattened
-                    
+
+                    XCTAssertTrue(children.count > 0, "no children element for doc \(name)")
+                    XCTAssertTrue(flattened.count > 2, "no flattened children element for doc \(name)")
+
+                    // Example code for indexation
+                    let analyser = IBAnalyser(document)
                     if name.contains("Empty")  {
-                        XCTAssertTrue(children.isEmpty, "must have no children element for doc \(name)")
-                        XCTAssertTrue(flattened.count == 1, "must have no flattened children element for doc \(name)")
+                        XCTAssertTrue(analyser.byId.isEmpty, "must have no element by id \(name)")
                     } else {
-                        XCTAssertTrue(children.count > 0, "no children element for doc \(name)")
-                        XCTAssertTrue(flattened.count > 2, "no flattened children element for doc \(name)")
-                        
-                        // Example code for indexation
-                        let analyser = IBAnalyser(document)
                         XCTAssertTrue(analyser.byId.count > 2, "no element by id \(name)")
-                        XCTAssertTrue(analyser.duplicateId.isEmpty, "there is duplicate element by id \(name)") 
                     }
+
+                    XCTAssertTrue(analyser.duplicateId.isEmpty, "there is duplicate element by id \(name)")
                 } catch {
                     XCTFail("\(error)  \(url)")
                 }

@@ -26,6 +26,9 @@ public struct StoryboardDocument: IBDecodable, InterfaceBuilderDocument {
     public let scenes: [Scene]?
     public let resources: [AnyResource]?
     public let classes: [IBClass]?
+    public let dependencies: [AnyDependency]?
+    public let systemVersion: String?
+    public let variant: String?
 
     enum ScenesCodingKeys: CodingKey { case scene }
 
@@ -47,7 +50,10 @@ public struct StoryboardDocument: IBDecodable, InterfaceBuilderDocument {
             device:                container.elementIfPresent(of: .device),
             scenes:                scenesContainer?.elementsIfPresent(of: .scene),
             resources:             container.childrenIfPresent(of: .resources),
-            classes:               container.childrenIfPresent(of: .classes)
+            classes:               container.childrenIfPresent(of: .classes),
+            dependencies:          container.childrenIfPresent(of: .dependencies),
+            systemVersion:         container.attributeIfPresent(of: .systemVersion),
+            variant:               container.attributeIfPresent(of: .variant)
         )
     }
 
