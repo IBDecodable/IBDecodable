@@ -14,8 +14,8 @@ public struct Segue: IBDecodable, ConnectionProtocol {
     public let relationship: String?
     public let identifier: String?
     public let destinationCreationSelector: String?
-    public let modalPresentationStyle: Segue.ModalPresentationStyle?
-    public let modalTransitionStyle: Segue.ModalTransitionStyle?
+    public let modalPresentationStyle: ModalPresentationStyle?
+    public let modalTransitionStyle: ModalTransitionStyle?
 
     static func decode(_ xml: XMLIndexerType) throws -> Segue {
         let container = xml.container(keys: CodingKeys.self)
@@ -80,48 +80,6 @@ public struct Segue: IBDecodable, ConnectionProtocol {
                 return left == right
             default:
                 return false
-            }
-        }
-    }
-
-    public enum ModalPresentationStyle: XMLAttributeDecodable, KeyDecodable, Equatable {
-        case automatic, fullScreen, pageSheet, formSheet, currentContext
-        case custom, overFullScreen, overCurrentContext, blurOverFullScreen, popover, none
-
-        public func encode(to encoder: Encoder) throws { fatalError() }
-
-        static func decode(_ attribute: XMLAttribute) throws -> Segue.ModalPresentationStyle {
-            switch attribute.text {
-            case "automatic": return .automatic
-            case "fullScreen": return .fullScreen
-            case "pageSheet": return .pageSheet
-            case "formSheet": return .formSheet
-            case "currentContext": return .currentContext
-            case "custom": return .custom
-            case "overFullScreen": return .overFullScreen
-            case "overCurrentContext": return .overCurrentContext
-            case "blurOverFullScreen": return .blurOverFullScreen
-            case "popover": return .popover
-            case "none": return .none
-            default:
-                return .none
-            }
-        }
-    }
-
-    public enum ModalTransitionStyle: XMLAttributeDecodable, KeyDecodable, Equatable {
-        case coverVertical, flipHorizontal, crossDissolve, partialCurl
-
-        public func encode(to encoder: Encoder) throws { fatalError() }
-
-        static func decode(_ attribute: XMLAttribute) throws -> Segue.ModalTransitionStyle {
-            switch attribute.text {
-            case "coverVertical": return .coverVertical
-            case "flipHorizontal": return .flipHorizontal
-            case "crossDissolve": return .crossDissolve
-            case "partialCurl": return .partialCurl
-            default:
-                throw IBError.elementNotFound
             }
         }
     }
