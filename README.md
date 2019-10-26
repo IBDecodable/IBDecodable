@@ -1,6 +1,11 @@
 # IBDecodable
 [![Build Status](https://travis-ci.org/IBDecodable/IBDecodable.svg?branch=master)](https://travis-ci.org/IBDecodable/IBDecodable)
 [![Swift 5.0](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
 A tool to translate `.xib` and `.storyboard` XML into Swift models.
 
@@ -69,3 +74,16 @@ From string content:
 let parser = InterfaceBuilderParser()
 let xibDocument = try parser.parseXib(xml: "<?xml ... ")
 ```
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/IBDecodable/IBDecodable.svg?style=flat
+[contributors-url]: https://github.com/IBDecodable/IBDecodable/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/IBDecodable/IBDecodable.svg?style=flat
+[forks-url]: https://github.com/IBDecodable/IBDecodable/network/members
+[stars-shield]: https://img.shields.io/github/stars/IBDecodable/IBDecodable.svg?style=flat
+[stars-url]: https://github.com/IBDecodable/IBDecodable/stargazers
+[issues-shield]: https://img.shields.io/github/issues/IBDecodable/IBDecodable.svg?style=flat
+[issues-url]: https://github.com/IBDecodable/IBDecodable/issues
+[license-shield]: https://img.shields.io/github/license/IBDecodable/IBDecodable.svg?style=flat
+[license-url]: https://github.com/IBDecodable/IBDecodable/blob/master/LICENSE.md
