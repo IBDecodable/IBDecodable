@@ -11,6 +11,7 @@ public struct Image: IBDecodable, ResourceProtocol {
     public let name: String
     public let width: String
     public let height: String
+    public let catalog: String?
     public let mutableData: MutableData?
 
     static func decode(_ xml: XMLIndexerType) throws -> Image {
@@ -19,6 +20,7 @@ public struct Image: IBDecodable, ResourceProtocol {
             name:          try container.attribute(of: .name),
             width:         try container.attribute(of: .width),
             height:        try container.attribute(of: .height),
+            catalog:       container.attributeIfPresent(of: .catalog),
             mutableData:   container.elementIfPresent(of: .mutableData))
     }
 }
