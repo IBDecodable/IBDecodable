@@ -54,7 +54,7 @@ class MissingAttributeTests: XCTestCase {
             switch result {
             case .success(let response):
                 response.items.forEach { testFile(remoteURL: $0.rawURL) }
-            case .failed(let error):
+            case .failure(let error):
                 XCTFail("\(error)")
             }
         }
@@ -63,9 +63,9 @@ class MissingAttributeTests: XCTestCase {
         }
     }
 
-    func fetchSample(handler: @escaping (Result<Github.Response>) -> Void) {
+    func fetchSample(handler: @escaping (Result<Github.Response, Swift.Error>) -> Void) {
         guard let token = ProcessInfo.processInfo.environment["GITHUB_ACCESS_TOKEN"] else {
-            handler(.failed(Error.missingAccessToken))
+            handler(.failure(Error.missingAccessToken))
             return
         }
         let github = Github(accessToken: token)

@@ -7,11 +7,6 @@
 
 import Foundation
 
-enum Result<Value> {
-    case success(Value)
-    case failed(Error)
-}
-
 class Github {
 
     struct Response: Codable {
@@ -59,7 +54,7 @@ class Github {
                       page: Int = 0,
                       perPage: Int = 100,
                       fileSize: Int = 350000,
-                      handler: @escaping (Result<Response>) -> Void) {
+                      handler: @escaping (Result<Response, Swift.Error>) -> Void) {
         let url: URL = {
             var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
             let queryItems = [
@@ -76,7 +71,7 @@ class Github {
         let task = session.dataTask(with: URLRequest(url: url)) { data, response, error in
             guard let responseData = data else {
                 if let error = error {
-                    handler(.failed(error))
+                    handler(.failure(error))
                     return
                 }
                 fatalError()
@@ -89,11 +84,11 @@ class Github {
 
     }
 
-    func downloadFile(url: URL, handler: @escaping (Result<URL>) -> Void) {
+    func downloadFile(url: URL, handler: @escaping (Result<URL, Error>) -> Void) {
         let task = URLSession.shared.downloadTask(with: url) { localURL, urlResponse, error in
             guard let localURL = localURL else {
                 if let error = error {
-                    handler(.failed(error))
+                    handler(.failure(error))
                     return
                 }
                 fatalError()
