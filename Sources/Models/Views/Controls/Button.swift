@@ -43,15 +43,19 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
 
     public struct State: IBDecodable, IBKeyable {
         public let key: String?
-        public let title: String
+        public let title: String?
         public let color: Color?
+        public let image: String?
+        public let catalog: String?
 
         static func decode(_ xml: XMLIndexerType) throws -> Button.State {
             let container = xml.container(keys: CodingKeys.self)
             return State.init(
-                key:   try container.attribute(of: .key),
-                title: try container.attribute(of: .title),
-                color: container.elementIfPresent(of: .color)
+                key: try container.attribute(of: .key),
+                title: container.attributeIfPresent(of: .title),
+                color: container.elementIfPresent(of: .color),
+                image: container.attributeIfPresent(of: .image),
+                catalog: container.attributeIfPresent(of: .catalog)
             )
         }
     }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name           = 'IBDecodable'
-  s.version        = '0.0.1'
+  s.version        = '0.1.0'
   s.summary        = 'A linter tool for Interface Builder.'
   s.homepage       = 'https://github.com/IBDecodable/IBDecodable'
   s.license        = { :type => 'MIT', :file => 'LICENSE.md' }
