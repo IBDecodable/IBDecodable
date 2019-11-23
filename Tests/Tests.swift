@@ -63,7 +63,17 @@ class Tests: XCTestCase {
             namedColor.forEach {
                 XCTAssertNotNil($0.color)
             }
-
+            
+            // check view
+            let buttons = file.document.children(of: Button.self)
+            let imageViews = file.document.children(of: ImageView.self)
+            
+            XCTAssertFalse(buttons.isEmpty, "There is no buttons")
+            XCTAssertFalse(imageViews.isEmpty, "There is no imageViews")
+            
+            let states = buttons.compactMap { $0.state }
+            XCTAssertFalse(states.isEmpty, "There is no button states")
+            
         } catch {
             XCTFail("\(error)")
         }
