@@ -67,6 +67,14 @@ public enum Color: IBDecodable {
                 return try .calibratedWhite((key:   key,
                                              white: calibratedWhiteContainer.attribute(of: .white),
                                              alpha: calibratedWhiteContainer.attribute(of: .alpha)))
+            case "calibratedRGB":
+                let calibratedRGBContainer = xml.container(keys: sRGBCodingKeys.self)
+                return try .sRGB((key:   key,
+                                  red:   calibratedRGBContainer.attribute(of: .red),
+                                  blue:  calibratedRGBContainer.attribute(of: .blue),
+                                  green: calibratedRGBContainer.attribute(of: .green),
+                                  alpha: calibratedRGBContainer.attribute(of: .alpha)
+                ))
             case "custom":
                 let container = xml.container(keys: CustomCodingKeys.self)
                 let customColorSpace: String = try container.attribute(of: .customColorSpace)
