@@ -10,12 +10,22 @@ import SWXMLHash
 public enum Color: IBDecodable {
 
     public typealias CalibratedWhite = (key: String?, white: Float, alpha: Float)
+    public typealias CalibratedRGB = SRGB
     public typealias SRGB = (key: String?, red: Float, blue: Float, green: Float, alpha: Float)
     public typealias Named = (key: String?, name: String)
     case calibratedWhite(CalibratedWhite)
+    case calibratedRGB(CalibratedRGB)
     case sRGB(SRGB)
     case name(Named)
     case systemColor(Named)
+
+    public var calibratedRGB: CalibratedRGB? {
+        switch self {
+        case .calibratedRGB(let calibratedRGB):
+            return calibratedRGB
+        default: return nil
+        }
+    }
 
     public var sRGB: SRGB? {
         switch self {
@@ -45,6 +55,10 @@ public enum Color: IBDecodable {
         case white, alpha
     }
 
+    enum CalibratedRGBCodingKeys: CodingKey {
+        case red, blue, green, alpha
+    }
+
     enum sRGBCodingKeys: CodingKey {
         case red, blue, green, alpha
     }
@@ -67,6 +81,14 @@ public enum Color: IBDecodable {
                 return try .calibratedWhite((key:   key,
                                              white: calibratedWhiteContainer.attribute(of: .white),
                                              alpha: calibratedWhiteContainer.attribute(of: .alpha)))
+            case "calibratedRGB":
+                let calibratedRGBContainer = xml.container(keys: CalibratedRGBCodingKeys.self)
+                return try .calibratedRGB((key:   key,
+                                           red:   calibratedRGBContainer.attribute(of: .red),
+                                           blue:  calibratedRGBContainer.attribute(of: .blue),
+                                           green: calibratedRGBContainer.attribute(of: .green),
+                                           alpha: calibratedRGBContainer.attribute(of: .alpha)
+                ))
             case "custom":
                 let container = xml.container(keys: CustomCodingKeys.self)
                 let customColorSpace: String = try container.attribute(of: .customColorSpace)
@@ -103,6 +125,8 @@ extension Color: AttributeProtocol {
         switch self {
         case .calibratedWhite(let calibratedWhite):
             return calibratedWhite.key
+        case .calibratedRGB(let calibratedRgb):
+            return calibratedRgb.key
         case .sRGB(let srgb):
             return srgb.key
         case .name(let named):
