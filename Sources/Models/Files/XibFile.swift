@@ -24,6 +24,11 @@ public class XibFile: InterfaceBuilderFile {
         self.pathString = url.absoluteString
         self.document = try type(of: self).parseContent(url: url)
     }
+    
+    public init(xml: String) throws {
+        self.pathString = "$temporary.xib"
+        self.document = try type(of: self).parseContent(xml: xml)
+    }
 
     private static func parseContent(pathString: String) throws -> XibDocument {
         let parser = InterfaceBuilderParser()
@@ -35,6 +40,11 @@ public class XibFile: InterfaceBuilderFile {
         let parser = InterfaceBuilderParser()
         let content = try Data(contentsOf: url)
         return try parser.parseDocument(data: content)
+    }
+    
+    private static func parseContent(xml: String) throws -> XibDocument {
+        let parser = InterfaceBuilderParser()
+        return try parser.parseDocument(xml: xml)
     }
 
 }
