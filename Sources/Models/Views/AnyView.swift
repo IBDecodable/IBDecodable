@@ -89,6 +89,7 @@ public struct AnyView: IBDecodable {
         case "view":                     return try AnyView(View.decode(xml))
         case "visualEffectView":         return try AnyView(VisualEffectView.decode(xml))
         case "wkWebView":                return try AnyView(WKWebView.decode(xml))
+        case "collectionViewCellContentView": return try AnyView(CollectionViewCell.ContentView.decode(xml))
         default:
             throw IBError.unsupportedViewClass(elementName)
         }

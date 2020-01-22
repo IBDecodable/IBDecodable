@@ -130,7 +130,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
-    public let contentView: CollectionViewContentView
+    public let contentView: ContentView
     public let contentMode: String?
     public let customClass: String?
     public let customModule: String?
@@ -172,7 +172,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
         return children
     }
 
-    public struct CollectionViewContentView: IBDecodable, ViewProtocol {
+    public struct ContentView: IBDecodable, ViewProtocol {
 
         public let elementClass: String = "UIView"
 
@@ -205,7 +205,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
         enum ExternalCodingKeys: CodingKey { case color }
         enum ColorsCodingKeys: CodingKey { case key }
 
-        static func decode(_ xml: XMLIndexerType) throws -> CollectionViewContentView {
+        static func decode(_ xml: XMLIndexerType) throws -> ContentView {
             let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
                 let stringValue: String = {
                     switch key {
@@ -218,10 +218,10 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
             }
             let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
             let variationContainer = xml.container(keys: VariationCodingKey.self)
-        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
-            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+            let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+                .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
-            return CollectionViewContentView(
+            return ContentView(
                 key:                                       container.attributeIfPresent(of: .key),
                 autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
                 clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
@@ -255,13 +255,14 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
     enum ColorsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> CollectionViewCell {
+        let contentViewKeys = ToggleKey(keys: ["view", "collectionViewCellContentView"])
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
                 case ._subviews: return "subview"
-                case .contentView: return "view"
+                case .contentView: return contentViewKeys.key
                 default: return key.stringValue
                 }
             }()
@@ -278,7 +279,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
-            contentView:                               try container.element(of: .contentView),
+            contentView:                               try(container.elementIfPresent(of: .contentView) ?? (try container.element(of: .contentView))),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
@@ -299,6 +300,19 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
+    }
+}
+
+class ToggleKey {
+    var keys: [String]
+    var currentIndex = 0
+    init(keys: [String]) {
+        self.keys = keys
+    }
+    var key: String {
+        let value = keys[currentIndex]
+        currentIndex = (currentIndex + 1) % keys.count
+        return value
     }
 }
 
