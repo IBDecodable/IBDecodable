@@ -59,6 +59,7 @@ public struct AnyView: IBDecodable {
         case "button":                   return try AnyView(Button.decode(xml))
         case "collectionView":           return try AnyView(CollectionView.decode(xml))
         case "collectionViewCell":       return try AnyView(CollectionViewCell.decode(xml))
+        case "collectionReusableView":   return try AnyView(CollectionReusableView.decode(xml))
         case "containerView":            return try AnyView(View.decode(xml))
         case "datePicker":               return try AnyView(DatePicker.decode(xml))
         case "glkView":                  return try AnyView(GLKView.decode(xml))
