@@ -35,12 +35,12 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
     public let cells: [CollectionViewCell]?
-    public let collectionReusableView: [CollectionReusableView]?
+    public let collectionReusableViews: [CollectionReusableView]?
     public var sectionHeaderView: CollectionReusableView? {
-        return collectionReusableView?.first(where: { $0.key == "sectionHeaderView" })
+        return collectionReusableViews?.first(where: { $0.key == "sectionHeaderView" })
     }
     public var sectionFooterView: CollectionReusableView? {
-        return collectionReusableView?.first(where: { $0.key == "sectionFooterView" })
+        return collectionReusableViews?.first(where: { $0.key == "sectionFooterView" })
     }
     public let layout: CollectionViewLayout?
     public let flowLayout: CollectionViewFlowLayout?
@@ -74,6 +74,7 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
                 case .flowLayout: return "collectionViewFlowLayout"
                 case .isDirectionalLockEnabled: return "directionalLockEnabled"
                 case .isPrefetchingEnabled: return "prefetchingEnabled"
+                case .collectionReusableViews: return "collectionReusableView"
                 default: return key.stringValue
                 }
             }()
@@ -108,7 +109,7 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             cells:                                     container.childrenIfPresent(of: .cells),
-            collectionReusableView:                    container.elementsIfPresent(of: .collectionReusableView),
+            collectionReusableViews:                   container.elementsIfPresent(of: .collectionReusableViews),
             layout:                                    container.elementIfPresent(of: .layout),
             flowLayout:                                container.elementIfPresent(of: .flowLayout),
             isPagingEnabled:                           container.attributeIfPresent(of: .isPagingEnabled),

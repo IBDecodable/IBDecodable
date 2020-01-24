@@ -117,10 +117,10 @@ class Tests: XCTestCase {
                 XCTFail("No collection view")
                 return
             }
-            XCTAssertEqual(collectionView.collectionReusableView?.count, 2)
-            XCTAssertEqual(collectionView.collectionReusableView?.first?.reuseIdentifier, "FirstReuseID")
+            XCTAssertEqual(collectionView.collectionReusableViews?.count, 2)
+            XCTAssertEqual(collectionView.collectionReusableViews?.first?.reuseIdentifier, "FirstReuseID")
             XCTAssertEqual(collectionView.sectionHeaderView?.reuseIdentifier, "FirstReuseID")
-            XCTAssertEqual(collectionView.collectionReusableView?.last?.reuseIdentifier, "SecondReuseID")
+            XCTAssertEqual(collectionView.collectionReusableViews?.last?.reuseIdentifier, "SecondReuseID")
             XCTAssertEqual(collectionView.sectionFooterView?.reuseIdentifier, "SecondReuseID")
         } catch {
             XCTFail("\(error)")
