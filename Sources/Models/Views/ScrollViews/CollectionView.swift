@@ -36,6 +36,12 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let cells: [CollectionViewCell]?
     public let collectionReusableView: [CollectionReusableView]?
+    public var sectionHeaderView: CollectionReusableView? {
+        return collectionReusableView?.first(where: { $0.key == "sectionHeaderView" })
+    }
+    public var sectionFooterView: CollectionReusableView? {
+        return collectionReusableView?.first(where: { $0.key == "sectionFooterView" })
+    }
     public let layout: CollectionViewLayout?
     public let flowLayout: CollectionViewFlowLayout?
     public let isPagingEnabled: Bool?
