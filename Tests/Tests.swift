@@ -100,6 +100,32 @@ class Tests: XCTestCase {
             XCTFail("\(error)")
         }
     }
+    
+    func testStoryboardAllViewsCollectionReusableView() {
+        let url = self.url(forResource:"StoryboardAllViews", withExtension: "storyboard")
+        do {
+            let file = try StoryboardFile(url: url)
+            guard let scene = file.document.scenes?.first else {
+                XCTFail("No scene")
+                return
+            }
+            guard let views = scene.viewController?.viewController.rootView?.subviews, !views.isEmpty else {
+                XCTFail("No subviews")
+                return
+            }
+            guard let collectionView = views.map({ $0.view }).first(where: { $0 is CollectionView }) as? CollectionView else {
+                XCTFail("No collection view")
+                return
+            }
+            XCTAssertEqual(collectionView.collectionReusableViews?.count, 2)
+            XCTAssertEqual(collectionView.collectionReusableViews?.first?.reuseIdentifier, "FirstReuseID")
+            XCTAssertEqual(collectionView.sectionHeaderView?.reuseIdentifier, "FirstReuseID")
+            XCTAssertEqual(collectionView.collectionReusableViews?.last?.reuseIdentifier, "SecondReuseID")
+            XCTAssertEqual(collectionView.sectionFooterView?.reuseIdentifier, "SecondReuseID")
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
 
     func testStoryboardWithUserDefinedAttributes() {
         let url = self.url(forResource:"StoryboardUserDefinedAttributes", withExtension: "storyboard")
@@ -320,6 +346,24 @@ class Tests: XCTestCase {
                 return
             }
             XCTAssertEqual(cell.contentView.key, "contentView")
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+    
+    func testCollectionReusableView() {
+        let url = self.url(forResource: "CollectionReusableView", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+            let rootView = file.document.views?.first?.view
+            XCTAssertNotNil(rootView, "There should be a root view")
+            XCTAssertEqual(rootView?.elementClass, "UICollectionReusableView")
+            
+            guard let reusableView = rootView as? CollectionReusableView else {
+                XCTFail("The root view should be a collection reusable view")
+                return
+            }
+            XCTAssertEqual(reusableView.reuseIdentifier, "ReuseID")
         } catch {
             XCTFail("\(error)  \(url)")
         }

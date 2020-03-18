@@ -35,6 +35,13 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
     public let cells: [CollectionViewCell]?
+    public let collectionReusableViews: [CollectionReusableView]?
+    public var sectionHeaderView: CollectionReusableView? {
+        return collectionReusableViews?.first(where: { $0.key == "sectionHeaderView" })
+    }
+    public var sectionFooterView: CollectionReusableView? {
+        return collectionReusableViews?.first(where: { $0.key == "sectionFooterView" })
+    }
     public let layout: CollectionViewLayout?
     public let flowLayout: CollectionViewFlowLayout?
     public let isPagingEnabled: Bool?
@@ -67,6 +74,7 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
                 case .flowLayout: return "collectionViewFlowLayout"
                 case .isDirectionalLockEnabled: return "directionalLockEnabled"
                 case .isPrefetchingEnabled: return "prefetchingEnabled"
+                case .collectionReusableViews: return "collectionReusableView"
                 default: return key.stringValue
                 }
             }()
@@ -101,6 +109,7 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             cells:                                     container.childrenIfPresent(of: .cells),
+            collectionReusableViews:                   container.elementsIfPresent(of: .collectionReusableViews),
             layout:                                    container.elementIfPresent(of: .layout),
             flowLayout:                                container.elementIfPresent(of: .flowLayout),
             isPagingEnabled:                           container.attributeIfPresent(of: .isPagingEnabled),
@@ -218,8 +227,8 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
             }
             let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
             let variationContainer = xml.container(keys: VariationCodingKey.self)
-        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
-            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+            let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+                .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
             return CollectionViewContentView(
                 key:                                       container.attributeIfPresent(of: .key),
@@ -292,6 +301,89 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
             _subviews:                                 container.childrenIfPresent(of: ._subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
+            userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
+            connections:                               container.childrenIfPresent(of: .connections),
+            variations:                                variationContainer.elementsIfPresent(of: .variation),
+            reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+        )
+    }
+}
+
+// MARK: - CollectionReusableView
+
+public struct CollectionReusableView: IBDecodable, ViewProtocol, IBIdentifiable, IBReusable {
+    
+    public let id: String
+    public let elementClass = "UICollectionReusableView"
+    
+    public let key: String?
+    public let autoresizingMask: AutoresizingMask?
+    public let clipsSubviews: Bool?
+    public let constraints: [Constraint]?
+    public let contentMode: String?
+    public let customClass: String?
+    public let customModule: String?
+    public let customModuleProvider: String?
+    public let userLabel: String?
+    public let colorLabel: String?
+    public let isMisplaced: Bool?
+    public let isAmbiguous: Bool?
+    public let opaque: Bool?
+    public let rect: Rect?
+    public let subviews: [AnyView]?
+    public let translatesAutoresizingMaskIntoConstraints: Bool?
+    public let userInteractionEnabled: Bool?
+    public let viewLayoutGuide: LayoutGuide?
+    public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
+    public let connections: [AnyConnection]?
+    public let variations: [Variation]?
+    public let reuseIdentifier: String?
+    public let backgroundColor: Color?
+    public let tintColor: Color?
+    
+    enum ConstraintsCodingKeys: CodingKey { case constraint }
+    enum VariationCodingKey: CodingKey { case variation }
+    enum ExternalCodingKeys: CodingKey { case color }
+    enum ColorsCodingKeys: CodingKey { case key }
+    
+    static func decode(_ xml: XMLIndexerType) throws -> CollectionReusableView {
+        let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
+            let stringValue: String = {
+                switch key {
+                case .isMisplaced: return "misplaced"
+                case .isAmbiguous: return "ambiguous"
+                default: return key.stringValue
+                }
+            }()
+            return MappedCodingKey(stringValue: stringValue)
+        }
+        let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
+        let variationContainer = xml.container(keys: VariationCodingKey.self)
+        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+            .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+        
+        return CollectionReusableView(
+            id:                                        try container.attribute(of: .id),
+            key:                                       container.attributeIfPresent(of: .key),
+            autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
+            clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
+            constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
+            contentMode:                               container.attributeIfPresent(of: .contentMode),
+            customClass:                               container.attributeIfPresent(of: .customClass),
+            customModule:                              container.attributeIfPresent(of: .customModule),
+            customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
+            userLabel:                                 container.attributeIfPresent(of: .userLabel),
+            colorLabel:                                container.attributeIfPresent(of: .colorLabel),
+            isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
+            isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
+            opaque:                                    container.attributeIfPresent(of: .opaque),
+            rect:                                      container.elementIfPresent(of: .rect),
+            subviews:                                  container.childrenIfPresent(of: .subviews),
+            translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
+            userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
+            viewLayoutGuide:                           container.elementIfPresent(of: .viewLayoutGuide),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
