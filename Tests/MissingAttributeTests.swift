@@ -192,8 +192,8 @@ class TraverseXMLIndexer: XMLIndexerType {
         if let index = attributes.index(forKey: attr) {
             attributes.remove(at: index)
         }
-        let element: XMLElement?? = try? indexer.withAttribute(attr, value).element
-        return element.flatMap { elm in children.first(where: { $0.indexer.element! === elm! }) }
+        let element: XMLElement? = (try? indexer.withAttribute(attr, value)).flatMap { $0.element }
+        return element.flatMap { elm in children.first(where: { $0.indexer.element! === elm }) }
     }
 
 
