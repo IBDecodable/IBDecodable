@@ -28,6 +28,7 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let estimatedRowHeight: Float?
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
+    public let verifyAmbiguity: VerifyAmbiguity?
     public let opaque: Bool?
     public let rect: Rect?
     public let rowHeight: Float?
@@ -128,6 +129,7 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
             estimatedRowHeight:                        container.attributeIfPresent(of: .estimatedRowHeight),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
+            verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      container.elementIfPresent(of: .rect),
             rowHeight:                                 container.attributeIfPresent(of: .rowHeight),
@@ -209,6 +211,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
     public let colorLabel: String?
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
+    public let verifyAmbiguity: VerifyAmbiguity?
     public let opaque: Bool?
     public let rect: Rect?
     private let _subviews: [AnyView]?
@@ -258,6 +261,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
         public let colorLabel: String?
         public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
+    public let verifyAmbiguity: VerifyAmbiguity?
         public let opaque: Bool?
         public let rect: Rect?
         public let subviews: [AnyView]?
@@ -299,6 +303,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
                 colorLabel:                                container.attributeIfPresent(of: .colorLabel),
                 isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
+            verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
                 opaque:                                    container.attributeIfPresent(of: .opaque),
                 rect:                                      container.elementIfPresent(of: .rect),
                 subviews:                                  container.childrenIfPresent(of: .subviews),
@@ -351,6 +356,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
             colorLabel:                                container.attributeIfPresent(of: .colorLabel),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
+            verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      container.elementIfPresent(of: .rect),
             _subviews:                                 container.childrenIfPresent(of: ._subviews),

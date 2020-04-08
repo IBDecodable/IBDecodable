@@ -24,6 +24,7 @@ public struct NavigationBar: IBDecodable, ViewProtocol, IBIdentifiable {
     public let items: [NavigationItem]?
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
+    public let verifyAmbiguity: VerifyAmbiguity?
     public let opaque: Bool?
     public let rect: Rect?
     public let subviews: [AnyView]?
@@ -104,6 +105,7 @@ public struct NavigationBar: IBDecodable, ViewProtocol, IBIdentifiable {
             items:                                     navigationItemsContainer?.elementsIfPresent(of: .navigationItem),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
+            verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
