@@ -26,6 +26,7 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
     public let horizontalHuggingPriority: Int?
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
+    public let verifyAmbiguity: VerifyAmbiguity?
     public let on: Bool
     public let onTintColor: Color?
     public let opaque: Bool?
@@ -79,6 +80,7 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
             horizontalHuggingPriority:                 container.attributeIfPresent(of: .horizontalHuggingPriority),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
+            verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
             on:                                        try container.attribute(of: .on),
             onTintColor:                               container.elementIfPresent(of: .onTintColor),
             opaque:                                    container.attributeIfPresent(of: .opaque),

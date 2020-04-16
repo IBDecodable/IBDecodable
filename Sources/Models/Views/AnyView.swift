@@ -24,6 +24,7 @@ public protocol ViewProtocol: IBKeyable, IBCustomClassable, IBUserLabelable {
     var colorLabel: String? { get }
     var isMisplaced: Bool? { get }
     var isAmbiguous: Bool? { get }
+    var verifyAmbiguity: VerifyAmbiguity? { get }
     var opaque: Bool? { get }
     var rect: Rect? { get }
     var subviews: [AnyView]? { get }
@@ -122,6 +123,24 @@ public struct AutoresizingMask: IBDecodable, IBKeyable {
             flexibleMaxX:  container.attributeIfPresent(of: .flexibleMaxX) ?? false,
             flexibleMaxY:  container.attributeIfPresent(of: .flexibleMaxY) ?? false
         )
+    }
+}
+
+// MARK: - VerifyAmbiguity
+
+public enum VerifyAmbiguity: XMLAttributeDecodable, KeyDecodable {
+    case off // Never Verify
+    case ignoreSizes // Verify Position Only
+    case other(String)
+
+    public func encode(to encoder: Encoder) throws { fatalError() }
+
+    static func decode(_ attribute: XMLAttribute) throws -> VerifyAmbiguity {
+        switch attribute.text {
+        case "off": return .off
+        case "ignoreSizes": return .ignoreSizes
+        default: return .other(attribute.text)
+        }
     }
 }
 

@@ -27,6 +27,7 @@ public struct ImageView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let insetsLayoutMarginsFromSafeArea: Bool?
     public let isMisplaced: Bool?
     public let isAmbiguous: Bool?
+    public let verifyAmbiguity: VerifyAmbiguity?
     public let multipleTouchEnabled: Bool?
     public let opaque: Bool?
     public let rect: Rect?
@@ -78,6 +79,7 @@ public struct ImageView: IBDecodable, ViewProtocol, IBIdentifiable {
             insetsLayoutMarginsFromSafeArea:           container.attributeIfPresent(of: .insetsLayoutMarginsFromSafeArea),
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
+            verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
             multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      container.elementIfPresent(of: .rect),
