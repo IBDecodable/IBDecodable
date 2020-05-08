@@ -9,10 +9,11 @@ let package = Package(
         .library(name: "IBDecodable", targets: ["IBDecodable"])
     ],
     dependencies: [
-        .package(url: "https://github.com/drmohundro/SWXMLHash.git", from: "4.9.0")
+        .package(url: "https://github.com/drmohundro/SWXMLHash.git", from: "5.0.1")
     ],
     targets: [
         .target(name: "IBDecodable", dependencies: ["SWXMLHash"], path: "Sources"),
-        .testTarget(name: "IBDecodableTests", dependencies: ["IBDecodable"], path: "Tests/")
+        .testTarget(name: "IBDecodableTests", dependencies: ["IBDecodable"]),
+        .testTarget(name: "DiscoverTests", dependencies: ["IBDecodable"])
     ]
 )
