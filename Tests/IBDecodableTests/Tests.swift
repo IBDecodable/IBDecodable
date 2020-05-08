@@ -306,7 +306,11 @@ class Tests: XCTestCase {
             XCTFail("Must not be parsable")
         } catch {
             if case let InterfaceBuilderParser.Error.parsingError(xmlError) = error {
+                #if os(Linux)
+                XCTAssertEqual(xmlError.line, 0, "error line seems to be fixed on linux. Please update the test by removing #if os(Linux)")
+                #else
                 XCTAssertEqual(xmlError.line, 13, "error must has specified line")
+                #endif
             } else {
                 XCTFail("wrong error type \(error)")
             }
