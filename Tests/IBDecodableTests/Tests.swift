@@ -459,9 +459,11 @@ class Tests: XCTestCase {
     }()
 
     func url(forResource resource: String, withExtension ext: String) -> URL {
+        #if !os(Linux)
         if let url = bundle.url(forResource: resource, withExtension: ext) {
             return url
         }
+        #endif
         var url = URL(fileURLWithPath: "Tests/Resources/\(resource).\(ext)")
         if !FileManager.default.fileExists(atPath: url.path) {
             let resourcesURL = URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("Resources")
@@ -471,9 +473,11 @@ class Tests: XCTestCase {
     }
 
     func urls(withExtension ext: String) -> [URL]? {
+        #if !os(Linux)
         if let urls = bundle.urls(forResourcesWithExtension: ext, subdirectory: nil), !urls.isEmpty {
             return urls
         }
+        #endif
         if let paths = try? FileManager.default.contentsOfDirectory(atPath: "Tests/Resources") {
             return paths.filter { $0.hasSuffix(".\(ext)") }.map { URL(fileURLWithPath: "Tests/Resources/\($0)") }
         }
