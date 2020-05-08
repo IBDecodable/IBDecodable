@@ -6,6 +6,9 @@ line_length:
 function_body_length:
   warning: 70
   error: 100
+file_length:
+  warning: 500
+  error: 600
 large_tuple:
   warning: 3
 nesting:
@@ -17,3 +20,4 @@ disabled_rules:
   - type_name
   - cyclomatic_complexity
   - pattern_matching_keywords
+  - todo

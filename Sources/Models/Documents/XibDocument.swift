@@ -23,7 +23,7 @@ public struct XibDocument: IBDecodable, InterfaceBuilderDocument {
     public let resources: [AnyResource]?
     public let placeholders: [Placeholder]?
     public let dependencies: [AnyDependency]?
-    
+
     enum ExternalCodingKeys: CodingKey { case objects }
     enum ObjectsCodingKeys: CodingKey { case placeholder }
 

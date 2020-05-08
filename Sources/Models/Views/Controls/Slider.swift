@@ -35,11 +35,11 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
-    
+
     public let value: String?
     public let minValue: String?
     public let maxValue: String?
-    
+
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
     enum ExternalCodingKeys: CodingKey { case color }

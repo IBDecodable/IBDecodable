@@ -320,10 +320,10 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
 // MARK: - CollectionReusableView
 
 public struct CollectionReusableView: IBDecodable, ViewProtocol, IBIdentifiable, IBReusable {
-    
+
     public let id: String
     public let elementClass = "UICollectionReusableView"
-    
+
     public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
@@ -349,12 +349,12 @@ public struct CollectionReusableView: IBDecodable, ViewProtocol, IBIdentifiable,
     public let reuseIdentifier: String?
     public let backgroundColor: Color?
     public let tintColor: Color?
-    
+
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
     enum ExternalCodingKeys: CodingKey { case color }
     enum ColorsCodingKeys: CodingKey { case key }
-    
+
     static func decode(_ xml: XMLIndexerType) throws -> CollectionReusableView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -370,7 +370,7 @@ public struct CollectionReusableView: IBDecodable, ViewProtocol, IBIdentifiable,
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
-        
+
         return CollectionReusableView(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),
