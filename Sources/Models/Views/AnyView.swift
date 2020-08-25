@@ -35,6 +35,13 @@ public protocol ViewProtocol: IBKeyable, IBCustomClassable, IBUserLabelable {
     var variations: [Variation]? { get }
     var backgroundColor: Color? { get }
     var tintColor: Color? { get }
+    var stateProperty: String? { get }
+}
+
+extension ViewProtocol {
+    public var stateProperty: String? {
+        return nil
+    }
 }
 
 // MARK: - AnyView

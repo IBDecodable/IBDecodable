@@ -39,6 +39,7 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
     public let value: String?
     public let minValue: String?
     public let maxValue: String?
+    public let stateProperty: String?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -51,6 +52,7 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .stateProperty: return "slider_value"
                 default: return key.stringValue
                 }
             }()
@@ -89,7 +91,8 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
             value:                                     container.attributeIfPresent(of: .value),
             minValue:                                  container.attributeIfPresent(of: .minValue),
-            maxValue:                                  container.attributeIfPresent(of: .maxValue)
+            maxValue:                                  container.attributeIfPresent(of: .maxValue),
+            stateProperty:                             container.attributeIfPresent(of: .stateProperty)
         )
     }
 }
