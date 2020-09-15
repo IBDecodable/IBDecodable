@@ -81,7 +81,7 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
             isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
-            on:                                        try container.attribute(of: .on),
+            on:                                        container.attributeIfPresent(of: .on) ?? false,
             onTintColor:                               container.elementIfPresent(of: .onTintColor),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      container.elementIfPresent(of: .rect),
