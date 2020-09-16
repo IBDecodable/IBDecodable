@@ -35,6 +35,11 @@ public struct ProgressView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let progressTintColor: Color?
+    public let trackTintColor: Color?
+    public let progress: Float?
+    public let progressImage: String?
+    public let trackImage: String?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -82,7 +87,12 @@ public struct ProgressView: IBDecodable, ViewProtocol, IBIdentifiable {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            progressTintColor:                         colorsContainer?.withAttributeElement(.key, CodingKeys.progressTintColor.stringValue),
+            trackTintColor:                            colorsContainer?.withAttributeElement(.key, CodingKeys.trackTintColor.stringValue),
+            progress:                                  container.attributeIfPresent(of: .progress),
+            progressImage:                             container.attributeIfPresent(of: .progressImage),
+            trackImage:                                container.attributeIfPresent(of: .trackImage)
         )
     }
 }

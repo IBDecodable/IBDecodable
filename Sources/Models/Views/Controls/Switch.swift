@@ -29,6 +29,7 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
     public let verifyAmbiguity: VerifyAmbiguity?
     public let on: Bool
     public let onTintColor: Color?
+    public let thumbTintColor: Color?
     public let opaque: Bool?
     public let rect: Rect?
     public let subviews: [AnyView]?
@@ -82,7 +83,8 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
             isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
             verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
             on:                                        container.attributeIfPresent(of: .on) ?? false,
-            onTintColor:                               container.elementIfPresent(of: .onTintColor),
+            onTintColor:                               colorsContainer?.withAttributeElement(.key, CodingKeys.onTintColor.stringValue),
+            thumbTintColor:                            colorsContainer?.withAttributeElement(.key, CodingKeys.thumbTintColor.stringValue),
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),

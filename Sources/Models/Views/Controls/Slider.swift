@@ -35,10 +35,16 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let minimumTrackTintColor: Color?
+    public let maximumTrackTintColor: Color?
+    public let thumbTintColor: Color?
 
     public let value: String?
     public let minValue: String?
     public let maxValue: String?
+    public let minimumValueImage: String?
+    public let maximumValueImage: String?
+    public let continuous: Bool
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -87,9 +93,15 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            minimumTrackTintColor:                     colorsContainer?.withAttributeElement(.key, CodingKeys.minimumTrackTintColor.stringValue),
+            maximumTrackTintColor:                     colorsContainer?.withAttributeElement(.key, CodingKeys.maximumTrackTintColor.stringValue),
+            thumbTintColor:                            colorsContainer?.withAttributeElement(.key, CodingKeys.thumbTintColor.stringValue),
             value:                                     container.attributeIfPresent(of: .value),
             minValue:                                  container.attributeIfPresent(of: .minValue),
-            maxValue:                                  container.attributeIfPresent(of: .maxValue)
+            maxValue:                                  container.attributeIfPresent(of: .maxValue),
+            minimumValueImage:                         container.attributeIfPresent(of: .minimumValueImage),
+            maximumValueImage:                         container.attributeIfPresent(of: .maximumValueImage),
+            continuous:                                container.attributeIfPresent(of: .continuous) ?? true
         )
     }
 }

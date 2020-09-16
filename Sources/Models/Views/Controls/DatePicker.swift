@@ -41,10 +41,17 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
     public let backgroundColor: Color?
     public let tintColor: Color?
 
+    public let style: String?
+    public let useCurrentDate: Bool?
+    public let countDownDuration: Int?
+    public let minimumDate: IBDate?
+    public let maximumDate: IBDate?
+
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
-    enum ExternalCodingKeys: CodingKey { case color }
+    enum ExternalCodingKeys: CodingKey { case color, date }
     enum ColorsCodingKeys: CodingKey { case key }
+    enum DateCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> DatePicker {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -61,6 +68,8 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+        let dateContainer = xml.container(keys: ExternalCodingKeys.self)
+                .nestedContainerIfPresent(of: .date, keys: DateCodingKeys.self)
 
         return DatePicker(
             id:                                        try container.attribute(of: .id),
@@ -90,9 +99,14 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
             contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             datePickerMode:                            container.attributeIfPresent(of: .datePickerMode),
             minuteInterval:                            container.attributeIfPresent(of: .minuteInterval),
-            date:                                      container.elementIfPresent(of: .date),
+            date:                                      dateContainer?.withAttributeElement(.key, CodingKeys.date.stringValue),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            style:                                     container.attributeIfPresent(of: .style),
+            useCurrentDate:                            container.attributeIfPresent(of: .useCurrentDate),
+            countDownDuration:                         container.attributeIfPresent(of: .countDownDuration),
+            minimumDate:                               dateContainer?.withAttributeElement(.key, CodingKeys.minimumDate.stringValue),
+            maximumDate:                               dateContainer?.withAttributeElement(.key, CodingKeys.maximumDate.stringValue)
         )
     }
 }

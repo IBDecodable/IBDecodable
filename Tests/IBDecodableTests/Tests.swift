@@ -92,15 +92,17 @@ class Tests: XCTestCase {
                 return
             }
             let clazz = views.map { $0.view.elementClass }
-            print("\(clazz.count)")
-
+            let allViewDistinctCount = 30
+            XCTAssertEqual(Set(clazz).count, allViewDistinctCount, "not correct unique element class found in all view storyboard. maybe a new one has been implemented? or there is decodng failure")
+            XCTAssertEqual(clazz.count, allViewDistinctCount + 2 /* two switch and two uisearchbar*/, "not correct element found in all view storyboard. added a new one? or there is decodng failure")
+            
             XCTAssertFalse(scene.customObjects?.isEmpty ?? true)
             XCTAssertFalse(scene.customViews?.isEmpty ?? true)
         } catch {
             XCTFail("\(error)")
         }
     }
-    
+
     func testStoryboardAllViewsCollectionReusableView() {
         let url = self.url(forResource:"StoryboardAllViews", withExtension: "storyboard")
         do {
@@ -470,8 +472,13 @@ class Tests: XCTestCase {
         #endif
         var url = URL(fileURLWithPath: "Tests/Resources/\(resource).\(ext)")
         if !FileManager.default.fileExists(atPath: url.path) {
-            let resourcesURL = URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("Resources")
+            var resourcesURL = URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("Resources")
             url = resourcesURL.appendingPathComponent(resource).appendingPathExtension(ext)
+
+            if !FileManager.default.fileExists(atPath: url.path), let projectDir = ProcessInfo.processInfo.environment["PROJECT_DIR"] {
+                resourcesURL = URL(fileURLWithPath: projectDir).appendingPathComponent("Tests").appendingPathComponent("Resources")
+                url = resourcesURL.appendingPathComponent(resource).appendingPathExtension(ext)
+            }
         }
         return url
     }
