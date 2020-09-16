@@ -34,9 +34,12 @@ public struct Stepper: IBDecodable, ViewProtocol, IBIdentifiable {
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
     public let stepValue: Float?
+    public let minimumValue: Float?
+    public let maximumValue: Float?
+    public let value: Float?
     public let backgroundColor: Color?
     public let tintColor: Color?
-
+                     
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
     enum ExternalCodingKeys: CodingKey { case color }
@@ -83,6 +86,9 @@ public struct Stepper: IBDecodable, ViewProtocol, IBIdentifiable {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             stepValue:                                 container.attributeIfPresent(of: .stepValue),
+            minimumValue:                              container.attributeIfPresent(of: .minimumValue),
+            maximumValue:                              container.attributeIfPresent(of: .maximumValue),
+            value:                                     container.attributeIfPresent(of: .value),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
         )
