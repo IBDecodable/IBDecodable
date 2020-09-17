@@ -39,6 +39,82 @@ public protocol IBUserLabelable: IBElement {
     // TODO add ?: var userComments: AttributedString?
 }
 
+/// Any element that could contains connections.
+public protocol IBConnectionOwner: IBElement {
+    var connections: [AnyConnection]? { get }
+}
+
+extension IBConnectionOwner {
+
+    /// Provide recursively all connections.
+    public var allConnections: [AnyConnection] {
+        var result: [AnyConnection] = []
+        _ = browse(skipSelf: false) { element in
+            if let casted = element as? IBConnectionOwner, let connections = casted.connections {
+                result.append(contentsOf: connections)
+            }
+            return true
+        }
+        return result
+    }
+
+    /// Provide recursively all connections of children.
+    public var childrenConnections: [AnyConnection] {
+        var result: [AnyConnection] = []
+        _ = browse(skipSelf: true) { element in
+            if let casted = element as? IBConnectionOwner {
+                if let connections = casted.connections {
+                    result.append(contentsOf: connections)
+                }
+            }
+            return true
+        }
+        return result
+    }
+
+    public func connectionsWith(destination identifiable: IBIdentifiable, recursive: Bool = true) -> [AnyConnection] {
+        return connectionsWith(destination: identifiable.id, recursive: recursive)
+    }
+
+    public func connectionsWith(destination id: String, recursive: Bool = true) -> [AnyConnection] {
+        if recursive {
+            // OPTI: we browse all hierachy here but normally we could find only on view hierarchy ie. for a view a parent view or view controller
+            // but we do not keep parent view  or controller now in view so we cannot return to parent. (see commented IBElement#parent)
+            var result: [AnyConnection] = []
+            _ = browse(skipSelf: false) { element in
+                if let casted = element as? IBConnectionOwner, let connections = casted.connections {
+                    for connection in connections where connection.connection.destination == id {
+                        result.append(connection)
+                    }
+                }
+                return true
+            }
+            return result
+        } else {
+            return (self.connections ?? []).filter { $0.connection.destination == id }
+        }
+    }
+
+    public func childrenConnectionsWith(destination identifiable: IBIdentifiable) -> [AnyConnection] {
+        return childrenConnectionsWith(destination: identifiable.id)
+    }
+
+    public func childrenConnectionsWith(destination id: String) -> [AnyConnection] {
+        // OPTI: we browse all hierachy here but normally we could find only on view hierarchy ie. for a view a parent view or view controller
+        // but we do not keep parent view  or controller now in view so we cannot return to parent. (see commented IBElement#parent)
+        var result: [AnyConnection] = []
+        _ = browse(skipSelf: true) { element in
+            if let casted = element as? IBConnectionOwner, let connections = casted.connections {
+                for connection in connections where connection.connection.destination == id {
+                    result.append(connection)
+                }
+            }
+            return true
+        }
+        return result
+    }
+}
+
 // MARK: IBElement
 
 /// Represent a node into hierarchical tree.
@@ -49,6 +125,14 @@ public protocol IBElement {
 }
 
 extension IBElement {
+
+    /* /// Return element hierarchy ie. all parents.
+     public var hierarchy: [IBElement] {
+     if let parent = parent {
+     return [parent] + parent.hierarchy
+     }
+     return []
+     }*/
 
     /// Return all tree nodes elements under this tree node (recursively).
     public var flattened: [IBElement] {

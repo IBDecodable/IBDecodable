@@ -178,8 +178,43 @@ class Tests: XCTestCase {
             let rootConnections = viewControllers.compactMap { $0?.connections }.flatMap { $0 }.compactMap { $0.connection }
             XCTAssertFalse(rootConnections.isEmpty)
 
-            let connections: [AnyConnection] = file.document.children(of: AnyConnection.self)
-            XCTAssertEqual(connections.count, 10)
+            let connections: [AnyConnection] = file.document.children(of: AnyConnection.self, recursive: false)
+            XCTAssertEqual(connections.count, 0) // nothing at root
+
+            let connectionsVc: [AnyConnection] = file.document.scenes?.first?.viewController?.viewController.children(of: AnyConnection.self, recursive: false) ?? []
+            XCTAssertEqual(connectionsVc.count, 2)
+            XCTAssertEqual(Set(connectionsVc.map { $0.connection.id}).count, 2)
+
+            let fullIDs = ["bfr-3x-8Cu", "NCO-CC-AeV", "70a-Qv-I1V", "0Zt-4d-vGk", "T6v-mS-lhn", "71I-4Y-Tjy", "E9O-7R-REh", "o8d-bM-qoT", "4xW-di-6F5", "bnm-eN-VfU"]
+            let connectionsFull: [AnyConnection] = file.document.children(of: AnyConnection.self, recursive: true)
+            XCTAssertEqual(connectionsFull.count, fullIDs.count)
+            XCTAssertEqual(Set(connectionsFull.map { $0.connection.id}).count, fullIDs.count)
+
+            // using IBConnectionOwner
+            let connectionsAllFull: [AnyConnection] = viewControllers.compactMap { viewController in
+                viewController?.allConnections
+            }.flatMap { $0 }
+            XCTAssertEqual(connectionsAllFull.count, fullIDs.count)
+            XCTAssertEqual(Set(connectionsAllFull.map { $0.connection.id}).count, fullIDs.count)
+
+            let connectionsAllForId: [AnyConnection] = viewControllers.compactMap { viewController in
+                viewController?.connectionsWith(destination: "McG-6E-zrF")
+            }.flatMap { $0 }
+            XCTAssertEqual(connectionsAllForId.count, 3)
+            XCTAssertEqual(Set(connectionsAllForId.map { $0.connection.id}).count, 3)
+
+            let connectionsChild: [AnyConnection] = viewControllers.compactMap { viewController in
+                viewController?.childrenConnections
+            }.flatMap { $0 }
+            XCTAssertEqual(connectionsChild.count, fullIDs.count - 3)
+            XCTAssertEqual(Set(connectionsChild.map { $0.connection.id}).count, fullIDs.count - 3)
+
+            let connectionsChildForId: [AnyConnection] = viewControllers.compactMap { viewController in
+                viewController?.childrenConnectionsWith(destination: "McG-6E-zrF")
+            }.flatMap { $0 }
+            XCTAssertEqual(connectionsChildForId.count, 2)
+            XCTAssertEqual(Set(connectionsChildForId.map { $0.connection.id}).count, 2)
+
         } catch {
             XCTFail("\(error)")
         }
