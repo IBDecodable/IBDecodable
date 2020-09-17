@@ -464,6 +464,11 @@ class Tests: XCTestCase {
         return Bundle(for: type(of: self))
     }()
 
+    let resourcesURL = URL(fileURLWithPath: #filePath)
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .appendingPathComponent("Resources")
+
     func url(forResource resource: String, withExtension ext: String) -> URL {
         #if !os(Linux)
         if let url = bundle.url(forResource: resource, withExtension: ext) {
@@ -472,13 +477,7 @@ class Tests: XCTestCase {
         #endif
         var url = URL(fileURLWithPath: "Tests/Resources/\(resource).\(ext)")
         if !FileManager.default.fileExists(atPath: url.path) {
-            var resourcesURL = URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("Resources")
             url = resourcesURL.appendingPathComponent(resource).appendingPathExtension(ext)
-
-            if !FileManager.default.fileExists(atPath: url.path), let projectDir = ProcessInfo.processInfo.environment["PROJECT_DIR"] {
-                resourcesURL = URL(fileURLWithPath: projectDir).appendingPathComponent("Tests").appendingPathComponent("Resources")
-                url = resourcesURL.appendingPathComponent(resource).appendingPathExtension(ext)
-            }
         }
         return url
     }
@@ -492,17 +491,9 @@ class Tests: XCTestCase {
         if let paths = try? FileManager.default.contentsOfDirectory(atPath: "Tests/Resources") {
             return paths.filter { $0.hasSuffix(".\(ext)") }.map { URL(fileURLWithPath: "Tests/Resources/\($0)") }
         }
-        var resourcesURL = URL(fileURLWithPath: #file).appendingPathComponent("Resources")
         if let urls = try? FileManager.default.contentsOfDirectory(at: resourcesURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles) {
             return urls.filter { $0.pathExtension == ext }
         }
-        if let projectDir = ProcessInfo.processInfo.environment["PROJECT_DIR"] {
-            resourcesURL = URL(fileURLWithPath: projectDir).appendingPathComponent("Tests").appendingPathComponent("Resources")
-            if let urls = try? FileManager.default.contentsOfDirectory(at: resourcesURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles) {
-                return urls.filter { $0.pathExtension == ext }
-            }
-        }
-
         return nil
     }
 
