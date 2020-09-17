@@ -464,10 +464,17 @@ class Tests: XCTestCase {
         return Bundle(for: type(of: self))
     }()
 
-    let resourcesURL = URL(fileURLWithPath: #filePath)
-        .deletingLastPathComponent()
-        .deletingLastPathComponent()
-        .appendingPathComponent("Resources")
+    let resourcesURL: URL = {
+        #if compiler(>=5.3)
+        let thisFilePath = #filePath
+        #else
+        let thisFilePath = #file
+        #endif
+        return URL(fileURLWithPath: thisFilePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Resources")
+    }()
 
     func url(forResource resource: String, withExtension ext: String) -> URL {
         #if !os(Linux)
