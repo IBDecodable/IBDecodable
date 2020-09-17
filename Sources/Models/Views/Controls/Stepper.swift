@@ -39,7 +39,7 @@ public struct Stepper: IBDecodable, ViewProtocol, IBIdentifiable {
     public let value: Float?
     public let backgroundColor: Color?
     public let tintColor: Color?
-                     
+
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
     enum ExternalCodingKeys: CodingKey { case color }
