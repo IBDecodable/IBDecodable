@@ -30,6 +30,7 @@ public struct AnyResource: IBDecodable {
             throw IBError.elementNotFound
         }
         switch elementName {
+        case "systemColor":     return try AnyResource(SystemColor.decode(xml))
         case "namedColor":      return try AnyResource(NamedColor.decode(xml))
         case "image":           return try AnyResource(Image.decode(xml))
         default:
