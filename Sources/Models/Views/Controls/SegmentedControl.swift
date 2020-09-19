@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
+public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UISegmentedControl"
 
@@ -15,9 +15,7 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
-    public let contentHorizontalAlignment: String?
     public let contentMode: String?
-    public let contentVerticalAlignment: String?
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
@@ -40,6 +38,12 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
     public let backgroundColor: Color?
     public let tintColor: Color?
 
+    public let isEnabled: Bool?
+    public let isHighlighted: Bool?
+    public let isSelected: Bool?
+    public let contentHorizontalAlignment: String?
+    public let contentVerticalAlignment: String?
+
     public struct Segment: IBDecodable {
         public let title: String
 
@@ -61,6 +65,9 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isEnabled: return "enabled"
+                case .isHighlighted: return "highlighted"
+                case .isSelected: return "selected"
                 default: return key.stringValue
                 }
             }()
@@ -78,9 +85,7 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
-            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
-            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
@@ -101,7 +106,12 @@ public struct SegmentedControl: IBDecodable, ViewProtocol, IBIdentifiable {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
+            isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
+            isSelected:                                container.attributeIfPresent(of: .isSelected),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment)
         )
     }
 
