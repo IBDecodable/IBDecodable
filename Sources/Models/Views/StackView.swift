@@ -99,7 +99,7 @@ public struct StackView: IBDecodable, ViewProtocol, IBIdentifiable {
             distribution:                              container.attributeIfPresent(of: .distribution),
             alignment:                                 container.attributeIfPresent(of: .alignment),
             spacing:                                   container.attributeIfPresent(of: .spacing) ?? 0,
-            baselineRelativeArrangement:               container.attributeIfPresent(of: .isAmbiguous) ?? false
+            baselineRelativeArrangement:               container.attributeIfPresent(of: .baselineRelativeArrangement) ?? false
         )
     }
 }
