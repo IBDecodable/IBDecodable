@@ -38,8 +38,8 @@ public struct StackView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let axis: String
     public let distribution: String?
     public let alignment: String?
-    public let spacing: Int
-    public let baselineRelativeArrangement: Bool
+    public let spacing: Int?
+    public let baselineRelativeArrangement: Bool?
 
     public var isVertical: Bool {
         return axis == "vertical"
@@ -98,8 +98,8 @@ public struct StackView: IBDecodable, ViewProtocol, IBIdentifiable {
             axis:                                      container.attributeIfPresent(of: .axis) ?? "horizontal",
             distribution:                              container.attributeIfPresent(of: .distribution),
             alignment:                                 container.attributeIfPresent(of: .alignment),
-            spacing:                                   container.attributeIfPresent(of: .spacing) ?? 0,
-            baselineRelativeArrangement:               container.attributeIfPresent(of: .baselineRelativeArrangement) ?? false
+            spacing:                                   container.attributeIfPresent(of: .spacing),
+            baselineRelativeArrangement:               container.attributeIfPresent(of: .baselineRelativeArrangement)
         )
     }
 }
