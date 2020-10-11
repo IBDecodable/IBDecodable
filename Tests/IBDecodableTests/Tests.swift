@@ -446,6 +446,7 @@ class Tests: XCTestCase {
                 XCTFail("The label should have a textStyle type")
                 return
             }
+            XCTAssertEqual(labels.first?.adjustsFontForContentSizeCategory, .some(true), "adjustsFontForContentSizeCategory shpuld be true")
         } catch {
             XCTFail("\(error)  \(url)")
         }
