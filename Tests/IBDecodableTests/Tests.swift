@@ -489,6 +489,13 @@ class Tests: XCTestCase {
                 XCTAssertNotNil($0.backgroundColor)
                 XCTAssertNotNil($0.tintColor)
             }
+
+            let systemColorBackgroundView = views.first(where: { $0.userLabel == "View with System Color" })
+            if case .systemColor(let systemColor) = systemColorBackgroundView?.backgroundColor {
+                XCTAssertEqual(systemColor.name, "systemOrangeColor")
+            } else {
+                XCTFail()
+            }
         } catch {
             XCTFail("\(error)  \(url)")
         }
