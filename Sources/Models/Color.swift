@@ -48,6 +48,7 @@ public enum Color: IBDecodable {
     enum CodingKeys: CodingKey {
         case key
         case colorSpace
+        case systemColor
         case cocoaTouchSystemColor
     }
 
@@ -74,6 +75,11 @@ public enum Color: IBDecodable {
     static func decode(_ xml: XMLIndexerType) throws -> Color {
         let container = xml.container(keys: CodingKeys.self)
         let key: String? = container.attributeIfPresent(of: .key)
+
+        if let systemColor: String = container.attributeIfPresent(of: .systemColor) {
+            return .systemColor((key, systemColor))
+        }
+
         if let colorSpace: String = container.attributeIfPresent(of: .colorSpace) {
             switch colorSpace {
             case "calibratedWhite":
