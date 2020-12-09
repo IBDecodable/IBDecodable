@@ -60,6 +60,7 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let headersFooters: [AnyView]?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let hidden: Bool?
 
     public enum DataMode: XMLAttributeDecodable, KeyDecodable, Equatable {
         case `static`, prototypes
@@ -157,7 +158,8 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
             isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled),
             headersFooters:                            container.elementsIfPresent(of: .headersFooters),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }
@@ -226,6 +228,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
     public let reuseIdentifier: String?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let hidden: Bool?
 
     public var children: [IBElement] {
         // do not let default implementation which lead to duplicate element contentView
@@ -272,6 +275,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
         public let variations: [Variation]?
         public let backgroundColor: Color?
         public let tintColor: Color?
+        public let hidden: Bool?
 
         static func decode(_ xml: XMLIndexerType) throws -> TableViewCell.TableViewContentView {
             let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -313,7 +317,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
                 connections:                               container.childrenIfPresent(of: .connections),
                 variations:                                variationContainer.elementsIfPresent(of: .variation),
                 backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-                tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+                tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+                hidden:                                    container.attributeIfPresent(of: .hidden)
             )
         }
     }
@@ -367,7 +372,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }

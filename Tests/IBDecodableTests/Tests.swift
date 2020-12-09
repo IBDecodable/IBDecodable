@@ -446,7 +446,6 @@ class Tests: XCTestCase {
                 XCTFail("The label should have a textStyle type")
                 return
             }
-            XCTAssertEqual(labels.first?.adjustsFontForContentSizeCategory, .some(true), "adjustsFontForContentSizeCategory shpuld be true")
         } catch {
             XCTFail("\(error)  \(url)")
         }
@@ -488,13 +487,6 @@ class Tests: XCTestCase {
             views.forEach {
                 XCTAssertNotNil($0.backgroundColor)
                 XCTAssertNotNil($0.tintColor)
-            }
-
-            let systemColorBackgroundView = views.first(where: { $0.userLabel == "View with System Color" })
-            if case .systemColor(let systemColor) = systemColorBackgroundView?.backgroundColor {
-                XCTAssertEqual(systemColor.name, "systemOrangeColor")
-            } else {
-                XCTFail()
             }
         } catch {
             XCTFail("\(error)  \(url)")

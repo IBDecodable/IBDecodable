@@ -11,8 +11,10 @@ public struct StackView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIStackView"
 
+    public let alignment: String?
     public let key: String?
     public let autoresizingMask: AutoresizingMask?
+    public let axis: String?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
     public let contentMode: String?
@@ -34,20 +36,9 @@ public struct StackView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
-
-    public let axis: String
     public let distribution: String?
-    public let alignment: String?
-    public let spacing: Int?
-    public let baselineRelativeArrangement: Bool?
-
-    public var isVertical: Bool {
-        return axis == "vertical"
-    }
-
-    public var isHorizontal: Bool {
-        return axis == "horizontal"
-    }
+    public let spacing: String?
+    public let hidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -72,8 +63,10 @@ public struct StackView: IBDecodable, ViewProtocol, IBIdentifiable {
 
         return StackView(
             id:                                        try container.attribute(of: .id),
+            alignment:                                 container.attributeIfPresent(of: .alignment),
             key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
+            axis:                                      container.attributeIfPresent(of: .axis),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
@@ -95,11 +88,9 @@ public struct StackView: IBDecodable, ViewProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-            axis:                                      container.attributeIfPresent(of: .axis) ?? "horizontal",
             distribution:                              container.attributeIfPresent(of: .distribution),
-            alignment:                                 container.attributeIfPresent(of: .alignment),
             spacing:                                   container.attributeIfPresent(of: .spacing),
-            baselineRelativeArrangement:               container.attributeIfPresent(of: .baselineRelativeArrangement)
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }

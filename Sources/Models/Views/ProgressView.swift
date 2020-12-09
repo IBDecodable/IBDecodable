@@ -40,6 +40,7 @@ public struct ProgressView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let progress: Float?
     public let progressImage: String?
     public let trackImage: String?
+    public let hidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -92,7 +93,8 @@ public struct ProgressView: IBDecodable, ViewProtocol, IBIdentifiable {
             trackTintColor:                            colorsContainer?.withAttributeElement(.key, CodingKeys.trackTintColor.stringValue),
             progress:                                  container.attributeIfPresent(of: .progress),
             progressImage:                             container.attributeIfPresent(of: .progressImage),
-            trackImage:                                container.attributeIfPresent(of: .trackImage)
+            trackImage:                                container.attributeIfPresent(of: .trackImage),
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,19 +19,11 @@
             <viewLayoutGuide key="safeArea" id="X6C-YP-6rn"/>
             <point key="canvasLocation" x="84" y="76"/>
         </view>
-        <view contentMode="scaleToFill" id="Qov-nb-VBj" userLabel="View with System Color">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <color key="tintColor" red="0.97513258820000004" green="0.2546594116" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <viewLayoutGuide key="safeArea" id="kSd-IL-b0e"/>
-            <point key="canvasLocation" x="809" y="252"/>
-        </view>
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="jKS-5y-TBK">
             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jKS-5y-TBK" id="Xq1-Ao-F1Q">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
             </tableViewCellContentView>
             <color key="backgroundColor" red="1" green="0.63078395700000001" blue="0.39357040630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

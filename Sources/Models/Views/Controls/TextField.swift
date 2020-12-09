@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TextField: IBDecodable, ControlProtocol, IBIdentifiable {
+public struct TextField: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UITextField"
 
@@ -16,7 +16,9 @@ public struct TextField: IBDecodable, ControlProtocol, IBIdentifiable {
     public let borderStyle: String?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
+    public let contentHorizontalAlignment: String?
     public let contentMode: String?
+    public let contentVerticalAlignment: String?
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
@@ -40,12 +42,7 @@ public struct TextField: IBDecodable, ControlProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
-
-    public let isEnabled: Bool?
-    public let isHighlighted: Bool?
-    public let isSelected: Bool?
-    public let contentHorizontalAlignment: String?
-    public let contentVerticalAlignment: String?
+    public let hidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -58,9 +55,6 @@ public struct TextField: IBDecodable, ControlProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
-                case .isEnabled: return "enabled"
-                case .isHighlighted: return "highlighted"
-                case .isSelected: return "selected"
                 default: return key.stringValue
                 }
             }()
@@ -78,7 +72,9 @@ public struct TextField: IBDecodable, ControlProtocol, IBIdentifiable {
             borderStyle:                               container.attributeIfPresent(of: .borderStyle),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
@@ -102,11 +98,7 @@ public struct TextField: IBDecodable, ControlProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-            isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
-            isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
-            isSelected:                                container.attributeIfPresent(of: .isSelected),
-            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
-            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment)
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 

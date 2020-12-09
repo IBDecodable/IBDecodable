@@ -58,7 +58,6 @@ public struct View: IBDecodable, ViewProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
-
         return View(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),

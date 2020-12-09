@@ -58,6 +58,7 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let isPrefetchingEnabled: Bool?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let hidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -126,7 +127,8 @@ public struct CollectionView: IBDecodable, ViewProtocol, IBIdentifiable {
             isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled),
             isPrefetchingEnabled:                      container.attributeIfPresent(of: .isPrefetchingEnabled),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }
@@ -165,6 +167,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
     public let reuseIdentifier: String?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let hidden: Bool?
 
     public var children: [IBElement] {
         // do not let default implementation which lead to duplicate element contentView
@@ -200,7 +203,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
         public let colorLabel: String?
         public let isMisplaced: Bool?
         public let isAmbiguous: Bool?
-    public let verifyAmbiguity: VerifyAmbiguity?
+        public let verifyAmbiguity: VerifyAmbiguity?
         public let opaque: Bool?
         public let rect: Rect?
         public let subviews: [AnyView]?
@@ -212,6 +215,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
         public let variations: [Variation]?
         public let backgroundColor: Color?
         public let tintColor: Color?
+        public let hidden: Bool?
 
         enum ConstraintsCodingKeys: CodingKey { case constraint }
         enum VariationCodingKey: CodingKey { case variation }
@@ -247,7 +251,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
                 colorLabel:                                container.attributeIfPresent(of: .colorLabel),
                 isMisplaced:                               container.attributeIfPresent(of: .isMisplaced),
                 isAmbiguous:                               container.attributeIfPresent(of: .isAmbiguous),
-            verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
+                verifyAmbiguity:                           container.attributeIfPresent(of: .verifyAmbiguity),
                 opaque:                                    container.attributeIfPresent(of: .opaque),
                 rect:                                      container.elementIfPresent(of: .rect),
                 subviews:                                  container.childrenIfPresent(of: .subviews),
@@ -258,7 +262,8 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
                 connections:                               container.childrenIfPresent(of: .connections),
                 variations:                                variationContainer.elementsIfPresent(of: .variation),
                 backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-                tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+                tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+                hidden:                                    container.attributeIfPresent(of: .hidden)
             )
         }
     }
@@ -312,7 +317,8 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }
@@ -349,6 +355,7 @@ public struct CollectionReusableView: IBDecodable, ViewProtocol, IBIdentifiable,
     public let reuseIdentifier: String?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let hidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -397,7 +404,8 @@ public struct CollectionReusableView: IBDecodable, ViewProtocol, IBIdentifiable,
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }

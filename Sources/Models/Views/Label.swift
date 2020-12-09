@@ -46,7 +46,7 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
-    public let adjustsFontForContentSizeCategory: Bool?
+    public let hidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -69,7 +69,7 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
-
+        
         return Label(
             id:                                        try container.attribute(of: .id),
             adjustsFontSizeToFit:                      container.attributeIfPresent(of: .adjustsFontSizeToFit),
@@ -106,7 +106,7 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-            adjustsFontForContentSizeCategory:         container.attributeIfPresent(of: .adjustsFontForContentSizeCategory)
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 

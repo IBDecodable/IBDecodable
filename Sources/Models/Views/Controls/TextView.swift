@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
+public struct TextView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UITextView"
 
@@ -44,12 +44,7 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
     public let editable: Bool?
     public let backgroundColor: Color?
     public let tintColor: Color?
-
-    public let isEnabled: Bool?
-    public let isHighlighted: Bool?
-    public let isSelected: Bool?
-    public let contentHorizontalAlignment: String?
-    public let contentVerticalAlignment: String?
+    public let hidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -62,9 +57,6 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
-                case .isEnabled: return "enabled"
-                case .isHighlighted: return "highlighted"
-                case .isSelected: return "selected"
                 default: return key.stringValue
                 }
             }()
@@ -110,11 +102,7 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
             editable:                                  container.attributeIfPresent(of: .editable),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, TextView.CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, TextView.CodingKeys.tintColor.stringValue),
-            isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
-            isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
-            isSelected:                                container.attributeIfPresent(of: .isSelected),
-            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
-            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment)
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }
