@@ -9,7 +9,7 @@ import SWXMLHash
 
 // MARK: - Rect
 
-public struct Rect: IBDecodable, IBKeyable {
+public struct Rect: IBDecodable, IBKeyable, Equatable {
 
     public let x: Float
     public let y: Float

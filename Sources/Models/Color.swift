@@ -49,6 +49,7 @@ public enum Color: IBDecodable {
         case key
         case colorSpace
         case cocoaTouchSystemColor
+        case systemColor
     }
 
     enum CalibratedWhiteCodingKeys: CodingKey {
@@ -93,7 +94,7 @@ public enum Color: IBDecodable {
                 let container = xml.container(keys: CustomCodingKeys.self)
                 let customColorSpace: String = try container.attribute(of: .customColorSpace)
                 switch customColorSpace {
-                case "sRGB":
+                case "sRGB", "calibratedRGB":
                     let sRGBContainer = xml.container(keys: sRGBCodingKeys.self)
                     return try .sRGB((key:   key,
                                       red:   sRGBContainer.attribute(of: .red),
@@ -109,7 +110,10 @@ public enum Color: IBDecodable {
             }
         } else {
             if let systemColor: String = container.attributeIfPresent(of: .cocoaTouchSystemColor) {
-                return .systemColor((key, systemColor))
+                return .systemColor((systemColor.replacingOccurrences(of: "Color", with: ""), systemColor.replacingOccurrences(of: "Color", with: "")))
+            }
+            if let systemColor: String = container.attributeIfPresent(of: .systemColor) {
+                return .systemColor((systemColor.replacingOccurrences(of: "Color", with: ""), systemColor.replacingOccurrences(of: "Color", with: "")))
             }
             let container = xml.container(keys: NamedCodingKeys.self)
             return .name((key, try container.attribute(of: .name)))
