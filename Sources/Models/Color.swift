@@ -8,7 +8,7 @@
 import SWXMLHash
 
 public enum Color: IBDecodable {
-
+    
     public typealias CalibratedWhite = (key: String?, white: Float, alpha: Float)
     public typealias CalibratedRGB = SRGB
     public typealias SRGB = (key: String?, red: Float, blue: Float, green: Float, alpha: Float)
@@ -18,7 +18,7 @@ public enum Color: IBDecodable {
     case sRGB(SRGB)
     case name(Named)
     case systemColor(Named)
-
+    
     public var calibratedRGB: CalibratedRGB? {
         switch self {
         case .calibratedRGB(let calibratedRGB):
@@ -26,7 +26,7 @@ public enum Color: IBDecodable {
         default: return nil
         }
     }
-
+    
     public var sRGB: SRGB? {
         switch self {
         case .sRGB(let sRGB):
@@ -34,7 +34,7 @@ public enum Color: IBDecodable {
         default: return nil
         }
     }
-
+    
     public var calibratedWhite: CalibratedWhite? {
         switch self {
         case .calibratedWhite(let calibratedWhite):
@@ -42,36 +42,36 @@ public enum Color: IBDecodable {
         default: return nil
         }
     }
-
+    
     public func encode(to encoder: Encoder) throws { fatalError() }
-
+    
     enum CodingKeys: CodingKey {
         case key
         case colorSpace
         case cocoaTouchSystemColor
         case systemColor
     }
-
+    
     enum CalibratedWhiteCodingKeys: CodingKey {
         case white, alpha
     }
-
+    
     enum CalibratedRGBCodingKeys: CodingKey {
         case red, blue, green, alpha
     }
-
+    
     enum sRGBCodingKeys: CodingKey {
         case red, blue, green, alpha
     }
-
+    
     enum CustomCodingKeys: CodingKey {
         case customColorSpace
     }
-
+    
     enum NamedCodingKeys: CodingKey {
         case name
     }
-
+    
     static func decode(_ xml: XMLIndexerType) throws -> Color {
         let container = xml.container(keys: CodingKeys.self)
         let key: String? = container.attributeIfPresent(of: .key)
@@ -102,6 +102,11 @@ public enum Color: IBDecodable {
                                       green: sRGBContainer.attribute(of: .green),
                                       alpha: sRGBContainer.attribute(of: .alpha)
                     ))
+                case "genericGamma22GrayColorSpace":
+                    let calibratedWhiteContainer = xml.container(keys: CalibratedWhiteCodingKeys.self)
+                    return try .calibratedWhite((key:   key,
+                                                 white: calibratedWhiteContainer.attribute(of: .white),
+                                                 alpha: calibratedWhiteContainer.attribute(of: .alpha)))
                 default:
                     throw IBError.unsupportedColorSpace(customColorSpace)
                 }
@@ -124,7 +129,7 @@ public enum Color: IBDecodable {
 // MARK: AttributeProtocol
 
 extension Color: AttributeProtocol {
-
+    
     public var key: String? {
         switch self {
         case .calibratedWhite(let calibratedWhite):
@@ -139,5 +144,5 @@ extension Color: AttributeProtocol {
             return named.key
         }
     }
-
+    
 }
