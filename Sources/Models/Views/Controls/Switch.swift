@@ -7,17 +7,16 @@
 
 import SWXMLHash
 
-public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
+public struct Switch: IBDecodable, ControlProtocol, IBIdentifiable {
+    
     public let id: String
     public let elementClass: String = "UISwitch"
-
+    
     public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
-    public let contentHorizontalAlignment: String?
     public let contentMode: String?
-    public let contentVerticalAlignment: String?
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
@@ -41,13 +40,20 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
-    public let hidden: Bool?
-
+    
+    public let isEnabled: Bool?
+    public let isHighlighted: Bool?
+    public let isSelected: Bool?
+    public let contentHorizontalAlignment: String?
+    public let contentVerticalAlignment: String?
+    
+    public var hidden: Bool?
+    
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
     enum ExternalCodingKeys: CodingKey { case color }
     enum ColorsCodingKeys: CodingKey { case key }
-
+    
     static func decode(_ xml: XMLIndexerType) throws -> Switch {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -55,6 +61,9 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
                 case .onTintColor: return "color"
+                case .isEnabled: return "enabled"
+                case .isHighlighted: return "highlighted"
+                case .isSelected: return "selected"
                 default: return key.stringValue
                 }
             }()
@@ -64,16 +73,14 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
-
+        
         return Switch(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
-            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
-            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
@@ -97,6 +104,11 @@ public struct Switch: IBDecodable, ViewProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
+            isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
+            isSelected:                                container.attributeIfPresent(of: .isSelected),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }

@@ -7,18 +7,16 @@
 
 import SWXMLHash
 
-public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
+public struct Button: IBDecodable, ControlProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIButton"
-
+    
     public let key: String?
     public let autoresizingMask: AutoresizingMask?
     public let buttonType: String?
     public let clipsSubviews: Bool?
     public let constraints: [Constraint]?
-    public let contentHorizontalAlignment: String?
     public let contentMode: String?
-    public let contentVerticalAlignment: String?
     public let customClass: String?
     public let customModule: String?
     public let customModuleProvider: String?
@@ -42,7 +40,13 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
     public let backgroundColor: Color?
     public let tintColor: Color?
     public let hidden: Bool?
-
+    
+    public let isEnabled: Bool?
+    public let isHighlighted: Bool?
+    public let isSelected: Bool?
+    public let contentHorizontalAlignment: String?
+    public let contentVerticalAlignment: String?
+    
     public struct State: IBDecodable, IBKeyable {
         public let key: String?
         public let title: String?
@@ -50,7 +54,7 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
         public let image: String?
         public let catalog: String?
         public let attributedString: AttributedString?
-
+        
         static func decode(_ xml: XMLIndexerType) throws -> Button.State {
             let container = xml.container(keys: CodingKeys.self)
             return State.init(
@@ -63,18 +67,21 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
             )
         }
     }
-
+    
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
     enum ExternalCodingKeys: CodingKey { case color }
     enum ColorsCodingKeys: CodingKey { case key }
-
+    
     static func decode(_ xml: XMLIndexerType) throws -> Button {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isEnabled: return "enabled"
+                case .isHighlighted: return "highlighted"
+                case .isSelected: return "selected"
                 default: return key.stringValue
                 }
             }()
@@ -84,7 +91,7 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
-
+        
         return Button(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),
@@ -92,9 +99,7 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
             buttonType:                                container.attributeIfPresent(of: .buttonType),
             clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),
             constraints:                               constraintsContainer?.elementsIfPresent(of: .constraint),
-            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
             contentMode:                               container.attributeIfPresent(of: .contentMode),
-            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             customClass:                               container.attributeIfPresent(of: .customClass),
             customModule:                              container.attributeIfPresent(of: .customModule),
             customModuleProvider:                      container.attributeIfPresent(of: .customModuleProvider),
@@ -117,7 +122,12 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-            hidden:                                    container.attributeIfPresent(of: .hidden)
+            hidden:                                    container.attributeIfPresent(of: .hidden),
+            isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
+            isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
+            isSelected:                                container.attributeIfPresent(of: .isSelected),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment)
         )
     }
 }

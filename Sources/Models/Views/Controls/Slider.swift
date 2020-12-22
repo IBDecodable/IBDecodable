@@ -7,7 +7,8 @@
 
 import SWXMLHash
 
-public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
+public struct Slider: IBDecodable, ControlProtocol, IBIdentifiable {
+    
     public let id: String
     public let elementClass: String = "UISlider"
 
@@ -35,10 +36,16 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
+
+    public let isEnabled: Bool?
+    public let isHighlighted: Bool?
+    public let isSelected: Bool?
+    public let contentHorizontalAlignment: String?
+    public let contentVerticalAlignment: String?
+
     public let minimumTrackTintColor: Color?
     public let maximumTrackTintColor: Color?
     public let thumbTintColor: Color?
-    public let hidden: Bool?
 
     public let value: String?
     public let minValue: String?
@@ -46,6 +53,8 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
     public let minimumValueImage: String?
     public let maximumValueImage: String?
     public let continuous: Bool
+    
+    public var hidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -58,6 +67,9 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isEnabled: return "enabled"
+                case .isHighlighted: return "highlighted"
+                case .isSelected: return "selected"
                 default: return key.stringValue
                 }
             }()
@@ -94,16 +106,21 @@ public struct Slider: IBDecodable, ViewProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
+            isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
+            isSelected:                                container.attributeIfPresent(of: .isSelected),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             minimumTrackTintColor:                     colorsContainer?.withAttributeElement(.key, CodingKeys.minimumTrackTintColor.stringValue),
             maximumTrackTintColor:                     colorsContainer?.withAttributeElement(.key, CodingKeys.maximumTrackTintColor.stringValue),
             thumbTintColor:                            colorsContainer?.withAttributeElement(.key, CodingKeys.thumbTintColor.stringValue),
-            hidden:                                    container.attributeIfPresent(of: .hidden),
             value:                                     container.attributeIfPresent(of: .value),
             minValue:                                  container.attributeIfPresent(of: .minValue),
             maxValue:                                  container.attributeIfPresent(of: .maxValue),
             minimumValueImage:                         container.attributeIfPresent(of: .minimumValueImage),
             maximumValueImage:                         container.attributeIfPresent(of: .maximumValueImage),
-            continuous:                                container.attributeIfPresent(of: .continuous) ?? true
+            continuous:                                container.attributeIfPresent(of: .continuous) ?? true,
+            hidden:                                    container.attributeIfPresent(of: .hidden)
         )
     }
 }

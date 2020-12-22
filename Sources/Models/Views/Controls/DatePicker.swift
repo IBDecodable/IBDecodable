@@ -7,7 +7,7 @@
 
 import SWXMLHash
 
-public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
+public struct DatePicker: IBDecodable, ControlProtocol, IBIdentifiable {
     public let id: String
     public let elementClass: String = "UIDatePicker"
 
@@ -33,13 +33,19 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
     public let connections: [AnyConnection]?
     public let variations: [Variation]?
-    public let contentHorizontalAlignment: String?
-    public let contentVerticalAlignment: String?
+    
     public let datePickerMode: String?
     public let minuteInterval: String? // Integer??
     public let date: IBDate?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    
+    public let isEnabled: Bool?
+    public let isHighlighted: Bool?
+    public let isSelected: Bool?
+    public let contentHorizontalAlignment: String?
+    public let contentVerticalAlignment: String?
+    
     public let hidden: Bool?
 
     public let style: String?
@@ -60,6 +66,9 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isEnabled: return "enabled"
+                case .isHighlighted: return "highlighted"
+                case .isSelected: return "selected"
                 default: return key.stringValue
                 }
             }()
@@ -96,13 +105,16 @@ public struct DatePicker: IBDecodable, ViewProtocol, IBIdentifiable {
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
-            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
-            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             datePickerMode:                            container.attributeIfPresent(of: .datePickerMode),
             minuteInterval:                            container.attributeIfPresent(of: .minuteInterval),
             date:                                      dateContainer?.withAttributeElement(.key, CodingKeys.date.stringValue),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
+            isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
+            isSelected:                                container.attributeIfPresent(of: .isSelected),
+            contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
+            contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
             hidden:                                    container.attributeIfPresent(of: .hidden),
             style:                                     container.attributeIfPresent(of: .style),
             useCurrentDate:                            container.attributeIfPresent(of: .useCurrentDate),
