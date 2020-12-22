@@ -49,6 +49,7 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
         public let color: Color?
         public let image: String?
         public let catalog: String?
+        public let attributedString: AttributedString?
 
         static func decode(_ xml: XMLIndexerType) throws -> Button.State {
             let container = xml.container(keys: CodingKeys.self)
@@ -57,7 +58,8 @@ public struct Button: IBDecodable, ViewProtocol, IBIdentifiable {
                 title: container.attributeIfPresent(of: .title),
                 color: container.elementIfPresent(of: .color),
                 image: container.attributeIfPresent(of: .image),
-                catalog: container.attributeIfPresent(of: .catalog)
+                catalog: container.attributeIfPresent(of: .catalog),
+                attributedString: container.elementIfPresent(of: .attributedString)
             )
         }
     }
