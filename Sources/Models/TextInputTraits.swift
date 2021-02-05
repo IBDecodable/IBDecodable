@@ -33,8 +33,7 @@ public struct TextInputTraits: IBDecodable, IBKeyable {
             smartInsertDeleteType: container.attributeIfPresent(of: .smartInsertDeleteType),
             smartQuotesType: container.attributeIfPresent(of: .smartDashesType),
             textContentType: container.attributeIfPresent(of: .textContentType),
-            autocapitalizationType: container.attributeIfPresent(of: .autocapitalizationType),
-            textContentType: container.attributeIfPresent(of: .textContentType)
+            autocapitalizationType: container.attributeIfPresent(of: .autocapitalizationType)
         )
     }
 }
