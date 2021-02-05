@@ -6,7 +6,6 @@
 //
 
 public struct TextInputTraits: IBDecodable, IBKeyable {
-    
     public let key: String?
     public let autocorrectionType: Bool?
     public let spellCheckingType: Bool?
@@ -34,7 +33,8 @@ public struct TextInputTraits: IBDecodable, IBKeyable {
             smartInsertDeleteType: container.attributeIfPresent(of: .smartInsertDeleteType),
             smartQuotesType: container.attributeIfPresent(of: .smartDashesType),
             textContentType: container.attributeIfPresent(of: .textContentType),
-            autocapitalizationType: container.attributeIfPresent(of: .autocapitalizationType)
+            autocapitalizationType: container.attributeIfPresent(of: .autocapitalizationType),
+            textContentType: container.attributeIfPresent(of: .textContentType)
         )
     }
 }
