@@ -6,7 +6,6 @@
 //
 
 public struct TextInputTraits: IBDecodable, IBKeyable {
-    
     public let key: String?
     public let autocorrectionType: Bool?
     public let spellCheckingType: Bool?
