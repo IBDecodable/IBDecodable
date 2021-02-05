@@ -94,7 +94,7 @@ public enum Color: IBDecodable {
                 let container = xml.container(keys: CustomCodingKeys.self)
                 let customColorSpace: String = try container.attribute(of: .customColorSpace)
                 switch customColorSpace {
-                case "sRGB", "calibratedRGB":
+                case "sRGB", "calibratedRGB", "displayP3":
                     let sRGBContainer = xml.container(keys: sRGBCodingKeys.self)
                     return try .sRGB((key:   key,
                                       red:   sRGBContainer.attribute(of: .red),
