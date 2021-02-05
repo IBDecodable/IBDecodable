@@ -53,6 +53,7 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
     public let contentVerticalAlignment: String?
     
     public var hidden: Bool?
+    public let textInputTraits: TextInputTraits?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -111,14 +112,15 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             editable:                                  container.attributeIfPresent(of: .editable),
-            backgroundColor:                           colorsContainer?.withAttributeElement(.key, TextView.CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, TextView.CodingKeys.tintColor.stringValue),
+            backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
             isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
             isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
             isSelected:                                container.attributeIfPresent(of: .isSelected),
             contentHorizontalAlignment:                container.attributeIfPresent(of: .contentHorizontalAlignment),
             contentVerticalAlignment:                  container.attributeIfPresent(of: .contentVerticalAlignment),
-            hidden:                                    container.attributeIfPresent(of: .hidden)
+            hidden:                                    container.attributeIfPresent(of: .hidden),
+            textInputTraits:                           container.elementIfPresent(of: .textInputTraits)
         )
     }
 }
