@@ -1,9 +1,0 @@
-language: swift
-osx_image: xcode10.2
-install: swift package update
-script:
-  - swift build
-  - swift build -c release
-  - swift test -Xswiftc "-DDISABLE_REMOTE_RESOURCES_TEST"
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
