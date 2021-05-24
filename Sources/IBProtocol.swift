@@ -240,12 +240,22 @@ extension Mirror {
         let mirror = Mirror(reflecting: element)
         let direct: [T] = mirror.children(T.self)
         let fromArray: [T] = mirror.children([T].self).flatMap { $0 }
-        let optional: [T]  = mirror.children(Optional<T>.self).compactMap { $0 }
-        return direct + fromArray + optional
+        return direct + fromArray
     }
 
     private func children <T> (_ type: T.Type) -> [T] {
-        //swiftlint:disable:next force_cast
-        return self.children.map { $0.value }.filter { $0 is T } as! [T]
+        // Workaround: Swift 5.3 can't cast `Any` to `Optional<T>` directly due to:
+        // > error: cannot downcast from 'Any' to a more optional type 'Optional<T>'
+        func cast<From, To>(_ value: From, _: To.Type) -> To? {
+            return value as? To
+        }
+        return self.children.compactMap { (_, value) in
+            // Note: value as? T fails even the value is .some on Swift 5.3
+            // This issue SR-1999 has been fixed since Swift 5.4
+            if let some = cast(value, Optional<T>.self) {
+                return some
+            }
+            return value as? T
+        }
     }
 }
