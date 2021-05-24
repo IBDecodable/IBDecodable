@@ -7,13 +7,37 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
-    runs-on: macos-latest
-
+  test_on_Linux:
+    name: Build and Test on Linux
+    strategy:
+      matrix:
+        swift-version: ["5.1", "5.2", "5.3", "5.4"]
+    runs-on: Ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v -Xswiftc "-DDISABLE_REMOTE_RESOURCES_TEST"
+      - uses: actions/checkout@v2
+      - name: Setup swiftenv
+        run: |
+          git clone https://github.com/kylef/swiftenv.git ~/.swiftenv
+          export SWIFTENV_ROOT="$HOME/.swiftenv"
+          export PATH="$SWIFTENV_ROOT/bin:$PATH"
+          eval "$(swiftenv init -)"
+          echo "$PATH" >> $GITHUB_PATH
+      - name: Install Swift
+        run: swiftenv install "${{ matrix.swift-version }}" --skip-existing
+      - run: swift --version
+      - run: swift test --enable-test-discovery -Xswiftc "-DDISABLE_REMOTE_RESOURCES_TEST"
+
+  test_on_macOS:
+    name: Build and Test on macOS
+    strategy:
+      matrix:
+        xcode-version:
+          - /Applications/Xcode_11.4.1.app
+          - /Applications/Xcode_12.3.app
+          - /Applications/Xcode_12.4.app
+    runs-on: macOS-10.15
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo xcode-select -s "${{ matrix.xcode-version }}"
+      - run: swift --version
+      - run: swift test -Xswiftc "-DDISABLE_REMOTE_RESOURCES_TEST"
