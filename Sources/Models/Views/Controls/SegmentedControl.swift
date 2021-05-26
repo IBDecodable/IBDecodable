@@ -29,6 +29,7 @@ public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
     public let segmentControlStyle: String?
     public let segments: [Segment]
     public let selectedSegmentIndex: Int?
+    public let selectedSegmentTintColor: Color?
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
@@ -37,6 +38,7 @@ public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let momentary: Bool?
 
     public let isEnabled: Bool?
     public let isHighlighted: Bool?
@@ -99,6 +101,7 @@ public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
             segmentControlStyle:                       container.attributeIfPresent(of: .segmentControlStyle),
             segments:                                  try segmentsContainer?.elements(of: .segment) ?? [],
             selectedSegmentIndex:                      container.attributeIfPresent(of: .selectedSegmentIndex),
+            selectedSegmentTintColor:                  colorsContainer?.withAttributeElement(.key, CodingKeys.selectedSegmentTintColor.stringValue),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
@@ -107,6 +110,7 @@ public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            momentary:                                 container.attributeIfPresent(of: .momentary),
             isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
             isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
             isSelected:                                container.attributeIfPresent(of: .isSelected),
