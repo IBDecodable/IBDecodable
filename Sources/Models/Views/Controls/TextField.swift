@@ -33,6 +33,8 @@ public struct TextField: IBDecodable, ControlProtocol, IBIdentifiable {
     public let subviews: [AnyView]?
     public let text: String?
     public let textAlignment: String?
+    public let placeholder: String?
+    public let textColor: Color?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
     public let userDefinedRuntimeAttributes: [UserDefinedRuntimeAttribute]?
@@ -95,6 +97,8 @@ public struct TextField: IBDecodable, ControlProtocol, IBIdentifiable {
             subviews:                                  container.childrenIfPresent(of: .subviews),
             text:                                      container.attributeIfPresent(of: .text),
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
+            placeholder:                               container.attributeIfPresent(of: .placeholder),
+            textColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.textColor.stringValue),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
             userDefinedRuntimeAttributes:              container.childrenIfPresent(of: .userDefinedRuntimeAttributes),
