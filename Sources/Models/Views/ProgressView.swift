@@ -35,6 +35,8 @@ public struct ProgressView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let hidden: Bool?
+    public let alpha: Float?
     public let progressTintColor: Color?
     public let trackTintColor: Color?
     public let progress: Float?
@@ -88,6 +90,8 @@ public struct ProgressView: IBDecodable, ViewProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            hidden:                                    container.attributeIfPresent(of: .hidden),
+            alpha:                                     container.attributeIfPresent(of: .alpha),
             progressTintColor:                         colorsContainer?.withAttributeElement(.key, CodingKeys.progressTintColor.stringValue),
             trackTintColor:                            colorsContainer?.withAttributeElement(.key, CodingKeys.trackTintColor.stringValue),
             progress:                                  container.attributeIfPresent(of: .progress),

@@ -35,6 +35,8 @@ public struct NavigationBar: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let hidden: Bool?
+    public let alpha: Float?
 
     public struct NavigationItem: IBDecodable, IBIdentifiable, IBKeyable, IBCustomClassable, IBUserLabelable {
 
@@ -115,7 +117,9 @@ public struct NavigationBar: IBDecodable, ViewProtocol, IBIdentifiable {
             connections:                               container.childrenIfPresent(of: .connections),
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            hidden:                                    container.attributeIfPresent(of: .hidden),
+            alpha:                                    container.attributeIfPresent(of: .alpha)
         )
     }
 }
