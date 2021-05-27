@@ -10,6 +10,7 @@ import SWXMLHash
 // MARK: - ViewProtocol
 
 public protocol ViewProtocol: IBKeyable, IBCustomClassable, IBUserLabelable, IBConnectionOwner {
+    var id: String { get }
     var elementClass: String { get }
 
     var key: String? { get }
