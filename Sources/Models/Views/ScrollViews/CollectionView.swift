@@ -442,6 +442,7 @@ public struct CollectionViewFlowLayout: IBDecodable, IBIdentifiable, IBKeyable {
     public let customModule: String?
     public let customModuleProvider: String?
     public let scrollDirection: String? // vertical, horizontal
+    public let automaticEstimatedItemSize: Bool?
 
     static func decode(_ xml: XMLIndexerType) throws -> CollectionViewFlowLayout {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -456,16 +457,17 @@ public struct CollectionViewFlowLayout: IBDecodable, IBIdentifiable, IBKeyable {
             return MappedCodingKey(stringValue: stringValue)
         }
         return CollectionViewFlowLayout(
-            id:                       try container.attribute(of: .id),
-            key:                      container.attributeIfPresent(of: .key),
-            minimumLineSpacing:       container.attributeIfPresent(of: .minimumLineSpacing),
-            minimumInteritemSpacing:  container.attributeIfPresent(of: .minimumInteritemSpacing),
-            sizes:                    container.elementsIfPresent(of: .sizes),
-            insets:                   container.elementsIfPresent(of: .insets),
-            customClass:              container.attributeIfPresent(of: .customClass),
-            customModule:             container.attributeIfPresent(of: .customModule),
-            customModuleProvider:     container.attributeIfPresent(of: .customModuleProvider),
-            scrollDirection:          container.attributeIfPresent(of: .scrollDirection)
+            id:                         try container.attribute(of: .id),
+            key:                        container.attributeIfPresent(of: .key),
+            minimumLineSpacing:         container.attributeIfPresent(of: .minimumLineSpacing),
+            minimumInteritemSpacing:    container.attributeIfPresent(of: .minimumInteritemSpacing),
+            sizes:                      container.elementsIfPresent(of: .sizes),
+            insets:                     container.elementsIfPresent(of: .insets),
+            customClass:                container.attributeIfPresent(of: .customClass),
+            customModule:               container.attributeIfPresent(of: .customModule),
+            customModuleProvider:       container.attributeIfPresent(of: .customModuleProvider),
+            scrollDirection:            container.attributeIfPresent(of: .scrollDirection),
+            automaticEstimatedItemSize: container.attributeIfPresent(of: .automaticEstimatedItemSize)
         )
     }
 }
