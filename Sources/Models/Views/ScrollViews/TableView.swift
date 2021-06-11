@@ -272,6 +272,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
         public let variations: [Variation]?
         public let backgroundColor: Color?
         public let tintColor: Color?
+        public let edgeInsets: DirectionalEdgeInsets?
 
         static func decode(_ xml: XMLIndexerType) throws -> TableViewCell.TableViewContentView {
             let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -313,7 +314,8 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
                 connections:                               container.childrenIfPresent(of: .connections),
                 variations:                                variationContainer.elementsIfPresent(of: .variation),
                 backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-                tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+                tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+                edgeInsets:                                container.elementIfPresent(of: .edgeInsets)
             )
         }
     }
