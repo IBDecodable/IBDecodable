@@ -452,6 +452,41 @@ class Tests: XCTestCase {
         }
     }
     
+    func testButtonStates() {
+        let url = self.url(forResource: "Button", withExtension: "xib")
+        
+        do {
+            let file = try XibFile(url: url)
+
+            let rootView = file.document.views?.first?.view
+            XCTAssertNotNil(rootView, "There should be a root view")
+
+            let button = rootView as? Button
+            XCTAssertNotNil(button, "There should be a button")
+            XCTAssertEqual(button?.elementClass, "UIButton")
+
+            let states = button?.state
+            XCTAssertEqual(states?.count, 2, "Should find 2 states")
+            
+            let normalState = states?.first(where: {$0.key == "normal"})
+            XCTAssertEqual(normalState?.title, "Normal title")
+            XCTAssertNil(normalState?.image)
+            XCTAssertNil(normalState?.backgroundImage)
+            XCTAssertNotNil(normalState?.titleColor)
+            XCTAssertNotNil(normalState?.titleShadowColor)
+            
+            let selectedState = states?.first(where: {$0.key == "selected"})
+            XCTAssertEqual(selectedState?.title, "selected text")
+            XCTAssertEqual(selectedState?.image, "testImage.png")
+            XCTAssertEqual(selectedState?.backgroundImage, "backImage.png")
+            XCTAssertNil(selectedState?.titleColor)
+            XCTAssertNil(selectedState?.titleShadowColor)
+            
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+    
     func testActivityIndicatorView() {
         let url = self.url(forResource: "ViewWithActivityIndicatorView", withExtension: "xib")
         do {
