@@ -39,7 +39,7 @@ public struct Stepper: IBDecodable, ControlProtocol, IBIdentifiable {
     public let value: Float?
     public let backgroundColor: Color?
     public let tintColor: Color?
-    public let hidden: Bool?
+    public let isHidden: Bool?
     public let alpha: Float?
 
     public let isEnabled: Bool?
@@ -59,6 +59,7 @@ public struct Stepper: IBDecodable, ControlProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isHidden: return "hidden"
                 case .isEnabled: return "enabled"
                 case .isHighlighted: return "highlighted"
                 case .isSelected: return "selected"
@@ -102,7 +103,7 @@ public struct Stepper: IBDecodable, ControlProtocol, IBIdentifiable {
             value:                                     container.attributeIfPresent(of: .value),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-            hidden:                                    container.attributeIfPresent(of: .hidden),
+            isHidden:                                  container.attributeIfPresent(of: .isHidden),
             alpha:                                     container.attributeIfPresent(of: .alpha),
             isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
             isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),

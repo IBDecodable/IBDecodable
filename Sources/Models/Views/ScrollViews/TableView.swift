@@ -60,7 +60,7 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let headersFooters: [AnyView]?
     public let backgroundColor: Color?
     public let tintColor: Color?
-    public let hidden: Bool?
+    public let isHidden: Bool?
     public let alpha: Float?
 
     public enum DataMode: XMLAttributeDecodable, KeyDecodable, Equatable {
@@ -100,6 +100,7 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isHidden: return "hidden"
                 case .prototypeCells: return "prototypes"
                 case .isPagingEnabled: return "pagingEnabled"
                 case .isDirectionalLockEnabled: return "directionalLockEnabled"
@@ -160,7 +161,7 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
             headersFooters:                            container.elementsIfPresent(of: .headersFooters),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-            hidden:                                    container.attributeIfPresent(of: .hidden),
+            isHidden:                                  container.attributeIfPresent(of: .isHidden),
             alpha:                                     container.attributeIfPresent(of: .alpha)
         )
     }
@@ -230,7 +231,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
     public let reuseIdentifier: String?
     public let backgroundColor: Color?
     public let tintColor: Color?
-    public let hidden: Bool?
+    public let isHidden: Bool?
     public let alpha: Float?
     
     public var children: [IBElement] {
@@ -278,7 +279,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
         public let variations: [Variation]?
         public let backgroundColor: Color?
         public let tintColor: Color?
-        public let hidden: Bool?
+        public let isHidden: Bool?
         public let alpha: Float?
         
         static func decode(_ xml: XMLIndexerType) throws -> TableViewCell.TableViewContentView {
@@ -287,6 +288,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
                     switch key {
                     case .isMisplaced: return "misplaced"
                     case .isAmbiguous: return "ambiguous"
+                    case .isHidden: return "hidden"
                     default: return key.stringValue
                     }
                 }()
@@ -322,7 +324,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
                 variations:                                variationContainer.elementsIfPresent(of: .variation),
                 backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
                 tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-                hidden:                                    container.attributeIfPresent(of: .hidden),
+                isHidden:                                  container.attributeIfPresent(of: .isHidden),
                 alpha:                                     container.attributeIfPresent(of: .alpha)
             )
         }
@@ -339,6 +341,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isHidden: return "hidden"
                 case ._subviews: return "subview"
                 case .contentView: return "tableViewCellContentView"
                 default: return key.stringValue
@@ -378,7 +381,7 @@ public struct TableViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBReusab
             reuseIdentifier:                           container.attributeIfPresent(of: .reuseIdentifier),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-            hidden:                                    container.attributeIfPresent(of: .hidden),
+            isHidden:                                  container.attributeIfPresent(of: .isHidden),
             alpha:                                     container.attributeIfPresent(of: .alpha)
         )
     }

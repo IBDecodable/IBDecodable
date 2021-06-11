@@ -35,7 +35,7 @@ public struct SKView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
-    public let hidden: Bool?
+    public let isHidden: Bool?
     public let alpha: Float?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
@@ -49,6 +49,7 @@ public struct SKView: IBDecodable, ViewProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isHidden: return "hidden"
                 default: return key.stringValue
                 }
             }()
@@ -85,7 +86,7 @@ public struct SKView: IBDecodable, ViewProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
-            hidden:                                    container.attributeIfPresent(of: .hidden),
+            isHidden:                                  container.attributeIfPresent(of: .isHidden),
             alpha:                                     container.attributeIfPresent(of: .alpha)
         )
     }
