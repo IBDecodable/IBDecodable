@@ -451,6 +451,39 @@ class Tests: XCTestCase {
             XCTFail("\(error)  \(url)")
         }
     }
+    
+    func testActivityIndicatorView() {
+        let url = self.url(forResource: "ViewWithActivityIndicatorView", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+
+            let rootView = file.document.views?.first?.view
+            XCTAssertNotNil(rootView, "There should be a root view")
+
+            let customActivityIndicatorView = rootView?.subviews?.first?.view as? ActivityIndicatorView
+            XCTAssertNotNil(customActivityIndicatorView, "There should be an activity indicator view with custom values")
+            XCTAssertEqual(customActivityIndicatorView?.elementClass, "UIActivityIndicatorView")
+            
+            let defaultActivityIndicatorView = rootView?.subviews?[1].view as? ActivityIndicatorView
+            XCTAssertNotNil(defaultActivityIndicatorView, "There should be an activity indicator view with default values")
+            XCTAssertEqual(defaultActivityIndicatorView?.elementClass, "UIActivityIndicatorView")
+            
+            XCTAssertEqual(customActivityIndicatorView?.style, "large")
+            XCTAssertEqual(defaultActivityIndicatorView?.style, "medium")
+            
+            XCTAssertTrue(customActivityIndicatorView?.isAnimating ?? false)
+            XCTAssertNil(defaultActivityIndicatorView?.isAnimating)
+            
+            XCTAssertTrue(customActivityIndicatorView?.hidesWhenStopped ?? false)
+            XCTAssertNil(defaultActivityIndicatorView?.hidesWhenStopped)
+            
+            XCTAssertNotNil(customActivityIndicatorView?.color)
+            XCTAssertNil(defaultActivityIndicatorView?.color)
+            
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
 
     func testViewsWithTextColorAndBackgroundColor() {
         let url = self.url(forResource: "ViewsWithTextColorAndBackgroundColor", withExtension: "xib")
