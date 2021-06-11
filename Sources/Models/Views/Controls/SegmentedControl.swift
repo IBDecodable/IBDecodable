@@ -29,6 +29,7 @@ public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
     public let segmentControlStyle: String?
     public let segments: [Segment]
     public let selectedSegmentIndex: Int?
+    public let selectedSegmentTintColor: Color?
     public let subviews: [AnyView]?
     public let translatesAutoresizingMaskIntoConstraints: Bool?
     public let userInteractionEnabled: Bool?
@@ -39,6 +40,7 @@ public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
     public let tintColor: Color?
     public let isHidden: Bool?
     public let alpha: Float?
+    public let momentary: Bool?
 
     public let isEnabled: Bool?
     public let isHighlighted: Bool?
@@ -102,6 +104,7 @@ public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
             segmentControlStyle:                       container.attributeIfPresent(of: .segmentControlStyle),
             segments:                                  try segmentsContainer?.elements(of: .segment) ?? [],
             selectedSegmentIndex:                      container.attributeIfPresent(of: .selectedSegmentIndex),
+            selectedSegmentTintColor:                  colorsContainer?.withAttributeElement(.key, CodingKeys.selectedSegmentTintColor.stringValue),
             subviews:                                  container.childrenIfPresent(of: .subviews),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
             userInteractionEnabled:                    container.attributeIfPresent(of: .userInteractionEnabled),
@@ -112,6 +115,7 @@ public struct SegmentedControl: IBDecodable, ControlProtocol, IBIdentifiable {
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
             isHidden:                                  container.attributeIfPresent(of: .isHidden),
             alpha:                                     container.attributeIfPresent(of: .alpha),
+            momentary:                                 container.attributeIfPresent(of: .momentary),
             isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
             isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
             isSelected:                                container.attributeIfPresent(of: .isSelected),

@@ -1,5 +1,5 @@
 //
-//  ActivityindicatorView.swift
+//  ActivityIndicatorView.swift
 //  IBDecodable
 //
 //  Created by phimage on 01/04/2018.
@@ -7,9 +7,12 @@
 
 import SWXMLHash
 
-public struct ActivityindicatorView: IBDecodable, ViewProtocol, IBIdentifiable {
+@available(*, deprecated, message: "Use ActivityIndicatorView instead")
+public typealias ActivityindicatorView = ActivityIndicatorView
+
+public struct ActivityIndicatorView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let id: String
-    public let elementClass: String = "UIActivityindicatorView"
+    public let elementClass: String = "UIActivityIndicatorView"
 
     public let key: String?
     public let autoresizingMask: AutoresizingMask?
@@ -38,18 +41,24 @@ public struct ActivityindicatorView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let isHidden: Bool?
     public let alpha: Float?
 
+    public let isAnimating: Bool?
+    public let hidesWhenStopped: Bool?
+    public let color: Color?
+    public let style: String?
+    
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
     enum ExternalCodingKeys: CodingKey { case color }
     enum ColorsCodingKeys: CodingKey { case key }
 
-    static func decode(_ xml: XMLIndexerType) throws -> ActivityindicatorView {
+    static func decode(_ xml: XMLIndexerType) throws -> ActivityIndicatorView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
                 case .isHidden: return "hidden"
+                case .isAnimating: return "animating"
                 default: return key.stringValue
                 }
             }()
@@ -60,7 +69,7 @@ public struct ActivityindicatorView: IBDecodable, ViewProtocol, IBIdentifiable {
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
-        return ActivityindicatorView(
+        return ActivityIndicatorView(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),
             autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
@@ -87,7 +96,11 @@ public struct ActivityindicatorView: IBDecodable, ViewProtocol, IBIdentifiable {
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
             isHidden:                                  container.attributeIfPresent(of: .isHidden),
-            alpha:                                     container.attributeIfPresent(of: .alpha)
+            alpha:                                     container.attributeIfPresent(of: .alpha),
+            isAnimating:                               container.attributeIfPresent(of: .isAnimating),
+            hidesWhenStopped:                          container.attributeIfPresent(of: .hidesWhenStopped),
+            color:                                     colorsContainer?.withAttributeElement(.key, CodingKeys.color.stringValue),
+            style:                                     container.attributeIfPresent(of: .style)
         )
     }
 }
