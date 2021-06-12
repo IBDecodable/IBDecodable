@@ -39,6 +39,8 @@ public struct Button: IBDecodable, ControlProtocol, IBIdentifiable {
     public let variations: [Variation]?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let isHidden: Bool?
+    public let alpha: Float?
     public let isEnabled: Bool?
     public let isHighlighted: Bool?
     public let isSelected: Bool?
@@ -75,6 +77,7 @@ public struct Button: IBDecodable, ControlProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isHidden: return "hidden"
                 case .isEnabled: return "enabled"
                 case .isHighlighted: return "highlighted"
                 case .isSelected: return "selected"
@@ -118,6 +121,8 @@ public struct Button: IBDecodable, ControlProtocol, IBIdentifiable {
             variations:                                variationContainer.elementsIfPresent(of: .variation),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            isHidden:                                  container.attributeIfPresent(of: .isHidden),
+            alpha:                                     container.attributeIfPresent(of: .alpha),
             isEnabled:                                 container.attributeIfPresent(of: .isEnabled),
             isHighlighted:                             container.attributeIfPresent(of: .isHighlighted),
             isSelected:                                container.attributeIfPresent(of: .isSelected),

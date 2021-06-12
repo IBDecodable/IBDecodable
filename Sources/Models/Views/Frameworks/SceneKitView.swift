@@ -37,6 +37,7 @@ public struct SceneKitView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let alpha: Float?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let isHidden: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -49,6 +50,7 @@ public struct SceneKitView: IBDecodable, ViewProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isHidden: return "hidden"
                 default: return key.stringValue
                 }
             }()
@@ -86,7 +88,8 @@ public struct SceneKitView: IBDecodable, ViewProtocol, IBIdentifiable {
             multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
             alpha:                                     container.attributeIfPresent(of: .alpha),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            isHidden:                                    container.attributeIfPresent(of: .isHidden)
         )
     }
 }

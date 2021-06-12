@@ -35,6 +35,8 @@ public protocol ViewProtocol: IBKeyable, IBCustomClassable, IBUserLabelable, IBC
     var variations: [Variation]? { get }
     var backgroundColor: Color? { get }
     var tintColor: Color? { get }
+    var isHidden: Bool? { get }
+    var alpha: Float? {get}
 }
 
 // MARK: - AnyView

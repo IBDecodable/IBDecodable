@@ -39,6 +39,8 @@ public struct GLKView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let multipleTouchEnabled: Bool?
     public let backgroundColor: Color?
     public let tintColor: Color?
+    public let isHidden: Bool?
+    public let alpha: Float?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
@@ -51,6 +53,7 @@ public struct GLKView: IBDecodable, ViewProtocol, IBIdentifiable {
                 switch key {
                 case .isMisplaced: return "misplaced"
                 case .isAmbiguous: return "ambiguous"
+                case .isHidden: return "hidden"
                 default: return key.stringValue
                 }
             }()
@@ -90,7 +93,9 @@ public struct GLKView: IBDecodable, ViewProtocol, IBIdentifiable {
             drawableDepthFormat:                       container.attributeIfPresent(of: .drawableDepthFormat),
             multipleTouchEnabled:                      container.attributeIfPresent(of: .multipleTouchEnabled),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
-            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue)
+            tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
+            isHidden:                                  container.attributeIfPresent(of: .isHidden),
+            alpha:                                     container.attributeIfPresent(of: .alpha)
         )
     }
 }
