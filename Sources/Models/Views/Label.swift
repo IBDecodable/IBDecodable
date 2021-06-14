@@ -48,6 +48,7 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
     public let tintColor: Color?
     public let isHidden: Bool?
     public let alpha: Float?
+    public let numberOfLines: Int?
     public let adjustsFontForContentSizeCategory: Bool?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
@@ -111,6 +112,7 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
             isHidden:                                  container.attributeIfPresent(of: .isHidden),
             alpha:                                     container.attributeIfPresent(of: .alpha),
+            numberOfLines:                             container.attributeIfPresent(of: .numberOfLines),
             adjustsFontForContentSizeCategory:         container.attributeIfPresent(of: .adjustsFontForContentSizeCategory)
         )
     }
