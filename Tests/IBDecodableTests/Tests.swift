@@ -452,6 +452,31 @@ class Tests: XCTestCase {
         }
     }
     
+    
+    func testTextViewTextProperty() {
+        let url = self.url(forResource: "TextView", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+
+            let textViews = file.document.views
+            XCTAssertEqual(textViews?.count, 2, "There should be 2 textViews")
+            
+
+            let multiLineTextView = textViews?[0].view as? TextView
+            XCTAssertNotNil(multiLineTextView, "There should be a textView")
+            XCTAssertEqual(multiLineTextView?.elementClass, "UITextView")
+            XCTAssertEqual(multiLineTextView?.text, "This is a text with multi lines and\nreturn character!", "Text property should contain the multiline text")
+
+            let singleLineTextView = textViews?[1].view as? TextView
+            XCTAssertNotNil(singleLineTextView, "There should be a textView")
+            XCTAssertEqual(singleLineTextView?.elementClass, "UITextView")
+            XCTAssertEqual(singleLineTextView?.text, "This is a small text", "Text property should contain the single line text from text view attribute")
+            
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+    
     func testActivityIndicatorView() {
         let url = self.url(forResource: "ViewWithActivityIndicatorView", withExtension: "xib")
         do {
