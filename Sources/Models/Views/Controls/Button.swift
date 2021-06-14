@@ -50,6 +50,7 @@ public struct Button: IBDecodable, ControlProtocol, IBIdentifiable {
     public struct State: IBDecodable, IBKeyable {
         public let key: String?
         public let title: String?
+        public let color: Color? ///`Color` maybe have been replaced by `titleColor` and `titleShadowColor`
         public let titleColor: Color?
         public let titleShadowColor: Color?
         public let image: String?
@@ -63,6 +64,7 @@ public struct Button: IBDecodable, ControlProtocol, IBIdentifiable {
             return State.init(
                 key: try container.attribute(of: .key),
                 title: container.attributeIfPresent(of: .title),
+                color: container.elementIfPresent(of: .color),
                 titleColor: colorsContainer?.withAttributeElement(.key, CodingKeys.titleColor.stringValue),
                 titleShadowColor: colorsContainer?.withAttributeElement(.key, CodingKeys.titleShadowColor.stringValue),
                 image: container.attributeIfPresent(of: .image),
