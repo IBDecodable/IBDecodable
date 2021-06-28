@@ -58,6 +58,8 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let minimumZoomScale: Float?
     public let isDirectionalLockEnabled: Bool?
     public let headersFooters: [AnyView]?
+    public let allowsSelection: Bool?
+    public let allowsMultipleSelection: Bool?
     public let backgroundColor: Color?
     public let tintColor: Color?
     public let isHidden: Bool?
@@ -159,6 +161,8 @@ public struct TableView: IBDecodable, ViewProtocol, IBIdentifiable {
             minimumZoomScale:                          container.attributeIfPresent(of: .minimumZoomScale),
             isDirectionalLockEnabled:                  container.attributeIfPresent(of: .isDirectionalLockEnabled),
             headersFooters:                            container.elementsIfPresent(of: .headersFooters),
+            allowsSelection:                           container.attributeIfPresent(of: .allowsSelection),
+            allowsMultipleSelection:                   container.attributeIfPresent(of: .allowsMultipleSelection),
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
             isHidden:                                  container.attributeIfPresent(of: .isHidden),
