@@ -31,6 +31,7 @@ public struct AnyResource: IBDecodable {
         }
         switch elementName {
         case "namedColor":      return try AnyResource(NamedColor.decode(xml))
+        case "systemColor":     return try AnyResource(SystemColor.decode(xml))
         case "image":           return try AnyResource(Image.decode(xml))
         default:
             throw IBError.unsupportedViewClass(elementName)

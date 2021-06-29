@@ -568,6 +568,26 @@ class Tests: XCTestCase {
             XCTFail("\(error)  \(url)")
         }
     }
+    
+    func testSystemColorNameInResources() {
+        let url = self.url(forResource: "ViewWithSystemColorResource", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+            let resources = file.document.resources
+            
+            XCTAssertNotNil(resources)
+            XCTAssertEqual(resources?.count, 3)
+            
+            resources?.forEach({ (r) in
+                XCTAssertNotNil(r.resource as? SystemColor)
+                XCTAssertNotNil((r.resource as? SystemColor)?.name)
+                XCTAssertNotNil((r.resource as? SystemColor)?.color)
+            })
+            
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
 
     // MARK: Utils
 
