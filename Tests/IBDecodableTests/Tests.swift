@@ -452,26 +452,56 @@ class Tests: XCTestCase {
         }
     }
     
-    
-    func testTextViewTextProperty() {
-        let url = self.url(forResource: "TextView", withExtension: "xib")
+    func testMultiLineTextProperty() {
+        let url = self.url(forResource: "MultiLineText", withExtension: "xib")
         do {
             let file = try XibFile(url: url)
 
-            let textViews = file.document.views
-            XCTAssertEqual(textViews?.count, 2, "There should be 2 textViews")
+            let textViews = file.document.views?.filter({$0.view is TextView})
+            XCTAssertEqual(textViews?.count, 2, "There should be 2 TextViews")
             
-
-            let multiLineTextView = textViews?[0].view as? TextView
-            XCTAssertNotNil(multiLineTextView, "There should be a textView")
-            XCTAssertEqual(multiLineTextView?.elementClass, "UITextView")
-            XCTAssertEqual(multiLineTextView?.text, "This is a text with multi lines and\nreturn character!", "Text property should contain the multiline text")
-
-            let singleLineTextView = textViews?[1].view as? TextView
+            let singleLineTextView = textViews?[0].view as? TextView
             XCTAssertNotNil(singleLineTextView, "There should be a textView")
             XCTAssertEqual(singleLineTextView?.elementClass, "UITextView")
             XCTAssertEqual(singleLineTextView?.text, "This is a small text", "Text property should contain the single line text from text view attribute")
             
+            let multiLineTextView = textViews?[1].view as? TextView
+            XCTAssertNotNil(multiLineTextView, "There should be a textView")
+            XCTAssertEqual(multiLineTextView?.elementClass, "UITextView")
+            XCTAssertEqual(multiLineTextView?.text, "This is a text with multi lines and\nreturn character!", "Text property should contain the multiline text")
+
+           
+            
+            let labels = file.document.views?.filter({$0.view is Label})
+            XCTAssertEqual(labels?.count, 2, "There should be 2 Labels")
+
+            let singleLineLabel = labels?[0].view as? Label
+            XCTAssertNotNil(singleLineLabel, "There should be a label")
+            XCTAssertEqual(singleLineLabel?.elementClass, "UILabel")
+            XCTAssertEqual(singleLineLabel?.text, "Single Line label", "Text property should contain the single line text from text view attribute")
+            
+            let multiLineLabel = labels?[1].view as? Label
+            XCTAssertNotNil(multiLineLabel, "There should be a label")
+            XCTAssertEqual(multiLineLabel?.elementClass, "UILabel")
+            XCTAssertEqual(multiLineLabel?.text, "This is a text with multi lines and\nreturn character!", "Text property should contain the multiline text")
+            
+            
+            
+            let textFields = file.document.views?.filter({$0.view is TextField})
+            XCTAssertEqual(textFields?.count, 2, "There should be 2 TextFields")
+            
+            let singleTextField = textFields?[0].view as? TextField
+            XCTAssertNotNil(singleTextField, "There should be a TextField")
+            XCTAssertEqual(singleTextField?.elementClass, "UITextField")
+            XCTAssertEqual(singleTextField?.text, "Single line textfield", "Text property should contain the single line text from text view attribute")
+            XCTAssertEqual(singleTextField?.placeholder, "Single line placeholder", "Text property should contain the single line text from placeholder view attribute")
+            
+            let multiLineTextField = textFields?[1].view as? TextField
+            XCTAssertNotNil(multiLineTextField, "There should be a TextField")
+            XCTAssertEqual(multiLineTextField?.elementClass, "UITextField")
+            XCTAssertEqual(multiLineTextField?.text, "This is a text with multi lines and\nreturn character!", "Text property should contain the single line text from text view attribute")
+            XCTAssertEqual(multiLineTextField?.placeholder, "This is a placeholder with multi lines and\nreturn character!", "Text property should contain the single line text from placeholder view attribute")
+
         } catch {
             XCTFail("\(error)  \(url)")
         }

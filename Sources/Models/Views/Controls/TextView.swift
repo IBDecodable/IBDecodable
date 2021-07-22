@@ -78,14 +78,12 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+        let stringsContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .string, keys: StringsCodingKeys.self)
 
         var text: String? = container.attributeIfPresent(of: .text)
         if text == nil {
-            let stringsContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .string, keys: StringsCodingKeys.self)
             let multiLineText: StringElement? = stringsContainer?.withAttributeElement(.key, CodingKeys.text.stringValue)
-            if multiLineText?.key == "text"{
-                text = multiLineText?.elementValue
-            }
+            text = multiLineText?.elementValue
         }
         
         return TextView(

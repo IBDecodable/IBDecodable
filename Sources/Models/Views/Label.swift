@@ -52,9 +52,10 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
-    enum ExternalCodingKeys: CodingKey { case color }
+    enum ExternalCodingKeys: CodingKey { case color, string }
     enum ColorsCodingKeys: CodingKey { case key }
-
+    enum StringsCodingKeys: CodingKey { case key }
+    
     static func decode(_ xml: XMLIndexerType) throws -> Label {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
             let stringValue: String = {
@@ -72,7 +73,14 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+        let stringsContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .string, keys: StringsCodingKeys.self)
 
+        var text: String? = container.attributeIfPresent(of: .text)
+        if text == nil {
+            let multiLineText: StringElement? = stringsContainer?.withAttributeElement(.key, CodingKeys.text.stringValue)
+            text = multiLineText?.elementValue
+        }
+        
         return Label(
             id:                                        try container.attribute(of: .id),
             adjustsFontSizeToFit:                      container.attributeIfPresent(of: .adjustsFontSizeToFit),
@@ -97,7 +105,7 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
             opaque:                                    container.attributeIfPresent(of: .opaque),
             rect:                                      container.elementIfPresent(of: .rect),
             subviews:                                  container.childrenIfPresent(of: .subviews),
-            text:                                      container.attributeIfPresent(of: .text),
+            text:                                      text,
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
             textColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.textColor.stringValue),
             attributedText:                            container.elementIfPresent(of: .attributedText),
