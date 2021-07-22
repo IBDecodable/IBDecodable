@@ -55,7 +55,7 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
-    enum ExternalCodingKeys: CodingKey { case color,string }
+    enum ExternalCodingKeys: CodingKey { case color, string }
     enum ColorsCodingKeys: CodingKey { case key }
     enum StringsCodingKeys: CodingKey { case key }
 
