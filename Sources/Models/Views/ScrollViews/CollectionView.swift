@@ -288,7 +288,11 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
                 case .isAmbiguous: return "ambiguous"
                 case .isHidden: return "hidden"
                 case ._subviews: return "subview"
-                case .contentView: return "view"
+                case .contentView:
+                    if xml.childrenElements.contains(where: {$0.elementName == "collectionViewCellContentView"}) {
+                        return "collectionViewCellContentView"
+                    }
+                    return "view"
                 default: return key.stringValue
                 }
             }()
