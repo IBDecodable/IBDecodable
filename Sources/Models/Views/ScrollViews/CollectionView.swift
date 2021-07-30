@@ -193,6 +193,9 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
 
     public struct CollectionViewContentView: IBDecodable, ViewProtocol {
 
+        /// - Note: Exists only in newer versions with `collectionViewCellContentView` key
+        public let id: String?
+        
         public let elementClass: String = "UIView"
 
         public let key: String?
@@ -245,6 +248,7 @@ public struct CollectionViewCell: IBDecodable, ViewProtocol, IBIdentifiable, IBR
                 .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
 
             return CollectionViewContentView(
+                id:                                        container.attributeIfPresent(of: .id),
                 key:                                       container.attributeIfPresent(of: .key),
                 autoresizingMask:                          container.elementIfPresent(of: .autoresizingMask),
                 clipsSubviews:                             container.attributeIfPresent(of: .clipsSubviews),

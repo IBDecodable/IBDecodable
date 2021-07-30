@@ -387,6 +387,7 @@ class Tests: XCTestCase {
                 return
             }
             XCTAssertEqual(cell.contentView.key, "contentView")
+            XCTAssertNil(cell.contentView.id)
         } catch {
             XCTFail("\(error)  \(url)")
         }
@@ -405,6 +406,8 @@ class Tests: XCTestCase {
                 return
             }
             XCTAssertEqual(cell.contentView.key, "contentView")
+            XCTAssertNotNil(cell.contentView.id)
+            XCTAssertEqual(cell.contentView.id, "YwU-He-qVe")
         } catch {
             XCTFail("\(error)  \(url)")
         }
