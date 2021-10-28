@@ -40,19 +40,6 @@ class Github {
         self.session = session
     }
 
-    func url(`extension`: String, page: Int, perPage: Int, fileSize: Int = 350000) -> URL {
-        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
-        let queryItems = [
-            URLQueryItem(name: "q", value: "extension:\(`extension`) xml size:>\(fileSize)"),
-            URLQueryItem(name: "access_token", value: accessToken),
-            URLQueryItem(name: "page", value: "\(page)"),
-            URLQueryItem(name: "per_page", value: "\(perPage)"),
-        ]
-        components.queryItems = queryItems
-
-        return components.url!
-    }
-
     func downloadPage(`extension`: String,
                       page: Int = 0,
                       perPage: Int = 100,
@@ -62,7 +49,6 @@ class Github {
             var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
             let queryItems = [
                 URLQueryItem(name: "q", value: "extension:\(`extension`) xml size:>\(fileSize)"),
-                URLQueryItem(name: "access_token", value: accessToken),
                 URLQueryItem(name: "page", value: "\(page)"),
                 URLQueryItem(name: "per_page", value: "\(perPage)"),
                 ]
@@ -70,8 +56,10 @@ class Github {
 
             return components.url!
         }()
-
-        let task = session.dataTask(with: URLRequest(url: url)) { data, response, error in
+        var urlRequest = URLRequest(url: url)
+        urlRequest.setValue("token \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = session.dataTask(with: urlRequest) { data, response, error in
             guard let responseData = data else {
                 if let error = error {
                     handler(.failure(error))
