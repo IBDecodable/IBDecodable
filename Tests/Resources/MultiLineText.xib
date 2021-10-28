@@ -65,6 +65,16 @@ return character!</string>
             <textInputTraits key="textInputTraits"/>
             <point key="canvasLocation" x="-102.17391304347827" y="872.54464285714278"/>
         </textField>
+        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UQ9-V5-tnP">
+            <rect key="frame" x="0.0" y="0.0" width="273" height="86"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <mutableString key="text">This is a text with multi lines and
+return character and mutableString!</mutableString>
+            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+            <nil key="textColor"/>
+            <nil key="highlightedColor"/>
+            <point key="canvasLocation" x="264" y="110"/>
+        </label>
     </objects>
     <resources>
         <systemColor name="labelColor">

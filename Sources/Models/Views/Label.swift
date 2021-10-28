@@ -53,9 +53,10 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
-    enum ExternalCodingKeys: CodingKey { case color, string }
+    enum ExternalCodingKeys: CodingKey { case color, string, mutableString }
     enum ColorsCodingKeys: CodingKey { case key }
     enum StringsCodingKeys: CodingKey { case key }
+    enum MutableStringsCodingKeys: CodingKey { case key }
     
     static func decode(_ xml: XMLIndexerType) throws -> Label {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -75,10 +76,15 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
         let stringsContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .string, keys: StringsCodingKeys.self)
+        let mutableStringsContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .mutableString, keys: StringsCodingKeys.self)
 
         var text: String? = container.attributeIfPresent(of: .text)
         if text == nil {
             let multiLineText: StringElement? = stringsContainer?.withAttributeElement(.key, CodingKeys.text.stringValue)
+            text = multiLineText?.elementValue
+        }
+        if text == nil {
+            let multiLineText: StringElement? = mutableStringsContainer?.withAttributeElement(.key, CodingKeys.text.stringValue)
             text = multiLineText?.elementValue
         }
         

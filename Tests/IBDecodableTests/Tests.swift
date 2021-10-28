@@ -473,7 +473,7 @@ class Tests: XCTestCase {
            
             
             let labels = file.document.views?.filter({$0.view is Label})
-            XCTAssertEqual(labels?.count, 2, "There should be 2 Labels")
+            XCTAssertEqual(labels?.count, 3, "There should be 3 Labels")
 
             let singleLineLabel = labels?[0].view as? Label
             XCTAssertNotNil(singleLineLabel, "There should be a label")
@@ -484,8 +484,12 @@ class Tests: XCTestCase {
             XCTAssertNotNil(multiLineLabel, "There should be a label")
             XCTAssertEqual(multiLineLabel?.elementClass, "UILabel")
             XCTAssertEqual(multiLineLabel?.text, "This is a text with multi lines and\nreturn character!", "Text property should contain the multiline text")
-            
-            
+
+            let multiLineMutableStringLabel = labels?[2].view as? Label
+            XCTAssertNotNil(multiLineMutableStringLabel, "There should be a label")
+            XCTAssertEqual(multiLineMutableStringLabel?.elementClass, "UILabel")
+            XCTAssertEqual(multiLineMutableStringLabel?.text, "This is a text with multi lines and\nreturn character and mutableString!")
+                        
             
             let textFields = file.document.views?.filter({$0.view is TextField})
             XCTAssertEqual(textFields?.count, 2, "There should be 2 TextFields")
