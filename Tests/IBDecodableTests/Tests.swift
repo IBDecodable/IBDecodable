@@ -569,6 +569,23 @@ class Tests: XCTestCase {
         }
     }
     
+    func testScrollViewWiithLayoutGuides() {
+        let url = self.url(forResource: "ScrollViewWithLayoutGuides", withExtension: "xib")
+        do {
+            let file = try XibFile(url: url)
+
+            let scrollView = file.document.views?.first?.view as? ScrollView
+            XCTAssertNotNil(scrollView, "There should be a scroll view")
+            XCTAssertEqual(scrollView?.elementClass, "UIScrollView")
+            
+            XCTAssertEqual(scrollView?.contentLayoutGuide?.id, "gIB-vp-IUT")
+            XCTAssertEqual(scrollView?.frameLayoutGuide?.id, "Rvc-ob-et2")
+            
+        } catch {
+            XCTFail("\(error)  \(url)")
+        }
+    }
+    
     func testSystemColorNameInResources() {
         let url = self.url(forResource: "ViewWithSystemColorResource", withExtension: "xib")
         do {

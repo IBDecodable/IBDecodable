@@ -46,11 +46,14 @@ public struct ScrollView: IBDecodable, ViewProtocol, IBIdentifiable {
     public let tintColor: Color?
     public let isHidden: Bool?
     public let alpha: Float?
+    public let contentLayoutGuide: LayoutGuide?
+    public let frameLayoutGuide: LayoutGuide?
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
-    enum ExternalCodingKeys: CodingKey { case color }
+    enum ExternalCodingKeys: CodingKey { case color, viewLayoutGuide }
     enum ColorsCodingKeys: CodingKey { case key }
+    enum ViewLayoutCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> ScrollView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -70,6 +73,7 @@ public struct ScrollView: IBDecodable, ViewProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+        let viewLayoutGuidesContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .viewLayoutGuide, keys: ViewLayoutCodingKeys.self)
 
         return ScrollView(
             id:                                        try container.attribute(of: .id),
@@ -107,7 +111,9 @@ public struct ScrollView: IBDecodable, ViewProtocol, IBIdentifiable {
             backgroundColor:                           colorsContainer?.withAttributeElement(.key, CodingKeys.backgroundColor.stringValue),
             tintColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.tintColor.stringValue),
             isHidden:                                  container.attributeIfPresent(of: .isHidden),
-            alpha:                                     container.attributeIfPresent(of: .alpha)
+            alpha:                                     container.attributeIfPresent(of: .alpha),
+            contentLayoutGuide:                        viewLayoutGuidesContainer?.withAttributeElement(.key, CodingKeys.contentLayoutGuide.stringValue),
+            frameLayoutGuide:                          viewLayoutGuidesContainer?.withAttributeElement(.key, CodingKeys.frameLayoutGuide.stringValue)
         )
     }
 }
