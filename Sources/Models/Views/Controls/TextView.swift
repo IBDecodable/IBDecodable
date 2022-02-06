@@ -55,8 +55,9 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
 
     enum ConstraintsCodingKeys: CodingKey { case constraint }
     enum VariationCodingKey: CodingKey { case variation }
-    enum ExternalCodingKeys: CodingKey { case color }
+    enum ExternalCodingKeys: CodingKey { case color, string }
     enum ColorsCodingKeys: CodingKey { case key }
+    enum StringsCodingKeys: CodingKey { case key }
 
     static func decode(_ xml: XMLIndexerType) throws -> TextView {
         let container = xml.container(keys: MappedCodingKey.self).map { (key: CodingKeys) in
@@ -77,7 +78,14 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
         let variationContainer = xml.container(keys: VariationCodingKey.self)
         let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
+        let stringsContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .string, keys: StringsCodingKeys.self)
 
+        var text: String? = container.attributeIfPresent(of: .text)
+        if text == nil {
+            let multiLineText: StringElement? = stringsContainer?.withAttributeElement(.key, CodingKeys.text.stringValue)
+            text = multiLineText?.elementValue
+        }
+        
         return TextView(
             id:                                        try container.attribute(of: .id),
             key:                                       container.attributeIfPresent(of: .key),
@@ -102,7 +110,7 @@ public struct TextView: IBDecodable, ControlProtocol, IBIdentifiable {
             showsHorizontalScrollIndicator:            container.attributeIfPresent(of: .showsHorizontalScrollIndicator),
             showsVerticalScrollIndicator:              container.attributeIfPresent(of: .showsVerticalScrollIndicator),
             subviews:                                  container.childrenIfPresent(of: .subviews),
-            text:                                      container.attributeIfPresent(of: .text),
+            text:                                      text,
             textAlignment:                             container.attributeIfPresent(of: .textAlignment),
             textColor:                                 colorsContainer?.withAttributeElement(.key, CodingKeys.textColor.stringValue),
             translatesAutoresizingMaskIntoConstraints: container.attributeIfPresent(of: .translatesAutoresizingMaskIntoConstraints),
