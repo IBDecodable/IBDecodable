@@ -588,6 +588,20 @@ class Tests: XCTestCase {
             XCTFail("\(error)  \(url)")
         }
     }
+    
+    func testStoryboardHidesBottomBarWhenPushed() {
+        let url = self.url(forResource:"StoryboardHidesBottomBarWhenPushed", withExtension: "storyboard")
+        do {
+            let file = try StoryboardFile(url: url)
+            let hidesBttomBarValues = file.document.scenes?.map { $0.viewController?.viewController.hidesBottomBarWhenPushed ?? false } ?? []
+            
+            XCTAssertEqual(hidesBttomBarValues.count, 2)
+            XCTAssertEqual(hidesBttomBarValues.filter { $0 == true }.count, 1)
+            XCTAssertEqual(hidesBttomBarValues.filter { $0 == false }.count, 1)
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
 
     // MARK: Utils
 

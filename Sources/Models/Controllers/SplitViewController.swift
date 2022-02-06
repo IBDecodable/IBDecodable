@@ -26,6 +26,7 @@ public struct SplitViewController: IBDecodable, ViewControllerProtocol {
     public let view: View?
     public var rootView: ViewProtocol? { return view }
     public let size: [Size]?
+    public let hidesBottomBarWhenPushed: Bool?
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
@@ -47,7 +48,8 @@ public struct SplitViewController: IBDecodable, ViewControllerProtocol {
             keyCommands:                  container.childrenIfPresent(of: .keyCommands),
             tabBarItem:                   container.elementIfPresent(of: .tabBarItem),
             view:                         container.elementIfPresent(of: .view),
-            size:                         container.elementsIfPresent(of: .size)
+            size:                         container.elementsIfPresent(of: .size),
+            hidesBottomBarWhenPushed:     container.attributeIfPresent(of: .hidesBottomBarWhenPushed)
         )
     }
 }
