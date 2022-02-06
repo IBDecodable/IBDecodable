@@ -71,9 +71,11 @@ public struct ScrollView: IBDecodable, ViewProtocol, IBIdentifiable {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
-        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+        let externalContainer = xml.container(keys: ExternalCodingKeys.self)
+        let colorsContainer = externalContainer
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
-        let viewLayoutGuidesContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .viewLayoutGuide, keys: ViewLayoutCodingKeys.self)
+        let viewLayoutGuidesContainer = externalContainer
+            .nestedContainerIfPresent(of: .viewLayoutGuide, keys: ViewLayoutCodingKeys.self)
 
         return ScrollView(
             id:                                        try container.attribute(of: .id),
