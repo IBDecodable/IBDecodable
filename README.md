@@ -1,6 +1,6 @@
 # IBDecodable
-[![Build Status](https://travis-ci.org/IBDecodable/IBDecodable.svg?branch=master)](https://travis-ci.org/IBDecodable/IBDecodable)
-[![Swift 5.0](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swift](https://github.com/IBDecodable/IBDecodable/actions/workflows/swift.yml/badge.svg)](https://github.com/IBDecodable/IBDecodable/actions/workflows/swift.yml)
+[![Swift 5.5](https://img.shields.io/badge/Swift-5.5-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
