@@ -26,6 +26,7 @@ public struct TabBarController: IBDecodable, ViewControllerProtocol {
     public let tabBar: TabBar?
     public var rootView: ViewProtocol? { return tabBar }
     public let size: [Size]?
+    public let hidesBottomBarWhenPushed: Bool?
 
     enum LayoutGuidesCodingKeys: CodingKey { case viewControllerLayoutGuide }
 
@@ -47,7 +48,8 @@ public struct TabBarController: IBDecodable, ViewControllerProtocol {
             keyCommands:                  container.childrenIfPresent(of: .keyCommands),
             tabBarItem:                   container.elementIfPresent(of: .tabBarItem),
             tabBar:                       container.elementIfPresent(of: .tabBar),
-            size:                         container.elementsIfPresent(of: .size)
+            size:                         container.elementsIfPresent(of: .size),
+            hidesBottomBarWhenPushed:     container.attributeIfPresent(of: .hidesBottomBarWhenPushed)
         )
     }
 }
