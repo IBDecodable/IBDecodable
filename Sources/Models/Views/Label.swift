@@ -73,10 +73,13 @@ public struct Label: IBDecodable, ViewProtocol, IBIdentifiable {
         }
         let constraintsContainer = container.nestedContainerIfPresent(of: .constraints, keys: ConstraintsCodingKeys.self)
         let variationContainer = xml.container(keys: VariationCodingKey.self)
-        let colorsContainer = xml.container(keys: ExternalCodingKeys.self)
+        let externalContainer = xml.container(keys: ExternalCodingKeys.self)
+        let colorsContainer = externalContainer
             .nestedContainerIfPresent(of: .color, keys: ColorsCodingKeys.self)
-        let stringsContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .string, keys: StringsCodingKeys.self)
-        let mutableStringsContainer = xml.container(keys: ExternalCodingKeys.self).nestedContainerIfPresent(of: .mutableString, keys: StringsCodingKeys.self)
+        let stringsContainer = externalContainer
+            .nestedContainerIfPresent(of: .string, keys: StringsCodingKeys.self)
+        let mutableStringsContainer = externalContainer
+            .nestedContainerIfPresent(of: .mutableString, keys: StringsCodingKeys.self)
 
         var text: String? = container.attributeIfPresent(of: .text)
         if text == nil {
