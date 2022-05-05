@@ -28,10 +28,10 @@ public struct InterfaceBuilderParser {
         }
     }
 
-    let xmlParser: SWXMLHash
+    let xmlParser: XMLHash
 
     public init(detectParsingErrors: Bool = true) {
-        xmlParser = SWXMLHash.config { options in
+        xmlParser = XMLHash.config { options in
             options.detectParsingErrors = detectParsingErrors
         }
     }
