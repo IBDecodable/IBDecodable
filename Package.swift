@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "IBDecodable", targets: ["IBDecodable"])
     ],
     dependencies: [
-        .package(url: "https://github.com/drmohundro/SWXMLHash.git", from: "7.0.1")
+        .package(url: "https://github.com/drmohundro/SWXMLHash.git", from: "7.0.2")
     ],
     targets: [
         .target(name: "IBDecodable", dependencies: ["SWXMLHash"], path: "Sources"),
